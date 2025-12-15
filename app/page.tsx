@@ -7,6 +7,7 @@ import { Services } from "@/components/sections/services";
 import { Process } from "@/components/sections/process";
 import { Contact } from "@/components/sections/contact";
 import { SystemMap } from "@/components/sections/system-map";
+import { CaseStudy } from "@/components/sections/case-study";
 
 
 export default function Page() {
@@ -15,7 +16,7 @@ export default function Page() {
       <IntroGate />
       <Hero />
       <FeaturedWork />
-
+      <CaseStudy />
       <FlagshipScroll />
 
       <Trust
