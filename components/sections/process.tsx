@@ -47,7 +47,7 @@ export function Process() {
                     className="block focus:outline-none"
                     aria-label={`Open process step ${s.step}: ${s.title}`}
                   >
-                    <Card className="h-full transition-shadow hover:shadow-md">
+                    <Card className="h-full transition-shadow">
                       <CardHeader className="space-y-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">

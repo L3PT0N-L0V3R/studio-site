@@ -16,18 +16,18 @@ const buttonVariants = cva(
     "motion-reduce:transform-none motion-reduce:transition-none",
 
     // Slight hover lift for pointer devices
-    "hover:shadow-sm",
+    
   ].join(" "),
   {
     variants: {
       variant: {
-        default: "bg-zinc-900 text-white hover:bg-zinc-800",
-        destructive: "bg-red-500 text-white hover:bg-red-600",
+        default: "bg-zinc-900 text-white zinc-800",
+        destructive: "bg-red-500 text-white red-600",
         outline:
-          "border border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50 hover:text-zinc-900",
-        secondary: "bg-zinc-100 text-zinc-900 hover:bg-zinc-200",
-        ghost: "hover:bg-zinc-100 hover:text-zinc-900",
-        link: "text-zinc-900 underline-offset-4 hover:underline hover:shadow-none active:translate-y-0 active:scale-100",
+          "border border-zinc-200 bg-white text-zinc-900 zinc-50 hover:text-zinc-900",
+        secondary: "bg-zinc-100 text-zinc-900 zinc-200",
+        ghost: "zinc-100 hover:text-zinc-900",
+        link: "text-zinc-900 underline-offset-4 hover:underline active:translate-y-0 active:scale-100",
       },
       size: {
         default: "h-10 px-4 py-2",

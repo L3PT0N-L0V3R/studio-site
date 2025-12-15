@@ -26,29 +26,29 @@ export function Hero() {
             </Parallax>
 
             <p className="mt-4 text-lg text-muted-foreground">
-              We rebuild websites for businesses that outgrew theirs—then we connect the systems
-              behind it.
+              {positioning.oneLiner}
             </p>
 
             <div className="mt-6 grid gap-6 sm:grid-cols-2">
               <div className="rounded-2xl border bg-white p-4">
-                <div className="text-sm font-semibold">We’re best for</div>
+                <div className="text-sm font-semibold">{positioning.bestForTitle}</div>
                 <ul className="mt-2 space-y-2 text-sm text-muted-foreground">
-                  <li>Teams with a proven offer that need a higher-converting site</li>
-                  <li>Businesses ready to connect intake → CRM → automation → reporting</li>
-                  <li>Owners who care about performance, clarity, and maintainability</li>
+                  {positioning.bestFor.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
                 </ul>
               </div>
 
               <div className="rounded-2xl border bg-white p-4">
-                <div className="text-sm font-semibold">Not for</div>
+                <div className="text-sm font-semibold">{positioning.notForTitle}</div>
                 <ul className="mt-2 space-y-2 text-sm text-muted-foreground">
-                  <li>Cheapest-possible builds or “just make it look cool”</li>
-                  <li>Projects without decision-makers or approval bandwidth</li>
-                  <li>Complex systems without owned process/content</li>
+                  {positioning.notFor.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
                 </ul>
               </div>
             </div>
+
 
             <div className="mt-8 flex flex-wrap gap-3">
               <Magnetic>

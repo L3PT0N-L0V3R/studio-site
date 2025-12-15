@@ -152,7 +152,7 @@ export function ServiceQuiz({
                       "group border bg-white text-left transition",
                       optionRadius,
                       optionPad,
-                      "hover:shadow-sm hover:-translate-y-[1px] active:translate-y-0",
+                      "active:translate-y-0",
                       "focus:outline-none focus:ring-2 focus:ring-zinc-900/10",
                     ].join(" ")}
                   >

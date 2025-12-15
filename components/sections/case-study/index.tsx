@@ -88,15 +88,13 @@ export function CaseStudy() {
         <div className={cn("mt-4", gap)}>
           <ScaleIn>
             <SystemWiringCard
-              active={activeNode}
-              onActiveChange={setActiveNode}
-              title={caseStudyCopy.wiringTitle}
-              desc={caseStudyCopy.wiringDesc}
-              tag={caseStudyCopy.wiringTag}
-              sideTitle={caseStudyCopy.wiringSideTitle}
-              sideBody={caseStudyCopy.wiringSideBody}
-              sideBadges={caseStudyCopy.wiringBadges}
+            active={activeNode}
+            onActiveChange={setActiveNode}
+            title={caseStudyCopy.wiringTitle}
+            desc={caseStudyCopy.wiringDesc}
+            tag={caseStudyCopy.wiringTag}
             />
+
           </ScaleIn>
         </div>
       </Container>

@@ -6,7 +6,7 @@ import { Trust } from "@/components/sections/trust";
 import { Services } from "@/components/sections/services";
 import { Process } from "@/components/sections/process";
 import { Contact } from "@/components/sections/contact";
-import { SystemMap } from "@/components/sections/system-map";
+import SystemMap from "@/components/sections/system-map";
 import { CaseStudy } from "@/components/sections/case-study";
 
 

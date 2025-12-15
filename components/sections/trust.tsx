@@ -45,7 +45,7 @@ export function Trust({
           <div className="mt-8 flex flex-wrap items-center gap-3">
             {items.map((it) => (
               <HoverCard key={it.label}>
-                <div className="flex items-center gap-2 rounded-2xl border bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md">
+                <div className="flex items-center gap-2 rounded-2xl border bg-white px-4 py-2 shadow-sm transition-shadow">
                   <Badge variant="secondary" className="rounded-full">
                     {it.label}
                   </Badge>

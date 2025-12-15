@@ -21,7 +21,7 @@ export function FeaturedWork() {
           {work.map((item, idx) => (
             <ScaleIn key={item.title} delay={0.06 * idx} from={0.9}>
               <InteractiveCard className="rounded-2xl">
-                <Card className="h-full rounded-2xl transition-shadow hover:shadow-md">
+                <Card className="h-full rounded-2xl transition-shadow">
                   <CardHeader>
                     <div className="text-base font-semibold">{item.title}</div>
                     <div className="mt-2 text-sm text-zinc-600">{item.description}</div>

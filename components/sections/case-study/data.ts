@@ -29,6 +29,12 @@ export const wiringNodes = [
     body:
       "Capture leads cleanly, validate inputs, and route to the right pipeline with predictable notifications.",
     bullets: ["Form schema + validation", "Spam + bot mitigation", "Notification rules"],
+    practice: {
+      title: "What this means in practice",
+      body:
+        "Your site stops acting like a brochure and starts acting like a reliable intake system—clean data in, correct routing, and fewer lost leads.",
+      badges: ["Cleaner lead data", "Fewer missed leads", "Consistent routing"],
+    },
   },
   {
     id: "crm",
@@ -37,6 +43,12 @@ export const wiringNodes = [
     body:
       "Turn submissions into trackable opportunities. Keep notes, stages, owners, and history in one place.",
     bullets: ["Stage design", "Owner assignment", "Context + history"],
+    practice: {
+      title: "What this means in practice",
+      body:
+        "Every lead has an owner, a stage, and a next step. No spreadsheet drift, no “who’s on it?”, and no context lost between handoffs.",
+      badges: ["One source of truth", "Clear handoffs", "Faster follow-up"],
+    },
   },
   {
     id: "automation",
@@ -45,6 +57,12 @@ export const wiringNodes = [
     body:
       "Automate reminders, sequences, and internal tasks so leads don’t stall and the team stays aligned.",
     bullets: ["Email/SMS sequences", "Task creation", "Scheduling handoff"],
+    practice: {
+      title: "What this means in practice",
+      body:
+        "Speed-to-lead improves automatically. Prospects get timely follow-ups, your team gets tasks at the right moments, and opportunities don’t die in the gaps.",
+      badges: ["Speed-to-lead", "No manual chasing", "Consistent touchpoints"],
+    },
   },
   {
     id: "reporting",
@@ -53,7 +71,14 @@ export const wiringNodes = [
     body:
       "Track conversion events and funnels so you can improve what matters—not guess.",
     bullets: ["Event plan", "Funnel view", "Attribution-ready data"],
+    practice: {
+      title: "What this means in practice",
+      body:
+        "You can see where leads drop, which pages create momentum, and what to fix next—so improvements are iterative, measurable, and defensible.",
+      badges: ["Funnel visibility", "ROI clarity", "Iteration loops"],
+    },
   },
 ] as const;
+
 
 export type WiringNodeId = (typeof wiringNodes)[number]["id"];

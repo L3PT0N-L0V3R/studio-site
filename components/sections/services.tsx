@@ -1,15 +1,12 @@
-"use client";
-
 import { Container } from "@/components/layout/container";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScaleIn } from "@/components/motion/scale-in";
-import { InteractiveCard } from "@/components/motion/interactive-card";
+import { HoverCard } from "@/components/motion/hover-card";
 import { tiers } from "@/content/services";
 import { ServiceQuiz } from "@/components/sections/service-quiz";
 import { Configurator } from "@/components/sections/configurator";
-import { useSectionSpacing, useGridGap, useCtaVariants } from "@/components/providers/ui-config";
 
 type TierLike = {
   name?: string;
@@ -27,22 +24,26 @@ type TierLike = {
 function getTierName(t: TierLike) {
   return t.name ?? t.title ?? "Service";
 }
+
 function getTierDesc(t: TierLike) {
   return t.description ?? t.desc ?? "";
 }
+
 function getTierFeatures(t: TierLike): string[] {
   const maybe = t.features ?? t.includes ?? t.bullets ?? t.items ?? [];
   return Array.isArray(maybe) ? maybe : [];
 }
 
-export function Services() {
-  const sectionPad = useSectionSpacing();
-  const gap = useGridGap();
-  const { primary } = useCtaVariants();
+const pill =
+  "rounded-full border border-zinc-200 bg-white px-3 py-1 text-sm text-zinc-700";
 
+const chip =
+  "rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-xs text-zinc-700";
+
+export function Services() {
   return (
     <section id="services" className="border-b">
-      <Container className={sectionPad}>
+      <Container className="py-14 sm:py-20">
         <ScaleIn>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -53,30 +54,34 @@ export function Services() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2 text-sm text-zinc-600">
-              <span className="rounded-full border px-3 py-1">Modular</span>
-              <span className="rounded-full border px-3 py-1">Mobile-first</span>
-              <span className="rounded-full border px-3 py-1">Fast</span>
+            {/* Neutral pills (B/W) */}
+            <div className="flex items-center gap-2">
+              <span className={pill}>Modular</span>
+              <span className={pill}>Mobile-first</span>
+              <span className={pill}>Fast</span>
             </div>
           </div>
         </ScaleIn>
 
-        {/* Configurator + Quiz */}
-        <div className={["mt-8 grid", gap, "lg:grid-cols-2"].join(" ")}>
-          <Configurator />
-          <ServiceQuiz />
+        <div className="mt-6 grid gap-4 lg:grid-cols-12 lg:items-start">
+          <div className="lg:col-span-7">
+            <Configurator />
+          </div>
+          <div className="lg:col-span-5">
+            <ServiceQuiz />
+          </div>
         </div>
 
-        <div className={["mt-8 grid", gap, "lg:grid-cols-3"].join(" ")}>
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
           {(tiers as TierLike[]).map((t, idx) => {
             const name = getTierName(t);
             const desc = getTierDesc(t);
             const features = getTierFeatures(t);
 
             return (
-              <ScaleIn key={name} delay={0.06 * idx} from={0.9}>
-                <InteractiveCard className="rounded-2xl">
-                  <Card className="h-full rounded-2xl transition-shadow hover:shadow-md">
+              <ScaleIn key={name} delay={0.06 * idx} from={0.92}>
+                <HoverCard>
+                  <Card className="h-full rounded-2xl transition-shadow">
                     <CardHeader>
                       <div className="flex items-center justify-between gap-3">
                         <div className="text-base font-semibold">{name}</div>
@@ -86,9 +91,10 @@ export function Services() {
                     </CardHeader>
 
                     <CardContent className="flex h-full flex-col">
+                      {/* Neutral chips (B/W) */}
                       <div className="flex flex-wrap gap-2">
                         {features.map((f) => (
-                          <span key={f} className="rounded-full border px-2.5 py-1 text-xs text-zinc-700">
+                          <span key={f} className={chip}>
                             {f}
                           </span>
                         ))}
@@ -96,13 +102,13 @@ export function Services() {
 
                       <div className="mt-6 flex items-center justify-between">
                         <div className="text-sm font-semibold">{t.price ?? ""}</div>
-                        <Button asChild size="sm" variant={primary}>
+                        <Button asChild size="sm" variant="outline">
                           <a href="#contact">Ask about this</a>
                         </Button>
                       </div>
                     </CardContent>
                   </Card>
-                </InteractiveCard>
+                </HoverCard>
               </ScaleIn>
             );
           })}
