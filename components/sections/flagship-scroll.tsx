@@ -8,6 +8,7 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
+  type Transition,
 } from "framer-motion";
 import { Container } from "@/components/layout/container";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -146,9 +147,10 @@ export function FlagshipScroll() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [thresholds]);
 
-  const spring = reduceMotion
-    ? { duration: 0 }
-    : { type: "spring", stiffness: 620, damping: 46, mass: 0.65 };
+  const spring: Transition = reduceMotion
+  ? { duration: 0 }
+  : { type: "spring", stiffness: 520, damping: 42, mass: 0.7 };
+
 
   // Dots (gold) – uses your --ui-glow
   const dottedLineBase: React.CSSProperties = {
