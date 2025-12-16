@@ -1,38 +1,59 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+
 export function RangeField(props: {
   label: string;
+  hint?: string;
   value: number;
   min: number;
   max: number;
   step?: number;
-  hint?: string;
-  onChange: (v: number) => void;
+  onChange: (next: number) => void;
+  className?: string;
 }) {
-  const { label, value, min, max, step = 1, hint, onChange } = props;
+  const { label, hint, value, min, max, step = 1, onChange, className } = props;
+
+  const clamped = Math.max(min, Math.min(max, value));
+  const percent = max === min ? 0 : ((clamped - min) / (max - min)) * 100;
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-end justify-between gap-4">
-        <div>
+    <div className={cn("space-y-2", className)}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
           <div className="text-sm font-medium">{label}</div>
-          {hint ? <div className="text-xs text-muted-foreground">{hint}</div> : null}
+          {hint ? <div className="mt-1 text-xs text-muted-foreground">{hint}</div> : null}
         </div>
-        <div className="text-sm tabular-nums text-foreground/80">{value}</div>
+
+        <div className="text-sm font-medium tabular-nums">{clamped}</div>
       </div>
 
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full accent-zinc-900"
-      />
-      <div className="flex justify-between text-[11px] text-muted-foreground">
-        <span>{min}</span>
-        <span>{max}</span>
+      <div className="relative">
+        {/* Visible track + fill */}
+        <div className="meter-track">
+          <div
+            className="meter-fill"
+            style={{ width: `${percent}%`, ["--p" as any]: `${percent}%` }}
+          />
+        </div>
+
+        {/* Thumb (clean + consistent) */}
+        <div
+          className="pointer-events-none absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border bg-white shadow-sm"
+          style={{ left: `calc(${percent}% - 8px)` }}
+        />
+
+        {/* Real range input (interaction layer) */}
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={clamped}
+          onChange={(e) => onChange(Number(e.target.value))}
+          className="absolute inset-0 h-2 w-full cursor-pointer opacity-0"
+          aria-label={label}
+        />
       </div>
     </div>
   );

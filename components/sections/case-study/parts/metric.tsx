@@ -13,8 +13,8 @@ export function Metric({ label, value }: { label: string; value: number }) {
       </div>
       <div className="h-2 w-full rounded-full bg-zinc-100">
         <div
-          className="h-2 rounded-full bg-zinc-900 transition-[width]"
-          style={{ width: `${v}%` }}
+          className="h-2 rounded-full meter-fill"
+          style={{ width: `${value}%`, ["--p" as any]: `${value}%` }}
         />
       </div>
     </div>

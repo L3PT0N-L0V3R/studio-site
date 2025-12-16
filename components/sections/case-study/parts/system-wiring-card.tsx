@@ -69,26 +69,33 @@ export function SystemWiringCard(props: {
                     onClick={() => onActiveChange(n.id)}
                     className={cn(
                       "relative rounded-2xl border bg-white px-3 py-3 text-left transition",
-                      "hover:shadow-sm active:scale-[0.99]",
-                      isActive ? "border-zinc-900" : "border-border"
+                      "active:scale-[0.99]",
+                      // subtle lift on hover for all
+                      "ui-lift",
+                      // stronger + gold underglow when active
+                      isActive ? "border-zinc-900 ui-lift-strong" : "border-border"
                     )}
                   >
-                    {/* Shared-element active pill */}
+                    {/* Shared-element active pill (gold) */}
                     {isActive ? (
                       <motion.div
                         layoutId="wiring-active-pill"
-                        className="pointer-events-none absolute inset-0 rounded-2xl ring-2 ring-zinc-900/10"
+                        className="pointer-events-none absolute inset-0 rounded-2xl"
+                        style={{
+                          background: "hsl(var(--ui-glow) / 0.14)",
+                          border: "1px solid hsl(var(--ui-glow) / 0.35)",
+                          boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.04)",
+                        }}
                         transition={
-                          reduceMotion
-                            ? { duration: 0 }
-                            : { type: "spring", stiffness: 520, damping: 42, mass: 0.7 }
+                          reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 42, mass: 0.7 }
                         }
                       />
                     ) : null}
 
-                    <div className="text-sm font-medium">{n.title}</div>
-                    <div className="mt-1 text-xs text-muted-foreground">{n.subtitle}</div>
+                    <div className="relative text-sm font-medium">{n.title}</div>
+                    <div className="relative mt-1 text-xs text-muted-foreground">{n.subtitle}</div>
                   </button>
+
                 );
               })}
             </div>

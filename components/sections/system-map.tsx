@@ -168,8 +168,8 @@ function MagneticCard(props: { item: SystemsMapItem; onClick: () => void; isActi
       style={reduceMotion ? undefined : { x, y }}
       className={cn(
         "group relative w-full rounded-2xl border bg-white p-6 text-left transition-shadow",
-        "ui-ambient ui-ambient-hover",
-        isActive ? "border-zinc-900 ui-ambient-active" : "border-border"
+        "ui-lift",
+        isActive ? "border-zinc-900 ui-lift-strong" : "border-border"
       )}
     >
       <motion.div layoutId={`systems-card-${item.id}`} className="absolute inset-0 rounded-2xl" />

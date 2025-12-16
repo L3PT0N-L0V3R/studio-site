@@ -34,7 +34,9 @@
   --ring: 240 5.9% 10%;
 
   --radius: 1rem;
-  --ui-glow: 8 92% 62%;
+  --ui-glow: 42 95% 58%;
+
+  
 }
 
 /* Optional dark mode tokens (keep; doesn’t affect you unless you add `.dark`) */
@@ -140,6 +142,42 @@
     hsl(var(--ui-glow) / 0.40),
     transparent
   );
+}
+
+.meter-track {
+  height: 0.5rem;              /* 8px (h-2) */
+  border-radius: 999px;
+  background: rgb(228 228 231); /* zinc-200 */
+  overflow: hidden;            /* IMPORTANT: keeps fill inside the track */
+  position: relative;          /* safe default */
+}
+
+.meter-fill {
+  height: 100%;                /* IMPORTANT: always matches the track */
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #111 0%,
+    #111 calc(100% - var(--p, 0%)),          /* fallback prevents “transparent fill” */
+    hsl(var(--ui-glow) / 1) 100%
+  );
+  transition: background 240ms ease, width 240ms ease;
+  display: block;
+}
+
+.meter-range {
+  background: linear-gradient(
+    90deg,
+    #111 0%,
+    #111 calc(100% - var(--p)),
+    hsl(var(--ui-glow) / 1) 100%
+  );
+  transition: background 240ms ease;
+}
+
+.pill-gold {
+  background: hsl(var(--ui-glow) / 0.22);
+  border: 1px solid hsl(var(--ui-glow) / 0.35);
 }
 
 /*
