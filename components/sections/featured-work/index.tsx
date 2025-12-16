@@ -1,3 +1,5 @@
+"use client";
+
 import { Container } from "@/components/layout/container";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -5,11 +7,17 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { ScaleIn } from "@/components/motion/scale-in";
 import { InteractiveCard } from "@/components/motion/interactive-card";
 import { work } from "@/content/work";
+import { RocketToRevenue } from "./rocket-to-revenue";
 
 export function FeaturedWork() {
   return (
     <section id="work" className="border-b">
       <Container className="py-14 sm:py-20">
+        {/* Rocket animation lives ABOVE the section heading */}
+        <div className="mb-10">
+          <RocketToRevenue />
+        </div>
+
         <FadeIn>
           <h2 className="text-2xl font-semibold tracking-tight">Featured work</h2>
           <p className="mt-2 text-zinc-600">
