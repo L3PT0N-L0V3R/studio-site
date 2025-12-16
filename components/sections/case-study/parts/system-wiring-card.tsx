@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Workflow } from "lucide-react";
 import { wiringNodes, type WiringNodeId } from "../data";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, type Easing } from "framer-motion";
+
 
 export function SystemWiringCard(props: {
   active: WiringNodeId;
@@ -34,7 +35,7 @@ export function SystemWiringCard(props: {
         initial: { opacity: 0, y: 6 },
         animate: { opacity: 1, y: 0 },
         exit: { opacity: 0, y: -6 },
-        transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] },
+        transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const },
       };
 
   return (
