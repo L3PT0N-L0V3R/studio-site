@@ -153,16 +153,21 @@
 }
 
 .meter-fill {
-  height: 100%;                /* IMPORTANT: always matches the track */
+  height: 100%;
   border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    #111 0%,
-    #111 calc(100% - var(--p, 0%)),          /* fallback prevents “transparent fill” */
-    hsl(var(--ui-glow) / 1) 100%
-  );
-  transition: background 240ms ease, width 240ms ease;
   display: block;
+
+  /* Fallback */
+  background: #111;
+
+  /* Whole-bar color shifts from black -> gold as --p increases */
+  background: color-mix(
+    in oklab,
+    #111 calc(100% - var(--p, 0%)),
+    hsl(var(--ui-glow) / 1) var(--p, 0%)
+  );
+
+  transition: background 240ms ease, width 240ms ease;
 }
 
 .meter-range {

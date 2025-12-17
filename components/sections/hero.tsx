@@ -2,34 +2,60 @@
 
 import { useMemo, useState } from "react";
 import { Container } from "@/components/layout/container";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Parallax } from "@/components/motion/parallax";
-import { cn } from "@/lib/utils";
-import { Lightbulb } from "lucide-react";
 import { Magnetic } from "@/components/motion/magnetic";
-import { positioning } from "@/content/positioning";
+import { cn } from "@/lib/utils";
+import { ConfiguratorDialog } from "@/components/overlays/configurator-dialog";
+import { useGridGap, useSectionSpacing } from "@/components/providers/ui-config";
 
 export function Hero() {
+  const sectionPad = useSectionSpacing();
+  const gap = useGridGap();
+
+  const positioning = {
+    eyebrow: "Systems-first rebuilds",
+    title: "Premium websites that act like infrastructure.",
+    description:
+      "We rebuild websites for businesses that outgrew theirs—then we connect the systems behind it.",
+    bestForTitle: "We’re best for…",
+    bestFor: [
+      "Service businesses ready for a premium rebuild",
+      "Teams that want intake → CRM → automation connected",
+      "Founders who care about performance, SEO, and conversion clarity",
+    ],
+    notForTitle: "Not for…",
+    notFor: [
+      "One-page brochure sites with no system needs",
+      "Projects where cheapest is the only priority",
+      "Heavy daily publishing workflows (CMS-first teams)",
+    ],
+  } as const;
+
+
   return (
-    <section className="pt-16 sm:pt-20">
-      <Container className="pb-10 sm:pb-14">
-        <div className="grid items-start gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+    <section className={cn(sectionPad, "border-b")} id="top">
+      <Container>
+        <div className={cn("grid items-start gap-10 lg:grid-cols-2", gap)}>
+          {/* Left column */}
           <div>
-            <div className="text-sm font-medium text-muted-foreground">
-              Web design + engineering for modern brands
+            <div className="inline-flex items-center gap-2">
+              <Badge variant="secondary">Systems-first</Badge>
+              <span className="text-sm text-muted-foreground">{positioning.eyebrow}</span>
             </div>
 
-            <Parallax offset={36}>
-              <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">
-                Premium websites that convert—plus the systems behind them.
-              </h1>
-            </Parallax>
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">
+              {positioning.title}
+            </h1>
 
-            <p className="mt-4 text-lg text-muted-foreground">
-              {positioning.oneLiner}
-            </p>
+            <p className="mt-3 max-w-xl text-muted-foreground">{positioning.description}</p>
 
-            <div className="mt-6 grid gap-6 sm:grid-cols-2">
+            <p className="mt-3 max-w-xl text-muted-foreground">{positioning.description}</p>
+
+            <div className="mt-6 text-sm text-muted-foreground">
+            </div>
+
+            <div className={cn("mt-8 grid gap-4 sm:grid-cols-2", gap)}>
               <div className="rounded-2xl border bg-white p-4">
                 <div className="text-sm font-semibold">{positioning.bestForTitle}</div>
                 <ul className="mt-2 space-y-2 text-sm text-muted-foreground">
@@ -49,19 +75,28 @@ export function Hero() {
               </div>
             </div>
 
-
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Magnetic>
-                <Button size="lg">Get a quote</Button>
-              </Magnetic>
-              <Magnetic>
-                <Button variant="outline" size="lg">
-                  View work
+            {/* Primary actions */}
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Magnetic strength={16}>
+                <Button asChild>
+                  <a href="#contact">Get a quote</a>
                 </Button>
+              </Magnetic>
+
+              <Magnetic strength={16} hoverScale={1.008}>
+                <Button variant="outline" asChild>
+                  <a href="#work">View work</a>
+                </Button>
+              </Magnetic>
+
+              {/* Configurator now lives here (popup) */}
+              <Magnetic strength={16} hoverScale={1.008}>
+                <ConfiguratorDialog />
               </Magnetic>
             </div>
           </div>
 
+          {/* Right column */}
           <div className="lg:pt-10">
             <div className="rounded-2xl border bg-white p-5">
               <div className="flex items-start justify-between gap-4">
@@ -83,19 +118,21 @@ export function Hero() {
                 />
               </div>
 
-              <div className="mt-4 grid gap-3 text-sm">
+              <div className={cn("mt-4 grid gap-3 text-sm", gap)}>
                 <div className="rounded-xl bg-zinc-50 p-4">
                   <div className="font-medium">Design system</div>
                   <div className="mt-1 text-muted-foreground">
                     Typography, spacing, components—consistent and scalable.
                   </div>
                 </div>
+
                 <div className="rounded-xl bg-zinc-50 p-4">
                   <div className="font-medium">Conversion flow</div>
                   <div className="mt-1 text-muted-foreground">
                     Clear offer, frictionless paths, measurable events.
                   </div>
                 </div>
+
                 <div className="rounded-xl bg-zinc-50 p-4">
                   <div className="font-medium">Systems integration</div>
                   <div className="mt-1 text-muted-foreground">
@@ -127,42 +164,30 @@ export function HighlightBulb({
   const glowStyle = useMemo(() => {
     if (!on) return undefined;
     return {
-      background:
-        "radial-gradient(600px circle at 30% 30%, rgba(250, 204, 21, 0.25), transparent 55%), radial-gradient(500px circle at 70% 60%, rgba(252, 211, 77, 0.18), transparent 60%)",
+      boxShadow: "0 18px 60px hsl(var(--ui-glow) / 0.22), 0 10px 22px rgba(0,0,0,0.10)",
     } as React.CSSProperties;
   }, [on]);
 
   return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setOn((v) => !v)}
-        className={cn(
-          "relative flex h-11 w-11 items-center justify-center rounded-2xl border bg-white transition",
-          "hover:shadow-md active:scale-[0.98]"
-        )}
-        aria-pressed={on}
-        aria-label={on ? "Turn highlight glow off" : "Turn highlight glow on"}
-      >
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 rounded-2xl opacity-0 transition-opacity"
-          style={glowStyle}
-        />
-        <Lightbulb className="h-5 w-5" />
-      </button>
-
-      <div className="mt-3">
-        <div className="text-sm font-semibold">{title}</div>
-        <div className="mt-1 text-xs text-muted-foreground">Tap for a quick preview</div>
-        {on ? (
-          <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-            {lines.map((l) => (
-              <li key={l}>{l}</li>
-            ))}
-          </ul>
-        ) : null}
+    <button
+      type="button"
+      onClick={() => setOn((v) => !v)}
+      className={cn(
+        "relative select-none rounded-2xl border bg-white px-3 py-2 text-left transition",
+        "ui-ambient ui-ambient-hover",
+        on ? "ui-ambient-active border-zinc-900" : "border-border"
+      )}
+      style={glowStyle}
+      aria-pressed={on}
+    >
+      <div className="text-xs font-semibold">{title}</div>
+      <div className="mt-1 space-y-1">
+        {lines.slice(0, 2).map((l) => (
+          <div key={l} className="text-[11px] text-muted-foreground">
+            {l}
+          </div>
+        ))}
       </div>
-    </div>
+    </button>
   );
 }

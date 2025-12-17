@@ -29,10 +29,13 @@ export function Magnetic({
   children,
   className,
   strength = 0.18,
-  hoverScale = 1.008,
+  hoverScale,
   disabled,
 }: Props) {
   const ref = React.useRef<HTMLDivElement | null>(null);
+
+  const max = strengthToPixels(strength);
+  const scale = hoverScale ?? 1.008;
 
   // Motion values in “raw px”
   const mx = useMotionValue(0);
@@ -43,7 +46,6 @@ export function Magnetic({
   const sy = useSpring(my, { stiffness: 260, damping: 28, mass: 0.6 });
 
   // Clamp the springed value to a max range
-  const max = strengthToPixels(strength);
   const x = useTransform(sx, (v) => Math.max(-max, Math.min(max, v)));
   const y = useTransform(sy, (v) => Math.max(-max, Math.min(max, v)));
 
@@ -69,6 +71,14 @@ export function Magnetic({
     my.set(0);
   };
 
+  // IMPORTANT: keep "spring" as a literal type (prevents TS “string not assignable” issues)
+  const hoverTransition = {
+    type: "spring" as const,
+    stiffness: 520,
+    damping: 40,
+    mass: 0.7,
+  };
+
   return (
     <motion.div
       ref={ref}
@@ -76,8 +86,8 @@ export function Magnetic({
       onMouseLeave={onLeave}
       style={disabled ? undefined : { x, y }}
       className={cn("inline-block", className)}
-      whileHover={disabled ? undefined : { scale: hoverScale }}
-      transition={{ type: "spring", stiffness: 520, damping: 40, mass: 0.7 }}
+      whileHover={disabled ? undefined : { scale }}
+      transition={hoverTransition}
     >
       {children}
     </motion.div>

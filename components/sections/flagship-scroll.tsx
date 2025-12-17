@@ -22,6 +22,7 @@ const STEP_SENTINEL_MIN_H = "min-h-[220px]";
 export function FlagshipScroll() {
   const [activeIndex, setActiveIndex] = useState(0);
   const reduceMotion = useReducedMotion();
+  const [scrollDir, setScrollDir] = useState<"down" | "up">("down");
 
   const listRef = useRef<HTMLDivElement | null>(null);
 
@@ -93,6 +94,22 @@ export function FlagshipScroll() {
   }, []);
 
   useEffect(() => {
+    let last = window.scrollY;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dir: "down" | "up" = y > last ? "down" : "up";
+      last = y;
+
+      setScrollDir((prev) => (prev === dir ? prev : dir));
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+
+  useEffect(() => {
     const els = nodesRef.current.filter(Boolean) as HTMLElement[];
     if (!els.length) return;
 
@@ -134,7 +151,7 @@ export function FlagshipScroll() {
       },
       {
         root: null,
-        rootMargin: "-40% 0px -40% 0px",
+        rootMargin: scrollDir === "up" ? "-25% 0px -55% 0px" : "-40% 0px -40% 0px",
         threshold: thresholds,
       }
     );
@@ -145,11 +162,11 @@ export function FlagshipScroll() {
       ratiosRef.current.clear();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [thresholds]);
+  }, [thresholds, scrollDir]);
 
   const spring: Transition = reduceMotion
   ? { duration: 0 }
-  : { type: "spring", stiffness: 520, damping: 42, mass: 0.7 };
+  : { type: "spring", stiffness: 780, damping: 38, mass: 0.55 };
 
 
   // Dots (gold) – uses your --ui-glow
@@ -231,9 +248,9 @@ export function FlagshipScroll() {
                         key="expanded"
                         layout
                         transition={spring}
-                        initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }}
+                        initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: 6 }}
                         animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                        exit={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -8 }}
+                        exit={reduceMotion ? { opacity: 1 } : { opacity: 0, y: -6 }}
                       >
                         <motion.div
                           onMouseMove={onTiltMove}

@@ -1,18 +1,15 @@
-export const positioning = {
-  oneLiner:
-    "We rebuild websites for businesses that outgrew theirs—then we connect the systems behind it.",
-
-  bestForTitle: "We’re best for",
+const positioning = {
+  line: "We rebuild websites for businesses that outgrew theirs—then we connect the systems behind it.",
+  bestForTitle: "We’re best for…",
   bestFor: [
-    "Teams with a proven offer that need a higher-converting site",
-    "Businesses ready to connect intake → CRM → automation → reporting",
-    "Owners who care about performance, clarity, and long-term maintainability",
+    "Service businesses ready for a premium web rebuild",
+    "Teams that want intake → CRM → automation connected",
+    "Founders who care about performance, SEO, and conversion clarity",
   ],
-
-  notForTitle: "Not for",
+  notForTitle: "Not for…",
   notFor: [
-    "Cheapest-possible builds or “just make it look cool”",
-    "Projects without decision-makers or approval bandwidth",
-    "Complex systems without owned process/content",
+    "One-page brochure sites with no system needs",
+    "Projects where the only priority is the cheapest possible build",
+    "Teams that want heavy CMS publishing workflows every day",
   ],
 } as const;
