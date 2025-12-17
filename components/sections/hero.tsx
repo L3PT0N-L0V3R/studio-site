@@ -8,6 +8,8 @@ import { Magnetic } from "@/components/motion/magnetic";
 import { cn } from "@/lib/utils";
 import { ConfiguratorDialog } from "@/components/overlays/configurator-dialog";
 import { useGridGap, useSectionSpacing } from "@/components/providers/ui-config";
+import { AnimatePresence, motion } from "framer-motion";
+import { Lightbulb } from "lucide-react";
 
 export function Hero() {
   const sectionPad = useSectionSpacing();
@@ -159,35 +161,87 @@ export function HighlightBulb({
   title?: string;
   lines?: string[];
 }) {
-  const [on, setOn] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const glowStyle = useMemo(() => {
-    if (!on) return undefined;
+    if (!open) return undefined;
     return {
-      boxShadow: "0 18px 60px hsl(var(--ui-glow) / 0.22), 0 10px 22px rgba(0,0,0,0.10)",
+      boxShadow:
+        "0 18px 60px hsl(var(--ui-glow) / 0.22), 0 10px 22px rgba(0,0,0,0.10)",
     } as React.CSSProperties;
-  }, [on]);
+  }, [open]);
+
+  const primary = lines.slice(0, 2);
+  const extra = lines.slice(2);
 
   return (
-    <button
+    <motion.button
       type="button"
-      onClick={() => setOn((v) => !v)}
+      onClick={() => setOpen((v) => !v)}
+      layout
       className={cn(
-        "relative select-none rounded-2xl border bg-white px-3 py-2 text-left transition",
+        "relative select-none rounded-2xl border bg-white px-3 py-2 text-left transition-all",
         "ui-ambient ui-ambient-hover",
-        on ? "ui-ambient-active border-zinc-900" : "border-border"
+        open ? "ui-ambient-active border-zinc-900" : "border-border",
+        // width expansion like before
+        open ? "w-[280px]" : "w-[220px]"
       )}
       style={glowStyle}
-      aria-pressed={on}
+      aria-pressed={open}
+      aria-expanded={open}
     >
-      <div className="text-xs font-semibold">{title}</div>
-      <div className="mt-1 space-y-1">
-        {lines.slice(0, 2).map((l) => (
+      {/* header row with bulb */}
+      <div className="flex items-center gap-2">
+        <span
+          className={cn(
+            "grid h-8 w-8 place-items-center rounded-xl border transition-colors",
+            open ? "bg-amber-200/70" : "bg-white"
+          )}
+        >
+          <Lightbulb
+            className={cn(
+              "h-4 w-4 transition-colors",
+              open ? "text-zinc-900" : "text-zinc-500"
+            )}
+          />
+        </span>
+
+        <div className="min-w-0">
+          <div className="text-xs font-semibold">{title}</div>
+          {!open ? <div className="text-[11px] text-muted-foreground">Click to expand</div> : null}
+        </div>
+      </div>
+
+      {/* lines (first two always visible) */}
+      <div className="mt-2 space-y-1">
+        {primary.map((l) => (
           <div key={l} className="text-[11px] text-muted-foreground">
             {l}
           </div>
         ))}
+
+        {/* extra lines animate in/out */}
+        <AnimatePresence initial={false}>
+          {open && extra.length > 0 ? (
+            <motion.div
+              key="extra"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="overflow-hidden pt-1"
+            >
+              <div className="space-y-1">
+                {extra.map((l) => (
+                  <div key={l} className="text-[11px] text-muted-foreground">
+                    {l}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
-    </button>
+    </motion.button>
   );
 }
