@@ -15,7 +15,16 @@ import {
 } from "framer-motion";
 import { BarChart3, Globe, Mail, ShieldCheck, Workflow, Database } from "lucide-react";
 
-type ItemId = "website" | "intake" | "crm" | "automations" | "reporting" | "trust";
+type ItemId =
+  | "website"
+  | "intake"
+  | "crm"
+  | "automations"
+  | "reporting"
+  | "trust"
+  | "modular"
+  | "expandable"
+  | "audit-aware";
 
 type SystemsMapItem = {
   id: ItemId;
@@ -118,6 +127,51 @@ const systemsMapItems: SystemsMapItem[] = [
   },
 ];
 
+const systemsMapPills: SystemsMapItem[] = [
+  {
+    id: "modular",
+    title: "Modular",
+    subtitle: "swap parts without rewrites",
+    icon: Workflow,
+    tags: ["Phased delivery", "Composable sections", "Clear boundaries"],
+    detail: {
+      headline: "Modular by default",
+      body:
+        "We build separable modules so you can ship in phases, replace parts without refactoring the whole site, and extend functionality without breaking what already works.",
+      bullets: ["Componentized sections", "Clear interfaces + boundaries", "Incremental rollout plan"],
+      outcomes: ["Faster iteration", "Lower rewrite risk", "Easier upgrades"],
+    },
+  },
+  {
+    id: "expandable",
+    title: "Expandable",
+    subtitle: "grow into automation + systems",
+    icon: BarChart3,
+    tags: ["Roadmap-ready", "Integration paths", "No dead ends"],
+    detail: {
+      headline: "Designed to expand",
+      body:
+        "The initial build is structured so you can add intake, CRM, automations, and reporting later without replatforming. Start lean, expand when it pays.",
+      bullets: ["Scalable structure", "Integration-friendly architecture", "Planned extension points"],
+      outcomes: ["Longer lifespan", "Easier feature adds", "Better ROI over time"],
+    },
+  },
+  {
+    id: "audit-aware",
+    title: "Audit-aware",
+    subtitle: "traceability built-in",
+    icon: ShieldCheck,
+    tags: ["Logging patterns", "Change history", "Operational clarity"],
+    detail: {
+      headline: "Audit-aware from day one",
+      body:
+        "We implement pragmatic traceability—structured logs, change history, and clear ownership—so audits and incident response don’t require a rebuild.",
+      bullets: ["Structured logging + correlation IDs", "Change tracking patterns", "Clear system boundaries"],
+      outcomes: ["Lower risk", "Faster debugging", "Simpler audits"],
+    },
+  },
+];
+
 function MagneticCard(props: { item: SystemsMapItem; onClick: () => void; isActive: boolean }) {
   const { item, onClick, isActive } = props;
   const reduceMotion = useReducedMotion();
@@ -130,8 +184,9 @@ function MagneticCard(props: { item: SystemsMapItem; onClick: () => void; isActi
   const gx = useMotionValue(50);
   const gy = useMotionValue(50);
   const glow = useMotionTemplate`
-  radial-gradient(600px circle at ${gx}% ${gy}%, hsl(var(--ui-glow) / 0.10), transparent 55%)
+    radial-gradient(600px circle at ${gx}% ${gy}%, rgba(0,0,0,0.06), transparent 60%)
   `;
+
   function onMove(e: React.MouseEvent<HTMLButtonElement>) {
     if (reduceMotion) return;
     const r = e.currentTarget.getBoundingClientRect();
@@ -172,7 +227,16 @@ function MagneticCard(props: { item: SystemsMapItem; onClick: () => void; isActi
         isActive ? "border-zinc-900 ui-lift-strong" : "border-border"
       )}
     >
-      <motion.div layoutId={`systems-card-${item.id}`} className="absolute inset-0 rounded-2xl" />
+      <motion.div
+        layoutId={`systems-card-${item.id}`}
+        className="absolute inset-0 rounded-2xl"
+      />
+
+      <motion.div
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+        style={{ backgroundImage: glow as any }}
+        aria-hidden="true"
+      />
 
       <div className="relative flex items-start gap-4">
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl border">
@@ -200,7 +264,7 @@ function SystemMap() {
   const reduceMotion = useReducedMotion();
 
   const selected = useMemo(
-    () => systemsMapItems.find((i) => i.id === openId) ?? null,
+    () => [...systemsMapItems, ...systemsMapPills].find((i) => i.id === openId) ?? null,
     [openId]
   );
 
@@ -216,10 +280,28 @@ function SystemMap() {
             </p>
           </div>
 
+          {/* Clickable header pills */}
           <div className="hidden items-center gap-2 sm:flex">
-            <Badge variant="outline">Modular</Badge>
-            <Badge variant="outline">Expandable</Badge>
-            <Badge variant="outline">Audit-aware</Badge>
+            {systemsMapPills.map((pill) => {
+              const isActive = openId === pill.id;
+
+              return (
+                <button
+                  key={pill.id}
+                  type="button"
+                  onClick={() => setOpenId((prev) => (prev === pill.id ? null : pill.id))}
+                  className={cn(
+                    "rounded-full border bg-white px-3 py-1 text-xs font-medium text-zinc-900 shadow-sm transition-all",
+                    "hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-300",
+                    isActive ? "border-zinc-900" : "border-border"
+                  )}
+                  aria-haspopup="dialog"
+                  aria-expanded={isActive}
+                >
+                  {pill.title}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -230,7 +312,7 @@ function SystemMap() {
                 key={item.id}
                 item={item}
                 isActive={openId === item.id}
-                onClick={() => setOpenId(item.id)}
+                onClick={() => setOpenId((prev) => (prev === item.id ? null : item.id))}
               />
             ))}
           </div>

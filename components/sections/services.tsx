@@ -6,7 +6,6 @@ import { ScaleIn } from "@/components/motion/scale-in";
 import { HoverCard } from "@/components/motion/hover-card";
 import { tiers } from "@/content/services";
 import { ServiceQuiz } from "@/components/sections/service-quiz";
-import { Configurator } from "@/components/sections/configurator";
 
 type TierLike = {
   name?: string;
@@ -63,13 +62,8 @@ export function Services() {
           </div>
         </ScaleIn>
 
-        <div className="mt-6 grid gap-4 lg:grid-cols-12 lg:items-start">
-          <div className="lg:col-span-7">
-            <Configurator />
-          </div>
-          <div className="lg:col-span-5">
-            <ServiceQuiz />
-          </div>
+        <div className="mt-6">
+          <ServiceQuiz />
         </div>
 
         <div className="mt-8 grid gap-4 lg:grid-cols-3">
