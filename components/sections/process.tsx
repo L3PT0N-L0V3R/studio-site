@@ -8,6 +8,13 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowRight, CheckCircle2, Sparkles, Workflow, Wrench } from "lucide-react";
 import { processSteps } from "@/content/process";
 
+const PROCESS_TONE_BY_ID: Record<string, string> = {
+  align: "var(--tone-1)",
+  design: "var(--tone-2)",
+  build: "var(--tone-3)",
+  launch: "var(--tone-4)",
+};
+
 const iconMap = {
   align: Workflow,
   design: Sparkles,
@@ -38,7 +45,26 @@ export function Process() {
 
         <div className="mt-8 grid gap-4 lg:grid-cols-2">
           {processSteps.map((s, idx) => {
-            const Icon = iconMap[s.slug];
+            const Icon =
+              iconMap[s.slug as keyof typeof iconMap] ?? Workflow;
+
+            // Use slug as the stable key (align/design/build/launch)
+            const tone = PROCESS_TONE_BY_ID[s.slug] ?? "var(--ui-glow)";
+
+            const iconWrapStyle: React.CSSProperties = {
+              // set a per-card tone that can be themed later
+              ["--tone" as any]: tone,
+
+              // neutral container (no colored fill)
+              backgroundColor: "hsl(var(--background) / 1)",
+              borderColor: "hsl(var(--border))",
+            };
+
+            const iconStyle: React.CSSProperties = {
+              // colored icon glyph
+              color: "hsl(var(--tone) / 1)",
+            };
+
             return (
               <ScaleIn key={s.slug} delay={0.06 * idx} from={0.88}>
                 <HoverCard>
@@ -51,9 +77,13 @@ export function Process() {
                       <CardHeader className="space-y-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border bg-white">
-                              <Icon className="h-5 w-5 text-zinc-900" />
+                            <div
+                              className="flex h-10 w-10 items-center justify-center rounded-2xl border bg-white"
+                              style={iconWrapStyle}
+                            >
+                              <Icon className="h-5 w-5" style={iconStyle} />
                             </div>
+
                             <div>
                               <div className="text-sm text-zinc-600">Step {s.step}</div>
                               <div className="text-base font-semibold">{s.title}</div>
