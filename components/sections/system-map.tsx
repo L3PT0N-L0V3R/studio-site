@@ -211,6 +211,24 @@ function MagneticCard(props: { item: SystemsMapItem; onClick: () => void; isActi
     gx.set(50);
     gy.set(50);
   }
+  
+  const TONE_BY_ID: Record<ItemId, string> = {
+  website: "var(--tone-1)",
+  intake: "var(--tone-2)",
+  crm: "var(--tone-3)",
+  automations: "var(--tone-4)",
+  reporting: "var(--tone-5)",
+  trust: "var(--tone-6)",
+
+  // header pills
+  modular: "var(--tone-2)",
+  expandable: "var(--tone-5)",
+  "audit-aware": "var(--tone-6)",
+};
+
+
+  const tone = TONE_BY_ID[item.id] ?? "var(--ui-glow)";
+
 
   const Icon = item.icon;
 
@@ -220,11 +238,11 @@ function MagneticCard(props: { item: SystemsMapItem; onClick: () => void; isActi
       onClick={onClick}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      style={reduceMotion ? undefined : { x, y }}
+      style={{ ["--tone" as any]: (TONE_BY_ID[item.id] ?? "var(--ui-glow)") }}
       className={cn(
         "group relative w-full rounded-2xl border bg-white p-6 text-left transition-shadow",
         "ui-lift",
-        isActive ? "border-zinc-900 ui-lift-strong" : "border-border"
+        isActive ? "ui-border-accent ui-lift-strong" : "border-border"
       )}
     >
       <motion.div
@@ -239,8 +257,14 @@ function MagneticCard(props: { item: SystemsMapItem; onClick: () => void; isActi
       />
 
       <div className="relative flex items-start gap-4">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border">
-          <Icon className="h-5 w-5" />
+        <div
+          className="flex h-12 w-12 items-center justify-center rounded-2xl border bg-white"
+          style={{
+            backgroundColor: "hsl(var(--background) / 1)",
+            borderColor: "hsl(var(--border))",
+          }}
+        >
+          <item.icon className="h-5 w-5" style={{ color: "hsl(var(--tone) / 1)" }} />
         </div>
         <div>
           <div className="text-lg font-semibold tracking-tight">{item.title}</div>
@@ -268,6 +292,20 @@ function SystemMap() {
     [openId]
   );
 
+  const TONE_BY_ID: Record<ItemId, string> = {
+  website: "var(--tone-1)",
+  intake: "var(--tone-2)",
+  crm: "var(--tone-3)",
+  automations: "var(--tone-4)",
+  reporting: "var(--tone-5)",
+  trust: "var(--tone-6)",
+
+  // header pills (if you want them to share tones)
+  modular: "var(--tone-1)",
+  expandable: "var(--tone-2)",
+  "audit-aware": "var(--tone-6)",
+};
+
   return (
     <section className="py-14">
       <Container>
@@ -293,7 +331,7 @@ function SystemMap() {
                   className={cn(
                     "rounded-full border bg-white px-3 py-1 text-xs font-medium text-zinc-900 shadow-sm transition-all",
                     "hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-300",
-                    isActive ? "border-zinc-900" : "border-border"
+                    isActive ? "ui-border-accent" : "border-border"
                   )}
                   aria-haspopup="dialog"
                   aria-expanded={isActive}

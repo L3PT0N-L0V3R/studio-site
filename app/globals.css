@@ -55,8 +55,8 @@
   --accent-1-soft: 231 85% 60% / 0.14;
   --accent-2-soft: 190 90% 45% / 0.12;
   
-  --ui-glow: 231 85% 60%;
-  --ui-glow-2: 190 90% 45%;
+  --ui-glow: var(--accent-1);
+  --ui-glow-2: var(--accent-2);
 
     /* Flagship step tones (used by flagship-scroll icons) */
   --tone-motion: var(--ui-glow);            /* motion = primary accent */
@@ -64,12 +64,13 @@
   --tone-conversion: 145 65% 36%;           /* green */
   --tone-integrations: 275 80% 60%;         /* violet */
 
-  --tone-1: 221 83% 53%; /* blue */
-  --tone-2: 262 83% 58%; /* violet */
-  --tone-3: 173 80% 40%; /* teal */
-  --tone-4: 24 95% 53%;  /* orange */
-  --tone-5: 346 77% 50%; /* rose */
-  --tone-6: 142 71% 45%; /* green */
+    /* Multi-tone palette (themeable later) */
+  --tone-1: var(--accent-1);        /* indigo */
+  --tone-2: var(--accent-2);        /* teal */
+  --tone-3: 152 70% 40%;            /* green */
+  --tone-4: 24 92% 55%;             /* orange */
+  --tone-5: 268 80% 62%;            /* violet */
+  --tone-6: 346 85% 55%;            /* rose */
   
 /* Make shadcn/tailwind ring feel premium and theme-aware */
   --ring: var(--accent-1);
