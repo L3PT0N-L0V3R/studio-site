@@ -349,6 +349,14 @@
       0 1px 0 rgba(255,255,255,0.10) inset,
       0 18px 60px hsl(var(--ui-glow) / 0.22);
   }
+
+  #system-map a,
+  #system-map a:hover,
+  #system-map button,
+  #system-map button:hover {
+    text-decoration: none !important;
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 

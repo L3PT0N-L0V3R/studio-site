@@ -30,7 +30,7 @@ type SystemsMapItem = {
   id: ItemId;
   title: string;
   subtitle: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   tags: string[];
   detail: {
     headline: string;
@@ -240,10 +240,14 @@ function MagneticCard(props: { item: SystemsMapItem; onClick: () => void; isActi
       onMouseLeave={onLeave}
       style={{ ["--tone" as any]: (TONE_BY_ID[item.id] ?? "var(--ui-glow)") }}
       className={cn(
-        "group relative w-full rounded-2xl border bg-white p-6 text-left transition-shadow",
-        "ui-lift",
-        isActive ? "ui-border-accent ui-lift-strong" : "border-border"
+        "group relative w-full rounded-2xl border bg-white p-6 text-left",
+        "transition-transform transition-shadow duration-200",
+        "shadow-sm hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+        isActive ? "ui-border-accent shadow-lg shadow-black/10" : "border-border"
       )}
+
+
     >
       <motion.div
         layoutId={`systems-card-${item.id}`}
@@ -264,7 +268,7 @@ function MagneticCard(props: { item: SystemsMapItem; onClick: () => void; isActi
             borderColor: "hsl(var(--border))",
           }}
         >
-          <item.icon className="h-5 w-5" style={{ color: "hsl(var(--tone) / 1)" }} />
+          <Icon className="h-5 w-5" style={{ color: "hsl(var(--tone) / 1)" }} />
         </div>
         <div>
           <div className="text-lg font-semibold tracking-tight">{item.title}</div>
@@ -307,7 +311,7 @@ function SystemMap() {
 };
 
   return (
-    <section className="py-14">
+    <section id="system-map" className="py-14">
       <Container>
         <div className="flex items-start justify-between gap-6">
           <div className="max-w-2xl">
@@ -331,8 +335,10 @@ function SystemMap() {
                   className={cn(
                     "rounded-full border bg-white px-3 py-1 text-xs font-medium text-zinc-900 shadow-sm transition-all",
                     "hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-300",
+                    "no-underline hover:no-underline",
                     isActive ? "ui-border-accent" : "border-border"
                   )}
+
                   aria-haspopup="dialog"
                   aria-expanded={isActive}
                 >

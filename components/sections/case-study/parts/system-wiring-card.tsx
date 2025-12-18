@@ -6,8 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Workflow } from "lucide-react";
 import { wiringNodes, type WiringNodeId } from "../data";
-import { AnimatePresence, motion, useReducedMotion, type Easing } from "framer-motion";
-
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 export function SystemWiringCard(props: {
   active: WiringNodeId;
@@ -55,6 +54,7 @@ export function SystemWiringCard(props: {
         <div>
           {/* Tabs */}
           <div className="relative mt-1" role="tablist" aria-label="System wiring steps">
+            {/* connector line */}
             <div className="absolute left-5 right-5 top-1/2 h-px -translate-y-1/2 bg-border" />
 
             <div className="relative grid grid-cols-4 gap-3">
@@ -69,34 +69,39 @@ export function SystemWiringCard(props: {
                     type="button"
                     onClick={() => onActiveChange(n.id)}
                     className={cn(
-                      "relative rounded-2xl border bg-white px-3 py-3 text-left transition",
-                      "active:scale-[0.99]",
-                      // subtle lift on hover for all
-                      "ui-lift",
-                      // stronger + gold underglow when active
-                      isActive ? "border-zinc-900 ui-lift-strong" : "border-border"
+                      // KEY FIX: relative + overflow-hidden contain the absolute highlight
+                      "group relative isolate overflow-hidden rounded-2xl border bg-white px-4 py-3 text-left",
+                      "transition-all duration-200",
+                      "shadow-sm hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10",
+                      "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                      isActive ? "ui-border-accent shadow-lg shadow-black/10" : "border-border"
                     )}
                   >
-                    {/* Shared-element active pill (gold) */}
+                    {/* Active highlight (contained to the button now) */}
                     {isActive ? (
                       <motion.div
                         layoutId="wiring-active-pill"
-                        className="pointer-events-none absolute inset-0 rounded-2xl"
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 z-0 rounded-2xl"
                         style={{
                           background: "hsl(var(--ui-glow) / 0.14)",
                           border: "1px solid hsl(var(--ui-glow) / 0.35)",
                           boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.04)",
                         }}
                         transition={
-                          reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 42, mass: 0.7 }
+                          reduceMotion
+                            ? { duration: 0 }
+                            : { type: "spring", stiffness: 520, damping: 42, mass: 0.7 }
                         }
                       />
                     ) : null}
 
-                    <div className="relative text-sm font-medium">{n.title}</div>
-                    <div className="relative mt-1 text-xs text-muted-foreground">{n.subtitle}</div>
+                    {/* Content above highlight */}
+                    <div className="relative z-10 text-sm font-medium">{n.title}</div>
+                    <div className="relative z-10 mt-1 text-xs text-muted-foreground">
+                      {n.subtitle}
+                    </div>
                   </button>
-
                 );
               })}
             </div>
