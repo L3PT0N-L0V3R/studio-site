@@ -15,17 +15,12 @@ import { processSteps } from "@/content/process";
 
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 
-type PageProps = {
-  // Next 16 can pass params as a Promise in some configurations
-  params: Promise<{ slug: string }> | { slug: string };
+type Props = {
+  params: Promise<{ slug: string }>;
 };
 
-function unwrapParams(params: PageProps["params"]) {
-  return params instanceof Promise ? params : Promise.resolve(params);
-}
-
-export default async function ProcessStepPage({ params }: PageProps) {
-  const { slug } = await unwrapParams(params);
+export default async function ProcessStepPage({ params }: Props) {
+  const { slug } = await params;
 
   const step = processSteps.find((s) => s.slug === slug);
   if (!step) return notFound();
@@ -37,7 +32,6 @@ export default async function ProcessStepPage({ params }: PageProps) {
   return (
     <section className="border-b">
       <Container className="py-10 sm:py-14">
-        {/* Breadcrumbs */}
         <FadeIn>
           <nav className="text-sm text-zinc-500">
             <Link href="/" className="hover:text-zinc-900">
@@ -52,7 +46,6 @@ export default async function ProcessStepPage({ params }: PageProps) {
           </nav>
         </FadeIn>
 
-        {/* Header */}
         <ScaleIn from={0.92}>
           <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -66,10 +59,7 @@ export default async function ProcessStepPage({ params }: PageProps) {
               </h1>
 
               <p className="mt-3 max-w-2xl text-zinc-600">{step.summary}</p>
-
-              <p className="mt-3 max-w-2xl text-sm text-zinc-500">
-                {POSITIONING_LINE}
-              </p>
+              <p className="mt-3 max-w-2xl text-sm text-zinc-500">{POSITIONING_LINE}</p>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button asChild>
@@ -96,10 +86,8 @@ export default async function ProcessStepPage({ params }: PageProps) {
 
         <Separator className="my-10" />
 
-        {/* Body grid */}
         <div className="grid gap-4 lg:grid-cols-3">
-          {/* Left column */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="space-y-4 lg:col-span-2">
             <ScaleIn from={0.94}>
               <Card>
                 <CardHeader>
@@ -123,9 +111,7 @@ export default async function ProcessStepPage({ params }: PageProps) {
               <Card>
                 <CardHeader>
                   <div className="text-base font-semibold">Deliverables</div>
-                  <div className="text-sm text-zinc-600">
-                    What you get at the end of this step.
-                  </div>
+                  <div className="text-sm text-zinc-600">What you get at the end of this step.</div>
                 </CardHeader>
                 <CardContent className="grid gap-2">
                   {step.deliverables.map((d) => (
@@ -162,7 +148,6 @@ export default async function ProcessStepPage({ params }: PageProps) {
             </ScaleIn>
           </div>
 
-          {/* Right column */}
           <div className="space-y-4">
             <ScaleIn from={0.94}>
               <Card>
@@ -219,7 +204,6 @@ export default async function ProcessStepPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Prev / Next */}
         <div className="mt-10 flex items-center justify-between">
           <div>
             {prev ? (

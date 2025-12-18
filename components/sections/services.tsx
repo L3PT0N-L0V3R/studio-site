@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/layout/container";
@@ -39,8 +40,16 @@ function getTierFeatures(t: TierLike): string[] {
   return Array.isArray(maybe) ? maybe : [];
 }
 
+function tierSlug(name: string): "starter" | "business" | "premium" | null {
+  const n = name.trim().toLowerCase();
+  if (n === "starter") return "starter";
+  if (n === "business") return "business";
+  if (n === "premium") return "premium";
+  return null;
+}
+
 type HeaderPill = {
-  id: "conversion" | "mobile" | "performance";
+  id: "conversion" | "mobile" | "fast";
   label: string;
   headline: string;
   body: string;
@@ -65,22 +74,24 @@ const headerPills: HeaderPill[] = [
     bullets: ["Responsive grids", "Thumb-friendly interactions", "Readable type scale"],
   },
   {
-    id: "performance",
-    label: "Performance-aware",
-    headline: "Performance-aware build",
+    id: "fast",
+    label: "Fast",
+    headline: "Fast, performance-aware builds",
     body:
-      "We treat speed as a feature, designing and implementing with Core Web Vitals and real user experience in mind.",
-    bullets: ["Core Web Vitals targets", "Image/code optimization", "No heavyweight UI patterns"],
+      "We treat speed as a feature. The build is designed to stay responsive and hit real-world performance targets.",
+    bullets: ["Core Web Vitals aware", "Image/code optimization", "No heavyweight UI patterns"],
   },
 ];
 
-const pill =
+const pillBase =
   "rounded-full border border-zinc-200 bg-white px-3 py-1 text-sm text-zinc-700 shadow-sm transition-all";
-const chip =
+
+const chipBase =
   "rounded-full border border-zinc-200 bg-white px-2.5 py-1 text-xs text-zinc-700";
 
 export function Services() {
   const reduceMotion = useReducedMotion();
+
   const [openPill, setOpenPill] = useState<HeaderPill["id"] | null>(null);
 
   const selectedPill = useMemo(
@@ -103,35 +114,39 @@ export function Services() {
         <ScaleIn>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Customizable builds</h2>
+              <h2 className="text-2xl font-semibold tracking-tight">Services</h2>
               <p className="mt-2 max-w-2xl text-zinc-600">
-                Start simple. Scale into premium motion, interactivity, conversion flows, and
-                integrations when it makes sense.
+                Choose what you need now. Start simple—or scale into advanced interactions,
+                automation, and systems that streamline your workflow over time.
               </p>
             </div>
 
             {/* Clickable header pills */}
             <div className="flex items-center gap-2">
-              {headerPills.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => setOpenPill((prev) => (prev === p.id ? null : p.id))}
-                  className={cn(
-                    pill,
-                    "hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-300"
-                  )}
-                  aria-haspopup="dialog"
-                  aria-expanded={openPill === p.id}
-                >
-                  {p.label}
-                </button>
-              ))}
+              {headerPills.map((p) => {
+                const isActive = openPill === p.id;
+
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setOpenPill((prev) => (prev === p.id ? null : p.id))}
+                    className={cn(
+                      pillBase,
+                      "hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-300",
+                      isActive ? "border-zinc-900" : "border-zinc-200"
+                    )}
+                    aria-haspopup="dialog"
+                    aria-expanded={isActive}
+                  >
+                    {p.label}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </ScaleIn>
 
-        {/* Quiz only (Configurator removed) */}
         <div className="mt-6">
           <ServiceQuiz />
         </div>
@@ -141,39 +156,61 @@ export function Services() {
             const name = getTierName(t);
             const desc = getTierDesc(t);
             const features = getTierFeatures(t);
+            const slug = tierSlug(name);
 
-            return (
-              <ScaleIn key={name} delay={0.06 * idx} from={0.92}>
-                <HoverCard>
-                  <Card className="h-full rounded-2xl transition-shadow">
-                    <CardHeader>
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="text-base font-semibold">{name}</div>
-                        {t.badge ? <Badge variant="secondary">{t.badge}</Badge> : null}
-                      </div>
-                      {desc ? <div className="mt-2 text-sm text-zinc-600">{desc}</div> : null}
-                    </CardHeader>
+              return (
+                <ScaleIn key={name} delay={0.06 * idx} from={0.92}>
+                  <HoverCard>
+                    <div className="relative">
+                      {slug ? (
+                        <Link
+                          href={`/services/${slug}`}
+                          aria-label={`Learn more about ${name}`}
+                          className="absolute inset-0 z-10 rounded-2xl focus:outline-none focus:ring-2 focus:ring-zinc-300"
+                        />
+                      ) : null}
 
-                    <CardContent className="flex h-full flex-col">
-                      <div className="flex flex-wrap gap-2">
-                        {features.map((f) => (
-                          <span key={f} className={chip}>
-                            {f}
-                          </span>
-                        ))}
-                      </div>
+                      <Card
+                        className={cn(
+                          "h-full rounded-2xl transition-shadow",
+                          slug ? "cursor-pointer hover:shadow-md" : ""
+                        )}
+                      >
+                        <CardHeader>
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="text-base font-semibold">{name}</div>
+                            {t.badge ? <Badge variant="secondary">{t.badge}</Badge> : null}
+                          </div>
+                          {desc ? <div className="mt-2 text-sm text-zinc-600">{desc}</div> : null}
+                        </CardHeader>
 
-                      <div className="mt-6 flex items-center justify-between">
-                        <div className="text-sm font-semibold">{t.price ?? ""}</div>
-                        <Button asChild size="sm" variant="outline">
-                          <a href="#contact">Ask about this</a>
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </HoverCard>
-              </ScaleIn>
-            );
+                        <CardContent className="flex h-full flex-col">
+                          {/* Pills are NOT links anymore — whole card is clickable */}
+                          <div className="flex flex-wrap gap-2">
+                            {features.map((f) => (
+                              <span key={f} className={chipBase}>
+                                {f}
+                              </span>
+                            ))}
+                          </div>
+
+                          <div className="mt-6 flex items-center justify-between">
+                            <div className="text-sm font-semibold">{t.price ?? ""}</div>
+
+                            {/* Keep this ABOVE the overlay so it stays clickable */}
+                            <div className="relative z-20">
+                              <Button asChild size="sm" variant="outline">
+                                <a href="#contact">Ask about this</a>
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </HoverCard>
+                </ScaleIn>
+              );
+
           })}
         </div>
 

@@ -16,13 +16,63 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { flagshipSteps } from "@/content/flagship";
 
-const TAGS = ["Modular", "Mobile-first", "Performance-aware"];
+type HeaderPill = {
+  id: "narrative" | "mobile" | "performance";
+  label: string;
+  headline: string;
+  body: string;
+  bullets: string[];
+};
+
+const HEADER_PILLS: HeaderPill[] = [
+  {
+    id: "narrative",
+    label: "Narrative-led",
+    headline: "Narrative-led motion",
+    body:
+      "Scroll pacing and transitions guide attention and hierarchy—so the experience feels premium and intentional, not noisy.",
+    bullets: ["Controlled reveals (scale/blur/parallax—subtle)", "Section-to-section rhythm", "Clear story beats"],
+  },
+  {
+    id: "mobile",
+    label: "Mobile-first",
+    headline: "Mobile-first motion",
+    body:
+      "Motion is tuned for small screens: readable, responsive, and never janky—so it feels high-end across devices.",
+    bullets: ["Responsive layout + spacing", "Thumb-friendly interaction zones", "Avoid layout thrash"],
+  },
+  {
+    id: "performance",
+    label: "Performance-aware",
+    headline: "Performance-aware implementation",
+    body:
+      "We keep motion lightweight and predictable so you hit Core Web Vitals targets and avoid stutters on real devices.",
+    bullets: ["GPU-friendly patterns", "Avoid heavy runtime effects", "Performance-safe motion (no jank on mobile)"],
+  },
+];
+
 const STEP_SENTINEL_MIN_H = "min-h-[220px]";
 
 export function FlagshipScroll() {
   const [activeIndex, setActiveIndex] = useState(0);
   const reduceMotion = useReducedMotion();
   const [scrollDir, setScrollDir] = useState<"down" | "up">("down");
+
+  // Header pill modal state
+  const [openPill, setOpenPill] = useState<HeaderPill["id"] | null>(null);
+  const selectedPill = useMemo(
+    () => HEADER_PILLS.find((p) => p.id === openPill) ?? null,
+    [openPill]
+  );
+
+  useEffect(() => {
+    if (!openPill) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenPill(null);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [openPill]);
 
   const listRef = useRef<HTMLDivElement | null>(null);
 
@@ -52,7 +102,10 @@ export function FlagshipScroll() {
   }
 
   // ---- Dotted spine: cover height (in px), animated ----
-  const coverH = useSpring(0, reduceMotion ? { stiffness: 1, damping: 1 } : { stiffness: 240, damping: 34, mass: 0.9 });
+  const coverH = useSpring(
+    0,
+    reduceMotion ? { stiffness: 1, damping: 1 } : { stiffness: 240, damping: 34, mass: 0.9 }
+  );
 
   const updateCoverToIndex = (idx: number) => {
     const listEl = listRef.current;
@@ -107,7 +160,6 @@ export function FlagshipScroll() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
 
   useEffect(() => {
     const els = nodesRef.current.filter(Boolean) as HTMLElement[];
@@ -165,9 +217,8 @@ export function FlagshipScroll() {
   }, [thresholds, scrollDir]);
 
   const spring: Transition = reduceMotion
-  ? { duration: 0 }
-  : { type: "spring", stiffness: 780, damping: 38, mass: 0.55 };
-
+    ? { duration: 0 }
+    : { type: "spring", stiffness: 780, damping: 38, mass: 0.55 };
 
   // Dots (gold) – uses your --ui-glow
   const dottedLineBase: React.CSSProperties = {
@@ -186,19 +237,35 @@ export function FlagshipScroll() {
       <Container className="py-14 sm:py-20">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-2xl font-semibold tracking-tight">Customizable builds</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">Guided user experience</h2>
             <p className="mt-2 max-w-2xl text-zinc-600">
-              Start simple. Scale into premium motion, interactivity, conversion flows, and integrations
-              when it makes sense.
+              Turn your site into a guided experience: pacing, hierarchy, and motion that move people
+              from curiosity to action.
             </p>
           </div>
 
+          {/* Clickable header pills */}
           <div className="flex items-center gap-2 text-sm text-zinc-600">
-            {TAGS.map((t) => (
-              <span key={t} className="rounded-full border px-3 py-1">
-                {t}
-              </span>
-            ))}
+            {HEADER_PILLS.map((p) => {
+              const isActive = openPill === p.id;
+
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setOpenPill((prev) => (prev === p.id ? null : p.id))}
+                  className={cn(
+                    "rounded-full border bg-white px-3 py-1 shadow-sm transition-all",
+                    "hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-300",
+                    isActive ? "border-zinc-900" : "border-border"
+                  )}
+                  aria-haspopup="dialog"
+                  aria-expanded={isActive}
+                >
+                  {p.label}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -337,6 +404,68 @@ export function FlagshipScroll() {
             );
           })}
         </div>
+
+        {/* Header pill modal */}
+        <AnimatePresence>
+          {selectedPill ? (
+            <>
+              <motion.div
+                className="fixed inset-0 z-50 bg-black/20 backdrop-blur-[1px]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setOpenPill(null)}
+              />
+
+              <motion.div
+                className="fixed inset-0 z-50 grid place-items-center p-4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <motion.div
+                  transition={
+                    reduceMotion
+                      ? { duration: 0 }
+                      : { type: "spring", stiffness: 520, damping: 42, mass: 0.85 }
+                  }
+                  className="w-full max-w-xl overflow-hidden rounded-2xl border bg-white shadow-xl"
+                  onClick={(e) => e.stopPropagation()}
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={selectedPill.headline}
+                >
+                  <div className="flex items-start justify-between gap-4 p-6">
+                    <div className="min-w-0">
+                      <div className="text-sm text-muted-foreground">{selectedPill.label}</div>
+                      <div className="mt-1 text-2xl font-semibold tracking-tight">
+                        {selectedPill.headline}
+                      </div>
+                      <p className="mt-3 text-muted-foreground">{selectedPill.body}</p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setOpenPill(null)}
+                      className="shrink-0 rounded-xl border bg-white px-3 py-2 text-sm hover:shadow-sm"
+                    >
+                      Close
+                    </button>
+                  </div>
+
+                  <div className="border-t px-6 py-5">
+                    <div className="text-sm font-semibold">Includes</div>
+                    <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+                      {selectedPill.bullets.map((b) => (
+                        <li key={b}>{b}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
+              </motion.div>
+            </>
+          ) : null}
+        </AnimatePresence>
       </Container>
     </section>
   );
