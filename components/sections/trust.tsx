@@ -272,7 +272,7 @@ function HighlightWords({ text, words }: { text: string; words: string[] }) {
     parts.push(
       <mark
         key={`${bestIdx}-${marked}`}
-        className="rounded-lg bg-amber-200 px-2 py-0.5 text-zinc-900"
+        className="ui-highlight"
       >
         {marked}
       </mark>

@@ -23,21 +23,76 @@
   --muted: 240 4.8% 95.9%;
   --muted-foreground: 240 3.8% 46.1%;
 
-  --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 5.9% 10%;
+  --accent: 231 30% 96%;
+  --accent-foreground: 231 35% 18%;
+
+    /* Secondary surfaces (badges, chips, subtle fills in shadcn) */
+  --secondary: 240 5% 96%;
+  --secondary-foreground: 240 10% 18%;
 
   --destructive: 0 84.2% 60.2%;
   --destructive-foreground: 0 0% 98%;
 
   --border: 240 5.9% 90%;
   --input: 240 5.9% 90%;
-  --ring: 240 5.9% 10%;
+  --ring: 231 85% 60%;
 
   --radius: 1rem;
   --ui-glow: 42 95% 58%;
 
+  --bg: 0 0% 100%;
+  --fg: 240 10% 3.9%;
+  --muted: 240 5% 96%;
+  --muted-foreground: 240 4% 46%;
+  --border: 240 6% 90%;
+  --card: 0 0% 100%;
+
+  /* Accent tokens (the ONLY place you should pick colors) */
+  --accent-1: 231 85% 60%; /* indigo */
+  --accent-2: 190 90% 45%; /* teal */
+  --ring: var(--accent-1);
+
+  /* Soft usage helpers */
+  --accent-1-soft: 231 85% 60% / 0.14;
+  --accent-2-soft: 190 90% 45% / 0.12;
   
+  --ui-glow: 231 85% 60%;
+  --ui-glow-2: 190 90% 45%;
+
+  
+/* Make shadcn/tailwind ring feel premium and theme-aware */
+  --ring: var(--accent-1);
 }
+
+/* Theme presets for the future theme selector */
+[data-theme="plum"] {
+  --accent-1: 270 84% 60%;
+  --accent-2: 330 86% 55%;
+  --ui-glow: var(--accent-1);
+  --ui-glow-2: var(--accent-2);
+  --ring: var(--accent-1);
+}
+
+[data-theme="forest"] {
+  --accent-1: 150 70% 40%;
+  --accent-2: 205 90% 45%;
+  --ui-glow: var(--accent-1);
+  --ui-glow-2: var(--accent-2);
+  --ring: var(--accent-1);
+}
+
+[data-theme="mono"] {
+  --accent-1: 240 5% 25%;
+  --accent-2: 240 5% 25%;
+  --ui-glow: var(--accent-1);
+  --ui-glow-2: var(--accent-2);
+  --ring: var(--accent-1);
+}
+
+.ui-smoke-test {
+  outline: 6px solid red !important;
+}
+
 
 /* Optional dark mode tokens (keep; doesn’t affect you unless you add `.dark`) */
 .dark {
@@ -144,6 +199,48 @@
   );
 }
 
+/* Modern, subtle color usage helpers */
+.ui-highlight {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--ui-glow) / 0.22),
+    hsl(var(--ui-glow-2) / 0.16)
+  );
+  border-radius: 0.6rem;
+  padding: 0.06em 0.35em;
+  color: hsl(var(--foreground));
+}
+
+.ui-wash {
+  position: relative;
+  isolation: isolate;
+}
+.ui-wash::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(650px circle at 18% 15%, hsl(var(--ui-glow) / 0.10), transparent 60%),
+    radial-gradient(650px circle at 82% 25%, hsl(var(--ui-glow-2) / 0.08), transparent 62%);
+  filter: blur(2px);
+}
+.ui-wash > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Accent border + ring you can use on “active” pills/cards */
+.ui-border-accent {
+  border-color: hsl(var(--ui-glow) / 0.65) !important;
+}
+.ui-ring-accent:focus-visible {
+  outline: 2px solid hsl(var(--ui-glow) / 0.35);
+  outline-offset: 2px;
+}
+
+
 .meter-track {
   height: 0.5rem;              /* 8px (h-2) */
   border-radius: 999px;
@@ -189,6 +286,56 @@
   Tailwind v4 needs the theme mapping for classes like:
   bg-background, text-foreground, border-border, ring-ring, etc.
 */
+
+@layer utilities {
+  /* Accent outline for small pills (logo chip, small badges) */
+  .ui-accent-pill {
+    border-color: hsl(var(--ui-glow) / 0.55) !important;
+    box-shadow: 0 10px 30px hsl(var(--ui-glow) / 0.10);
+  }
+
+  /* Nav link underline (clean + modern, no loud color blocks) */
+  .ui-accent-underline {
+    position: relative;
+  }
+  .ui-accent-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    height: 2px;
+    border-radius: 999px;
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity 150ms ease, transform 150ms ease;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--ui-glow) / 0.85),
+      hsl(var(--ui-glow-2) / 0.75)
+    );
+  }
+  .ui-accent-underline:hover::after,
+  .ui-accent-underline:focus-visible::after {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Signature CTA glow (subtle, professional) */
+  .ui-accent-cta {
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 14px 45px hsl(var(--ui-glow) / 0.18);
+  }
+  .ui-accent-cta:hover {
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.10) inset,
+      0 18px 60px hsl(var(--ui-glow) / 0.22);
+  }
+}
+
+
+
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));

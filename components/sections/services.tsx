@@ -134,7 +134,7 @@ export function Services() {
                     className={cn(
                       pillBase,
                       "hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-300",
-                      isActive ? "border-zinc-900" : "border-zinc-200"
+                      isActive ? "ui-border-accent" : "border-zinc-200"
                     )}
                     aria-haspopup="dialog"
                     aria-expanded={isActive}

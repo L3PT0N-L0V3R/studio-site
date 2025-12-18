@@ -81,13 +81,13 @@ export function Hero() {
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Magnetic strength={16}>
                 <Button asChild>
-                  <a href="#contact">Get a quote</a>
+                  <a className="ui-accent-cta" href="#contact">Get a quote</a>
                 </Button>
               </Magnetic>
 
               <Magnetic strength={16} hoverScale={1.008}>
                 <Button variant="outline" asChild>
-                  <a href="#work">View work</a>
+                  <a className="ui-accent-underline" href="#work">View work</a>
                 </Button>
               </Magnetic>
 
@@ -182,7 +182,7 @@ export function HighlightBulb({
       className={cn(
         "relative select-none rounded-2xl border bg-white px-3 py-2 text-left transition-all",
         "ui-ambient ui-ambient-hover",
-        open ? "ui-ambient-active border-zinc-900" : "border-border",
+        open ? "ui-ambient-active ui-border-accent" : "border-border",
         // width expansion like before
         open ? "w-[280px]" : "w-[220px]"
       )}
@@ -195,7 +195,7 @@ export function HighlightBulb({
         <span
           className={cn(
             "grid h-8 w-8 place-items-center rounded-xl border transition-colors",
-            open ? "bg-amber-200/70" : "bg-white"
+            open ? "bg-[hsl(var(--ui-glow)/0.14)]" : "bg-white"
           )}
         >
           <Lightbulb

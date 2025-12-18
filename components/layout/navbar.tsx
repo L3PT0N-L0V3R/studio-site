@@ -20,26 +20,41 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
       <Container className="flex h-14 items-center justify-between">
-        <a href="#top" className="text-sm font-semibold tracking-tight">
-          Studio
+        {/* Logo / Studio */}
+        <a
+          href="#top"
+          className="ui-accent-underline inline-flex items-center gap-2 text-sm font-semibold tracking-tight"
+        >
+          <span>Studio</span>
+
           {focus ? (
-            <span className="ml-2 rounded-full border px-2 py-0.5 text-[11px] font-medium text-zinc-600">
+            <span className="ui-accent-pill rounded-full border px-2 py-0.5 text-[11px] font-medium text-zinc-600">
               {focus}
             </span>
           ) : null}
         </a>
 
+        {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-sm text-zinc-600 md:flex">
           {links.map((l) => (
-            <a key={l.href} href={l.href} className="hover:text-zinc-900">
+            <a
+              key={l.href}
+              href={l.href}
+              className="ui-accent-underline transition-colors hover:text-zinc-900 focus-visible:outline-none"
+            >
               {l.label}
             </a>
           ))}
+
+          {/* CTA: apply accent glow to the anchor (most reliable with asChild) */}
           <Button asChild size="sm">
-            <a href="#contact">Get a quote</a>
+            <a href="#contact" className="ui-accent-cta">
+              Get a quote
+            </a>
           </Button>
         </nav>
 
+        {/* Mobile menu */}
         <div className="md:hidden">
           <Sheet>
             <SheetTrigger asChild>
@@ -55,12 +70,19 @@ export function Navbar() {
 
               <div className="mt-6 grid gap-3">
                 {links.map((l) => (
-                  <a key={l.href} href={l.href} className="text-sm">
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    className="ui-accent-underline text-sm text-zinc-700 hover:text-zinc-900"
+                  >
                     {l.label}
                   </a>
                 ))}
+
                 <Button asChild className="mt-2">
-                  <a href="#contact">Get a quote</a>
+                  <a href="#contact" className="ui-accent-cta">
+                    Get a quote
+                  </a>
                 </Button>
               </div>
             </SheetContent>
