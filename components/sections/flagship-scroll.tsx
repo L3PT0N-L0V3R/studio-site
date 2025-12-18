@@ -10,6 +10,7 @@ import {
   useTransform,
   type Transition,
 } from "framer-motion";
+
 import { Container } from "@/components/layout/container";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,7 +32,11 @@ const HEADER_PILLS: HeaderPill[] = [
     headline: "Narrative-led motion",
     body:
       "Scroll pacing and transitions guide attention and hierarchy—so the experience feels premium and intentional, not noisy.",
-    bullets: ["Controlled reveals (scale/blur/parallax—subtle)", "Section-to-section rhythm", "Clear story beats"],
+    bullets: [
+      "Controlled reveals (scale/blur/parallax—subtle)",
+      "Section-to-section rhythm",
+      "Clear story beats",
+    ],
   },
   {
     id: "mobile",
@@ -52,6 +57,16 @@ const HEADER_PILLS: HeaderPill[] = [
 ];
 
 const STEP_SENTINEL_MIN_H = "min-h-[220px]";
+
+/**
+ * Per-step tone selection (themeable).
+ * Define these in globals.css:
+ *   --tone-1..--tone-6 = "H S L" triplets, e.g. "221 83% 53%"
+ */
+function toneForIndex(idx: number) {
+  const n = (idx % 6) + 1;
+  return `hsl(var(--tone-${n}) / 1)`;
+}
 
 export function FlagshipScroll() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -75,7 +90,6 @@ export function FlagshipScroll() {
   }, [openPill]);
 
   const listRef = useRef<HTMLDivElement | null>(null);
-
   const nodesRef = useRef<(HTMLElement | null)[]>([]);
   const ratiosRef = useRef<Map<Element, number>>(new Map());
   const activeRef = useRef(0);
@@ -115,11 +129,9 @@ export function FlagshipScroll() {
     const listRect = listEl.getBoundingClientRect();
     const nodeRect = nodeEl.getBoundingClientRect();
 
-    // Cover everything ABOVE the active step's center:
     const nodeCenterY = nodeRect.top + nodeRect.height / 2;
     const raw = nodeCenterY - listRect.top;
 
-    // Clamp into list bounds
     const clamped = Math.max(0, Math.min(listRect.height, raw));
     coverH.set(clamped);
   };
@@ -134,7 +146,6 @@ export function FlagshipScroll() {
 
   useEffect(() => {
     activeRef.current = activeIndex;
-    // After the layout changes (active card expands), update cover using real geometry.
     requestAnimationFrame(() => updateCoverToIndex(activeIndex));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeIndex]);
@@ -153,7 +164,6 @@ export function FlagshipScroll() {
       const y = window.scrollY;
       const dir: "down" | "up" = y > last ? "down" : "up";
       last = y;
-
       setScrollDir((prev) => (prev === dir ? prev : dir));
     };
 
@@ -183,7 +193,6 @@ export function FlagshipScroll() {
         const current = activeRef.current;
         const currentRatio = ratiosRef.current.get(els[current]) ?? 0;
 
-        // Slight hysteresis so fast scrolling feels less clunky.
         const shouldSwitch =
           bestIdx !== current &&
           (bestRatio > Math.max(0.25, currentRatio + 0.08) ||
@@ -193,11 +202,9 @@ export function FlagshipScroll() {
           activeRef.current = bestIdx;
           setActiveIndex(bestIdx);
 
-          // reset tilt on active change
           mx.set(0);
           my.set(0);
 
-          // Update cover immediately based on real pixel position
           requestAnimationFrame(() => updateCoverToIndex(bestIdx));
         }
       },
@@ -220,7 +227,7 @@ export function FlagshipScroll() {
     ? { duration: 0 }
     : { type: "spring", stiffness: 780, damping: 38, mass: 0.55 };
 
-  // Dots (gold) – uses your --ui-glow
+  // Dotted line uses --ui-glow
   const dottedLineBase: React.CSSProperties = {
     backgroundImage:
       "radial-gradient(circle at center, hsl(var(--ui-glow) / 0.55) 1.2px, transparent 1.45px)",
@@ -257,7 +264,7 @@ export function FlagshipScroll() {
                   className={cn(
                     "rounded-full border bg-white px-3 py-1 shadow-sm transition-all",
                     "hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-300",
-                    isActive ? "border-zinc-900" : "border-border"
+                    isActive ? "ui-border-accent" : "border-border"
                   )}
                   aria-haspopup="dialog"
                   aria-expanded={isActive}
@@ -276,10 +283,8 @@ export function FlagshipScroll() {
               aria-hidden="true"
               className="pointer-events-none absolute inset-y-0 left-1/2 w-10 -translate-x-1/2"
             >
-              {/* dots */}
               <div className="absolute inset-0" style={dottedLineBase} />
 
-              {/* soft fade top/bottom */}
               <div
                 className="absolute inset-0"
                 style={{
@@ -287,11 +292,10 @@ export function FlagshipScroll() {
                 }}
               />
 
-              {/* COVER: hides everything above the active step (animated in PX) */}
               <motion.div
                 className="absolute left-0 top-0 w-full"
                 style={{
-                  height: coverH, // <-- KEY: real pixel height, not percentage
+                  height: coverH,
                   background: `linear-gradient(to bottom, ${bg} 0%, ${bg} 78%, ${bg0} 100%)`,
                 }}
               />
@@ -302,12 +306,15 @@ export function FlagshipScroll() {
             const Icon = s.icon;
             const isActive = idx === activeIndex;
 
+            const iconColor = toneForIndex(idx);
+
+            const iconWrapStyle: React.CSSProperties = {
+              backgroundColor: "hsl(var(--background) / 1)", // neutral
+              borderColor: "hsl(var(--border))",
+            };
+
             return (
-              <div
-                key={s.slug}
-                ref={setNode(idx)}
-                className={cn("relative", STEP_SENTINEL_MIN_H, "py-12")}
-              >
+              <div key={s.slug} ref={setNode(idx)} className={cn("relative", STEP_SENTINEL_MIN_H, "py-12")}>
                 <motion.div layout transition={spring} className="relative z-10 h-full">
                   <AnimatePresence initial={false} mode="wait">
                     {isActive ? (
@@ -340,10 +347,11 @@ export function FlagshipScroll() {
                                 <div className="flex items-center gap-3">
                                   <motion.div
                                     layoutId={`flagship-icon-${s.slug}`}
-                                    className="flex h-10 w-10 items-center justify-center rounded-2xl border bg-white"
+                                    className="flex h-10 w-10 items-center justify-center rounded-2xl border"
+                                    style={iconWrapStyle}
                                     transition={spring}
                                   >
-                                    <Icon className="h-5 w-5 text-zinc-900" />
+                                    <Icon className="h-5 w-5" style={{ color: iconColor }} />
                                   </motion.div>
 
                                   <div>
@@ -390,10 +398,11 @@ export function FlagshipScroll() {
                         >
                           <motion.div
                             layoutId={`flagship-icon-${s.slug}`}
-                            className="flex h-10 w-10 items-center justify-center rounded-2xl border bg-white"
+                            className="flex h-10 w-10 items-center justify-center rounded-2xl border"
+                            style={iconWrapStyle}
                             transition={spring}
                           >
-                            <Icon className="h-5 w-5 text-zinc-900" />
+                            <Icon className="h-5 w-5" style={{ color: iconColor }} />
                           </motion.div>
                         </motion.div>
                       </motion.div>
