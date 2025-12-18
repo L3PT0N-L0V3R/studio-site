@@ -3,6 +3,10 @@
 /* Enables `dark:` utilities to respond to `.dark` on a parent */
 @custom-variant dark (&:is(.dark *));
 
+html {
+  scroll-padding-top: 72px; /* navbar height + a little breathing room */
+}
+
 /* shadcn-style tokens (DEFAULT / original vibe) */
 :root {
   --background: 0 0% 100%;

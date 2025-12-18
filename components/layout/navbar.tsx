@@ -18,8 +18,8 @@ export function Navbar() {
   const { focus } = useSitePreferences();
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
-      <Container className="flex h-14 items-center justify-between">
+    <header className="fixed inset-x-0 top-0 z-50 border-b bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/70">
+      <Container className="flex h-16 items-center justify-between">
         {/* Logo / Studio */}
         <a
           href="#top"

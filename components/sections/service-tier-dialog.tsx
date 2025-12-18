@@ -272,7 +272,7 @@ export function ServiceTierDialog({
             </div>
           </Section>
 
-          <div className="flex flex-wrap items-center justify-end gap-2">
+          <div className="flex flex-wrap items-center justify-end gap-2 ui-accent-cta">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Close
             </Button>
