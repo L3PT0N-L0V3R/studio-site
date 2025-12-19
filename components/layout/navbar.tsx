@@ -1,17 +1,20 @@
 "use client";
 
+import Link from "next/link";
+import { Menu } from "lucide-react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useSitePreferences } from "@/components/providers/site-preferences";
 
 const links = [
-  { label: "Work", href: "#work" },
-  { label: "Services", href: "#services" },
-  { label: "Process", href: "#process" },
-  { label: "Contact", href: "#contact" },
+  // Always resolve to the homepage sections, regardless of current route.
+  { label: "Work", href: "/#work" },
+  { label: "Services", href: "/#services" },
+  { label: "Process", href: "/#process" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export function Navbar() {
@@ -21,8 +24,8 @@ export function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50 border-b bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/70">
       <Container className="flex h-16 items-center justify-between">
         {/* Logo / Studio */}
-        <a
-          href="#top"
+        <Link
+          href="/#top"
           className="ui-accent-underline inline-flex items-center gap-2 text-sm font-semibold tracking-tight"
         >
           <span>Studio</span>
@@ -32,25 +35,24 @@ export function Navbar() {
               {focus}
             </span>
           ) : null}
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-sm text-zinc-600 md:flex">
           {links.map((l) => (
-            <a
+            <Link
               key={l.href}
               href={l.href}
               className="ui-accent-underline transition-colors hover:text-zinc-900 focus-visible:outline-none"
             >
               {l.label}
-            </a>
+            </Link>
           ))}
 
-          {/* CTA: apply accent glow to the anchor (most reliable with asChild) */}
           <Button asChild size="sm">
-            <a href="#contact" className="ui-accent-cta">
+            <Link href="/#contact" className="ui-accent-cta">
               Get a quote
-            </a>
+            </Link>
           </Button>
         </nav>
 
@@ -70,19 +72,22 @@ export function Navbar() {
 
               <div className="mt-6 grid gap-3">
                 {links.map((l) => (
-                  <a
-                    key={l.href}
-                    href={l.href}
-                    className="ui-accent-underline text-sm text-zinc-700 hover:text-zinc-900"
-                  >
-                    {l.label}
-                  </a>
+                  <SheetClose asChild key={l.href}>
+                    <Link
+                      href={l.href}
+                      className="ui-accent-underline text-sm text-zinc-700 hover:text-zinc-900"
+                    >
+                      {l.label}
+                    </Link>
+                  </SheetClose>
                 ))}
 
                 <Button asChild className="mt-2">
-                  <a href="#contact" className="ui-accent-cta">
-                    Get a quote
-                  </a>
+                  <SheetClose asChild>
+                    <Link href="/#contact" className="ui-accent-cta">
+                      Get a quote
+                    </Link>
+                  </SheetClose>
                 </Button>
               </div>
             </SheetContent>
