@@ -77,17 +77,18 @@ export function Hero() {
   const selected = openPanel ? panelContent[openPanel] : null;
 
   return (
-    <section className={cn(sectionPad, "border-b relative overflow-hidden isolate")} id="top">
-      {/* Hero background wash (contained, no bleed, no page widening) */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-        {/* soft left bloom */}
-        <div className="absolute inset-0 bg-[radial-gradient(900px_circle_at_18%_18%,hsl(var(--tone-2)/0.12),transparent_60%)]" />
-        {/* soft right bloom */}
-        <div className="absolute inset-0 bg-[radial-gradient(900px_circle_at_82%_22%,hsl(var(--tone-5)/0.10),transparent_62%)]" />
-        {/* subtle top veil so it feels “premium” */}
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[hsl(var(--tone-2)/0.06)] to-transparent" />
-      </div>
-
+  <section
+    id="top"
+    className={cn(sectionPad, "border-b relative bg-white")}
+    style={{
+      // Layer 1 (top): fade to white at the bottom
+      // Layer 2 (bottom): your theme wash
+      backgroundImage:
+        "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 70%, rgba(255,255,255,1) 100%), var(--hero-wash)",
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      backgroundPosition: "center top",
+    }}>
       <Container>
         <div className={cn("grid items-start gap-10 lg:grid-cols-2", gap)}>
           {/* Left column */}

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -13,17 +13,15 @@ type Props = {
 };
 
 function strengthToPixels(strength?: number) {
-  // Supports two calling styles:
-  // - ratio style: 0.1–0.5 (typical)
-  // - pixel style: 8–24 (common in “magnetic” demos)
   const s = strength ?? 0.18;
-
-  // If it looks like a ratio, convert to pixels with a sane cap.
   if (s > 0 && s <= 1) return Math.max(0, Math.min(24, s * 48));
-
-  // If it looks like pixels already, clamp it.
   return Math.max(0, Math.min(32, s));
 }
+
+type MQLWithLegacy = MediaQueryList & {
+  addListener?: (cb: (e: MediaQueryListEvent) => void) => void;
+  removeListener?: (cb: (e: MediaQueryListEvent) => void) => void;
+};
 
 export function Magnetic({
   children,
@@ -33,24 +31,44 @@ export function Magnetic({
   disabled,
 }: Props) {
   const ref = React.useRef<HTMLDivElement | null>(null);
+  const reduceMotion = useReducedMotion();
+
+  // Disable magnetics on devices that don't really have hover (most mobile)
+  const [coarse, setCoarse] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mq = window.matchMedia("(hover: none), (pointer: coarse)") as MQLWithLegacy;
+
+    const update = () => setCoarse(!!mq.matches);
+    update();
+
+    if (mq.addEventListener) mq.addEventListener("change", update);
+    else mq.addListener?.(update);
+
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener("change", update);
+      else mq.removeListener?.(update);
+    };
+  }, []);
+
+  const isDisabled = !!disabled || !!reduceMotion || coarse;
 
   const max = strengthToPixels(strength);
   const scale = hoverScale ?? 1.008;
 
-  // Motion values in “raw px”
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
 
-  // Smooth it
   const sx = useSpring(mx, { stiffness: 260, damping: 28, mass: 0.6 });
   const sy = useSpring(my, { stiffness: 260, damping: 28, mass: 0.6 });
 
-  // Clamp the springed value to a max range
   const x = useTransform(sx, (v) => Math.max(-max, Math.min(max, v)));
   const y = useTransform(sy, (v) => Math.max(-max, Math.min(max, v)));
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (disabled) return;
+    if (isDisabled) return;
     const el = ref.current;
     if (!el) return;
 
@@ -58,7 +76,6 @@ export function Magnetic({
     const dx = e.clientX - (r.left + r.width / 2);
     const dy = e.clientY - (r.top + r.height / 2);
 
-    // Normalize by size so large buttons don’t overreact
     const nx = dx / Math.max(1, r.width / 2);
     const ny = dy / Math.max(1, r.height / 2);
 
@@ -71,7 +88,6 @@ export function Magnetic({
     my.set(0);
   };
 
-  // IMPORTANT: keep "spring" as a literal type (prevents TS “string not assignable” issues)
   const hoverTransition = {
     type: "spring" as const,
     stiffness: 520,
@@ -84,9 +100,9 @@ export function Magnetic({
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      style={disabled ? undefined : { x, y }}
+      style={isDisabled ? undefined : { x, y }}
       className={cn("inline-block", className)}
-      whileHover={disabled ? undefined : { scale }}
+      whileHover={isDisabled ? undefined : { scale }}
       transition={hoverTransition}
     >
       {children}
