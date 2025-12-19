@@ -9,10 +9,13 @@ import { useMemo, useState } from "react";
 
 type Stage = "locked" | "calibrate";
 
-const focusOptions: { key: Exclude<FocusMode, null>; title: string; desc: string }[] = [
+const OPTIONS: Array<{
+  key: Exclude<FocusMode, null>;
+  title: string;
+  desc: string;
+}> = [
   { key: "design", title: "Design", desc: "Typography, layout, and visual polish." },
   { key: "performance", title: "Performance", desc: "Speed, SEO, and core web vitals." },
-  { key: "motion", title: "Motion", desc: "Scroll narratives and micro-interactions." },
   { key: "conversion", title: "Conversion", desc: "Offer clarity and funnel mechanics." },
 ];
 
@@ -26,15 +29,24 @@ export function IntroGate() {
 
   const skip = () => setIntroDismissed(true);
 
-  const completeCalibration = (mode: Exclude<FocusMode, null>) => {
-    setFocus(mode);
-    setIntroDismissed(true);
-  };
+  const panelMotion = reduce
+    ? {
+        initial: { opacity: 1 },
+        animate: { opacity: 1 },
+        exit: { opacity: 1 },
+        transition: { duration: 0 },
+      }
+    : {
+        initial: { opacity: 0, y: 10 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: -10 },
+        transition: { duration: 0.35, ease: "easeOut" as const },
+      };
 
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[100] bg-white"
+        className="fixed inset-0 z-[80] bg-white"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -47,15 +59,9 @@ export function IntroGate() {
 
         <div className="flex h-full items-center justify-center px-4">
           <div className="w-full max-w-md">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
               {stage === "locked" ? (
-                <motion.div
-                  key="locked"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.35, ease: "easeOut" }}
-                >
+                <motion.div key="locked" {...panelMotion}>
                   <div className="mb-6 text-center">
                     <div className="text-sm font-medium text-zinc-600">Welcome</div>
                     <div className="mt-2 text-2xl font-semibold tracking-tight">
@@ -66,44 +72,33 @@ export function IntroGate() {
                     </div>
                   </div>
 
-                  <HoldToEnter
-                    onComplete={() => setStage("calibrate")}
-                    className="mx-auto"
-                  />
-
-                  {reduce ? (
-                    <div className="mt-6 text-center text-xs text-zinc-600">
-                      Reduced motion enabled — simplified entry.
-                    </div>
-                  ) : null}
+                  <HoldToEnter onComplete={() => setStage("calibrate")} className="mx-auto" />
                 </motion.div>
               ) : (
-                <motion.div
-                  key="calibrate"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.35, ease: "easeOut" }}
-                >
+                <motion.div key="calibrate" {...panelMotion}>
                   <div className="mb-6 text-center">
                     <div className="text-sm font-medium text-zinc-600">Calibration</div>
                     <div className="mt-2 text-2xl font-semibold tracking-tight">
                       What matters most right now?
                     </div>
                     <div className="mt-2 text-sm text-zinc-600">
-                      We’ll highlight the work that matches your focus.
+                      We’ll lead with the parts of the site that match your focus.
                     </div>
                   </div>
 
                   <div className="grid gap-3">
-                    {focusOptions.map((o) => (
+                    {OPTIONS.map((o) => (
                       <button
                         key={o.key}
-                        onClick={() => completeCalibration(o.key)}
+                        onClick={() => {
+                          setFocus(o.key);
+                          setIntroDismissed(true);
+                        }}
                         className={cn(
                           "rounded-2xl border bg-white p-4 text-left shadow-sm",
                           "transition active:scale-[0.99]"
                         )}
+                        type="button"
                       >
                         <div className="text-sm font-semibold">{o.title}</div>
                         <div className="mt-1 text-xs text-zinc-600">{o.desc}</div>
@@ -125,3 +120,6 @@ export function IntroGate() {
     </AnimatePresence>
   );
 }
+
+// Also export default so both import styles work
+export default IntroGate;
