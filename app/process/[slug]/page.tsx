@@ -61,12 +61,12 @@ export default async function ProcessStepPage({ params }: Props) {
               <p className="mt-3 max-w-2xl text-zinc-600">{step.summary}</p>
               <p className="mt-3 max-w-2xl text-sm text-zinc-500">{POSITIONING_LINE}</p>
 
-              <div className="mt-6 flex flex-wrap gap-3 ui-accent-cta">
+              <div className="mt-6 flex flex-wrap gap-3">
                 <Button asChild>
-                  <a href="/#contact">Get a quote</a>
+                  <a href="/#contact" className="... ui-accent-cta">Get a quote</a>
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href="/#work">View work</a>
+                  <a href="/#work" className="... ui-accent-underline">View work</a>
                 </Button>
               </div>
             </div>

@@ -8,6 +8,7 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
+  useMotionTemplate,
   type Transition,
 } from "framer-motion";
 
@@ -236,8 +237,18 @@ export function FlagshipScroll() {
     backgroundPosition: "center top",
   };
 
-  const bg = "hsl(var(--background) / 1)";
-  const bg0 = "hsl(var(--background) / 0)";
+  // --- Spine masking (no background overlays) ---
+  // We use CSS masking instead of painting over the spine with a solid background,
+  // so the effect works on gradient/washed backgrounds without leaving a vertical seam.
+  const spineEdgeMask =
+    "linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)";
+  const spineProgressMask = useMotionTemplate`linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent ${coverH}px,
+    black calc(${coverH}px + 44px),
+    black 100%
+  )`;
 
   return (
     <section className="border-b">
@@ -282,21 +293,25 @@ export function FlagshipScroll() {
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-y-0 left-1/2 w-10 -translate-x-1/2"
+              style={{
+                WebkitMaskImage: spineEdgeMask,
+                maskImage: spineEdgeMask,
+                WebkitMaskRepeat: "no-repeat",
+                maskRepeat: "no-repeat",
+                WebkitMaskSize: "100% 100%",
+                maskSize: "100% 100%",
+              }}
             >
-              <div className="absolute inset-0" style={dottedLineBase} />
-
-              <div
+              <motion.div
                 className="absolute inset-0"
                 style={{
-                  background: `linear-gradient(to bottom, ${bg} 0%, ${bg0} 12%, ${bg0} 88%, ${bg} 100%)`,
-                }}
-              />
-
-              <motion.div
-                className="absolute left-0 top-0 w-full"
-                style={{
-                  height: coverH,
-                  background: `linear-gradient(to bottom, ${bg} 0%, ${bg} 78%, ${bg0} 100%)`,
+                  ...dottedLineBase,
+                  WebkitMaskImage: spineProgressMask,
+                  maskImage: spineProgressMask,
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskSize: "100% 100%",
+                  maskSize: "100% 100%",
                 }}
               />
             </div>
