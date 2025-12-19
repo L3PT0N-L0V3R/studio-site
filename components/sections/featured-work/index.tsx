@@ -278,7 +278,7 @@ function FullWidthMeter() {
                   }}
                 >
                   <motion.div
-                    className="h-full rounded-full"
+                    className="h-full rounded-full overflow-hidden relative"
                     initial={false}
                     animate={{ width: `${v}%` }}
                     transition={
@@ -290,26 +290,29 @@ function FullWidthMeter() {
                           }
                     }
                     style={{
-                      background:
-                        "linear-gradient(90deg, hsl(var(--ui-glow) / 0.98), hsl(var(--ui-glow) / 0.45))",
+                      background: "linear-gradient(90deg, hsl(var(--ui-glow) / 0.98), hsl(var(--ui-glow) / 0.45))",
                       boxShadow: "0 14px 34px rgba(0,0,0,0.08)",
                     }}
-                  />
+                  >
+                    {/* highlight is now CLIPPED to the filled area */}
+                    <motion.div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-y-0 w-10"
+                      initial={false}
+                      animate={{
+                        // keep it near the end of the fill but never outside the fill
+                        left: `calc(100% - 22px)`,
+                        opacity: v > 6 ? 0.55 : 0, // avoid a bright flash when the fill is tiny
+                      }}
+                      transition={reduceMotion ? { duration: 0 } : { duration: 0.12, ease: [0.22, 1, 0.36, 1] }}
+                      style={{
+                        background:
+                          "linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.55), rgba(255,255,255,0))",
+                        mixBlendMode: "soft-light",
+                      }}
+                    />
+                  </motion.div>
 
-                  {/* specular highlight riding the fill (visual only) */}
-                  <motion.div
-                    aria-hidden
-                    className="pointer-events-none absolute top-0 h-full w-10 rounded-full"
-                    initial={false}
-                    animate={{ left: `calc(${v}% - 20px)` }}
-                    transition={reduceMotion ? { duration: 0 } : { duration: 0.12, ease: [0.22, 1, 0.36, 1] }}
-                    style={{
-                      background:
-                        "linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.55), rgba(255,255,255,0))",
-                      opacity: 0.55,
-                      mixBlendMode: "soft-light",
-                    }}
-                  />
                 </div>
               ))}
             </div>
