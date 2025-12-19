@@ -54,10 +54,11 @@ export function SystemWiringCard(props: {
         <div>
           {/* Tabs */}
           <div className="relative mt-1" role="tablist" aria-label="System wiring steps">
-            {/* connector line */}
-            <div className="absolute left-5 right-5 top-1/2 h-px -translate-y-1/2 bg-border" />
+            {/* connector line (desktop/tablet only) */}
+            <div className="absolute left-5 right-5 top-1/2 hidden h-px -translate-y-1/2 bg-border sm:block" />
 
-            <div className="relative grid grid-cols-4 gap-3">
+            {/* Mobile: wrap pills cleanly. sm+: revert to 4-col grid */}
+            <div className="relative flex flex-wrap gap-2 sm:grid sm:grid-cols-4 sm:gap-3">
               {wiringNodes.map((n) => {
                 const isActive = n.id === active;
 
@@ -69,12 +70,21 @@ export function SystemWiringCard(props: {
                     type="button"
                     onClick={() => onActiveChange(n.id)}
                     className={cn(
-                      // KEY FIX: relative + overflow-hidden contain the absolute highlight
-                      "group relative isolate overflow-hidden rounded-2xl border bg-white px-4 py-3 text-left",
+                      // Base pill
+                      "group relative isolate overflow-hidden rounded-2xl border bg-white text-left",
                       "transition-all duration-200",
                       "shadow-sm hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10",
                       "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
-                      isActive ? "ui-border-accent shadow-lg shadow-black/10" : "border-border"
+                      isActive ? "ui-border-accent shadow-lg shadow-black/10" : "border-border",
+
+                      // Mobile sizing: consistent height + balanced width so wrapping looks intentional
+                      "px-3 py-2.5",
+                      "min-h-[56px]",
+                      "flex-1 basis-[calc(50%-0.25rem)]", // 2 per row on mobile
+                      "max-w-[calc(50%-0.25rem)]",
+
+                      // sm+ sizing: go back to original roomy card-like tabs
+                      "sm:min-h-0 sm:max-w-none sm:basis-auto sm:px-4 sm:py-3"
                     )}
                   >
                     {/* Active highlight (contained to the button now) */}
@@ -97,8 +107,10 @@ export function SystemWiringCard(props: {
                     ) : null}
 
                     {/* Content above highlight */}
-                    <div className="relative z-10 text-sm font-medium">{n.title}</div>
-                    <div className="relative z-10 mt-1 text-xs text-muted-foreground">
+                    <div className="relative z-10 text-[12px] font-medium leading-tight sm:text-sm">
+                      {n.title}
+                    </div>
+                    <div className="relative z-10 mt-1 text-[11px] leading-snug text-muted-foreground sm:text-xs">
                       {n.subtitle}
                     </div>
                   </button>
