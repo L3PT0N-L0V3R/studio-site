@@ -276,9 +276,28 @@ html[data-theme="mono"] {
     hsl(var(--ui-glow-2) / 0.16)
   );
   border-radius: 0.6rem;
-  padding: 0.06em 0.35em;
+
+  /* Fix mobile overlap */
+  display: inline-block;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+
+  /* Slightly smaller vertical padding so lines don’t collide */
+  padding: 0.04em 0.35em;
+
+  /* Gives each highlighted chunk breathing room when it wraps */
+  margin: 0 0.08em 0.12em 0;
+
   color: hsl(var(--foreground));
 }
+
+@media (min-width: 640px) {
+  .ui-highlight {
+    margin-bottom: 0; /* keep desktop tight/clean */
+    padding: 0.06em 0.35em;
+  }
+}
+
 
 .ui-wash {
   position: relative;
