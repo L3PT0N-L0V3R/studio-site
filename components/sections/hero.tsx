@@ -255,7 +255,7 @@ export function Hero() {
                   aria-label={selected.title}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="flex items-start justify-between gap-4 p-6">
+                  <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
                       <div className="text-sm text-muted-foreground">{selected.subtitle}</div>
                       <div className="mt-1 text-2xl font-semibold tracking-tight">
