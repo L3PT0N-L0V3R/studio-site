@@ -163,14 +163,6 @@ export function Hero() {
               </Magnetic>
 
               <Magnetic strength={16} hoverScale={1.008}>
-                <Button variant="outline" asChild>
-                  <a className="ui-accent-underline" href="#work">
-                    View work
-                  </a>
-                </Button>
-              </Magnetic>
-
-              <Magnetic strength={16} hoverScale={1.008}>
                 <ConfiguratorDialog />
               </Magnetic>
             </div>
@@ -255,7 +247,7 @@ export function Hero() {
                   aria-label={selected.title}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex items-start justify-between gap-4 p-6">
                     <div className="min-w-0">
                       <div className="text-sm text-muted-foreground">{selected.subtitle}</div>
                       <div className="mt-1 text-2xl font-semibold tracking-tight">

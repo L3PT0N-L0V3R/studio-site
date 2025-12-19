@@ -1,4 +1,5 @@
 "use client";
+import type React from "react";
 
 import { useMemo } from "react";
 import { useSitePreferences } from "@/components/providers/site-preferences";
@@ -31,7 +32,8 @@ const ORDER: Record<string, Key[]> = {
   default: ["hero", "clicks", "caseStudy", "flagship", "trust", "systemMap", "services", "process", "contact"],
 };
 
-type Registry = Record<Key, () => JSX.Element>;
+type Registry = Record<Key, () => React.ReactElement>;
+
 
 export function HomeExperience() {
   const { focus } = useSitePreferences();
