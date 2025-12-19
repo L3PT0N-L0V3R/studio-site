@@ -72,30 +72,59 @@ function ThemeDots(props: { className?: string; size?: "sm" | "md" }) {
         {palettes.map((p) => {
           const active = p.id === theme;
 
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => {
-                setTheme(p.id);
-                applyTheme(p.id);
-              }}
-              aria-label={`Theme: ${p.name}`}
-              aria-pressed={active}
-              className={cn(
-                "rounded-full border overflow-hidden",
-                "transition-transform hover:-translate-y-[1px]",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
-                btnSize,
-                active ? "ring-2 ring-[hsl(var(--ui-glow)/0.55)]" : "ring-0"
-              )}
-              style={{
-                backgroundImage: p.bg,
-                backgroundColor: "white",
-              }}
-            >
-              <span className="sr-only">{p.name}</span>
-            </button>
+          const soft = `radial-gradient(65% 65% at 35% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.75)),
+                ${p.bg}`;
+
+  return (
+    <button
+      key={p.id}
+      type="button"
+      onClick={() => {
+        setTheme(p.id);
+        applyTheme(p.id);
+      }}
+      aria-label={`Theme: ${p.name}`}
+      aria-pressed={active}
+      className={cn(
+        "relative rounded-full border overflow-hidden",
+        "transition-transform hover:-translate-y-[1px] active:translate-y-0",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+        btnSize
+      )}
+      style={{
+        // much softer + whiter than the full conic coin
+        backgroundImage: soft,
+        backgroundBlendMode: "screen",
+        borderColor: "rgba(0,0,0,0.22)",
+        boxShadow:
+          "inset 0 0 0 1px rgba(255,255,255,0.65), 0 6px 18px rgba(0,0,0,0.08)",
+        filter: "saturate(0.85) brightness(1.08)",
+      }}
+    >
+      {/* inner soft ring (matches the lower dots vibe) */}
+      <span
+        aria-hidden
+        className="absolute inset-[2px] rounded-full"
+        style={{
+          boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.10)",
+          background: "rgba(255,255,255,0.55)",
+          mixBlendMode: "soft-light",
+        }}
+      />
+
+      {/* active outline: same accent behavior */}
+      {active ? (
+        <span
+          aria-hidden
+          className="absolute -inset-1 rounded-full"
+          style={{
+            boxShadow: "0 0 0 2px hsl(var(--ui-glow) / 0.45)",
+          }}
+        />
+      ) : null}
+
+      <span className="sr-only">{p.name}</span>
+    </button>
           );
         })}
       </div>
