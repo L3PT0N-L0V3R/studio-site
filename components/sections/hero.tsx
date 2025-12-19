@@ -179,7 +179,7 @@ export function Hero() {
           {/* Right column */}
           <div className="lg:pt-10">
             <div className="rounded-2xl border bg-white p-5">
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <div className="text-sm font-semibold">What you get</div>
                   <div className="mt-1 text-sm text-muted-foreground">
@@ -333,9 +333,14 @@ export function HighlightBulb({
       className={cn(
         "relative select-none rounded-2xl border bg-white px-3 py-2 text-left transition-all",
         "ui-ambient ui-ambient-hover",
+        "max-w-full",
+        "sm:shrink-0",
         open ? "ui-ambient-active ui-border-accent" : "border-border",
-        open ? "w-[280px]" : "w-[220px]"
+        // Mobile: never widen the page. Desktop: allow the nice width expand.
+        "w-full",
+        open ? "sm:w-[280px]" : "sm:w-[220px]"
       )}
+
       style={glowStyle}
       aria-pressed={open}
       aria-expanded={open}
