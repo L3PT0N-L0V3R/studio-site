@@ -43,10 +43,10 @@ export function Process() {
           </div>
         </ScaleIn>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        {/* KEY CHANGE: group wrapper so we can blur "non-hovered" siblings */}
+        <div className="group/process mt-8 grid gap-4 lg:grid-cols-2">
           {processSteps.map((s, idx) => {
-            const Icon =
-              iconMap[s.slug as keyof typeof iconMap] ?? Workflow;
+            const Icon = iconMap[s.slug as keyof typeof iconMap] ?? Workflow;
 
             // Use slug as the stable key (align/design/build/launch)
             const tone = PROCESS_TONE_BY_ID[s.slug] ?? "var(--ui-glow)";
@@ -67,7 +67,23 @@ export function Process() {
 
             return (
               <ScaleIn key={s.slug} delay={0.06 * idx} from={0.88}>
-                <HoverCard>
+                {/* KEY CHANGE: blur/dim siblings on group hover, keep hovered card clear */}
+                <HoverCard
+                  className={[
+                    // Fast + snappy: only animate transform/opacity. Filter changes instantly.
+                    "transition-[transform,opacity] duration-100 ease-out",
+                    "will-change-transform",
+
+                    // Subtle de-emphasis for non-hovered cards (applied instantly)
+                    "md:group-hover/process:opacity-90 md:group-hover/process:blur-[0.35px]",
+
+                    // Hovered/focused card stays crisp and fully opaque
+                    "md:hover:opacity-100 md:hover:blur-0",
+                    "md:focus-within:opacity-100 md:focus-within:blur-0",
+                  ].join(" ")}
+
+
+                >
                   <Link
                     href={`/process/${s.slug}`}
                     className="block focus:outline-none"
@@ -78,14 +94,14 @@ export function Process() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
                             <div
-                              className="flex h-10 w-10 items-center justify-center rounded-2xl border bg-white"
+                              className="flex h-11 w-11 items-center justify-center rounded-2xl border"
                               style={iconWrapStyle}
                             >
                               <Icon className="h-5 w-5" style={iconStyle} />
                             </div>
 
                             <div>
-                              <div className="text-sm text-zinc-600">Step {s.step}</div>
+                              <div className="text-sm text-zinc-500">{s.step}</div>
                               <div className="text-base font-semibold">{s.title}</div>
                             </div>
                           </div>
@@ -116,10 +132,10 @@ export function Process() {
 
                           <div>
                             <div className="text-xs font-medium text-zinc-500">Outputs</div>
-                            <div className="mt-2 grid gap-2">
+                            <div className="mt-2 grid gap-1.5">
                               {s.outputs.map((o) => (
-                                <div key={o} className="flex items-start gap-2 text-sm text-zinc-700">
-                                  <span className="mt-0.5 inline-block h-1.5 w-1.5 rounded-full bg-zinc-900" />
+                                <div key={o} className="flex items-center gap-2 text-sm text-zinc-600">
+                                  <span className="h-1.5 w-1.5 rounded-full bg-zinc-300" />
                                   <span>{o}</span>
                                 </div>
                               ))}
