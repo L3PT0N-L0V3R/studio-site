@@ -39,17 +39,23 @@ function ThemeDots({
   className?: string;
   size?: "sm" | "md";
 }) {
-  const [active, setActive] = useState<ThemeId>("day");
+  const DEFAULT_THEME_ID = (THEMES[0]?.id ?? ("day" as any)) as ThemeId;
+
+  const [active, setActive] = useState<ThemeId>(DEFAULT_THEME_ID);
 
   useEffect(() => {
-    const stored = (typeof window !== "undefined"
-      ? (localStorage.getItem(THEME_STORAGE_KEY) as ThemeId | null)
-      : null) ?? null;
+    const stored =
+      typeof window !== "undefined"
+        ? (localStorage.getItem(THEME_STORAGE_KEY) as ThemeId | null)
+        : null;
 
-    const initial = stored && THEMES.some((t) => t.id === stored) ? stored : "day";
+    const initial =
+      stored && THEMES.some((t) => t.id === stored) ? stored : DEFAULT_THEME_ID;
+
     setActive(initial);
     applyTheme(initial);
   }, []);
+
 
   const dotSize = size === "sm" ? "h-2.5 w-2.5" : "h-3 w-3";
 
@@ -81,10 +87,14 @@ function ThemeDots({
                 isActive ? "opacity-100" : "opacity-70"
               )}
               style={{
-                background: t.bg,
-                boxShadow: isActive ? "0 0 0 2px rgb(255 255 255 / 0.9), 0 0 0 4px rgb(var(--ui-glow) / 0.45)" : undefined,
+                background: t.swatches?.[0] ?? "transparent",
+                boxShadow: isActive
+                  ? "0 0 0 2px rgb(255 255 255 / 0.9), 0 0 0 4px rgb(var(--ui-glow) / 0.45)"
+                  : undefined,
               }}
             />
+
+
             {isActive ? (
               <span
                 className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-[10px] text-zinc-500"
