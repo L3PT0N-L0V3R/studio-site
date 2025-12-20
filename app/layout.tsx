@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { SitePreferencesProvider } from "@/components/providers/site-preferences";
 import { UiConfigProvider } from "@/components/providers/ui-config";
 
 export const metadata: Metadata = {
@@ -15,7 +14,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground antialiased ui-accent-pill">
-        <SitePreferencesProvider>
           <UiConfigProvider>
             <div className="relative isolate min-h-screen">
               {/* Global theme wash (full-viewport) */}
@@ -41,7 +39,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <Footer />
             </div>
           </UiConfigProvider>
-        </SitePreferencesProvider>
       </body>
     </html>
   );

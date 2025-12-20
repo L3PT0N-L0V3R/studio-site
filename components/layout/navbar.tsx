@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,6 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 
-import { useSitePreferences, type FocusMode } from "@/components/providers/site-preferences";
 import { THEMES, type ThemeId, THEME_STORAGE_KEY } from "@/lib/themes";
 import { cn } from "@/lib/utils";
 
@@ -72,8 +71,9 @@ function ThemeDots(props: { className?: string; size?: "sm" | "md" }) {
         {palettes.map((p) => {
           const active = p.id === theme;
 
+          // Softer / whiter preview (matches the lower style you liked)
           const soft = `radial-gradient(65% 65% at 35% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.72)),
-            ${p.bg}`;
+${p.bg}`;
 
           return (
             <button
@@ -128,71 +128,6 @@ function ThemeDots(props: { className?: string; size?: "sm" | "md" }) {
   );
 }
 
-const MODE_OPTIONS: Array<{ id: Exclude<FocusMode, null>; label: string }> = [
-  { id: "design", label: "Design" },
-  { id: "performance", label: "Performance" },
-  { id: "conversion", label: "Conversion" },
-];
-
-function ModeSwitcher() {
-  const { focus, setFocus } = useSitePreferences();
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const onDown = (e: MouseEvent) => {
-      if (!ref.current) return;
-      if (!ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    window.addEventListener("mousedown", onDown);
-    return () => window.removeEventListener("mousedown", onDown);
-  }, [open]);
-
-  if (!focus) return null;
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="ui-accent-pill rounded-full border px-2 py-0.5 text-[11px] font-medium text-zinc-600 hover:text-zinc-900"
-        aria-label="Change mode"
-        aria-expanded={open}
-      >
-        {focus}
-      </button>
-
-      {open ? (
-        <div className="absolute left-0 mt-2 w-44 overflow-hidden rounded-2xl border bg-white/95 shadow-lg backdrop-blur">
-          <div className="p-1">
-            {MODE_OPTIONS.map((m) => {
-              const active = m.id === focus;
-              return (
-                <button
-                  key={m.id}
-                  type="button"
-                  onClick={() => {
-                    setFocus(m.id);
-                    setOpen(false);
-                  }}
-                  className={cn(
-                    "flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm",
-                    active ? "bg-zinc-900 text-white" : "text-zinc-700 hover:bg-zinc-50"
-                  )}
-                >
-                  <span>{m.label}</span>
-                  {active ? <span className="text-xs opacity-80">Active</span> : null}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
 export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/70">
@@ -203,7 +138,6 @@ export function Navbar() {
           className="ui-accent-underline inline-flex items-center gap-2 text-sm font-semibold tracking-tight"
         >
           <span>Studio</span>
-          <ModeSwitcher />
         </Link>
 
         {/* Desktop nav */}
@@ -219,10 +153,12 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* Right cluster (always visible) */}
+        {/* Right cluster (ALWAYS visible on mobile + desktop) */}
         <div className="flex items-center gap-2">
+          {/* pinned theme dots (outside hamburger) */}
           <ThemeDots className="mr-1" size="sm" />
 
+          {/* CTA always visible */}
           <Button asChild size="sm">
             <Link href="/#contact" className="ui-accent-cta">
               Get a quote
