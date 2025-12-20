@@ -2,10 +2,14 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Metric } from "./metric";
-import { Activity, Gauge } from "lucide-react";
 import { simulateLighthouse } from "../models";
 
-export function PerformanceBudgetCard(props: { pages: number; complexity: number; title: string; desc: string }) {
+export function PerformanceBudgetCard(props: {
+  pages: number;
+  complexity: number;
+  title: string;
+  desc: string;
+}) {
   const { pages, complexity, title, desc } = props;
   const m = simulateLighthouse(pages, complexity);
 
@@ -16,33 +20,29 @@ export function PerformanceBudgetCard(props: { pages: number; complexity: number
           <CardTitle className="text-base">{title}</CardTitle>
           <CardDescription>{desc}</CardDescription>
         </div>
-        <div className="flex items-center gap-2 text-muted-foreground">
-          <Gauge className="h-4 w-4" />
-          <span className="text-xs">Budget</span>
-        </div>
+        {/* Removed: "Budget" label */}
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent>
         <div className="rounded-xl border bg-white p-4">
-          <div className="flex items-center justify-between">
-            <div className="text-sm font-medium">Lighthouse (simulated)</div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Activity className="h-4 w-4" />
-              reacts to scope
-            </div>
-          </div>
+          {/* Removed: "Lighthouse (simulated)" + "reacts to scope" row */}
 
-          <div className="mt-4 space-y-3">
-            <Metric label="Performance" value={m.performance} />
+          <div className="space-y-3">
+            {/* Quality gates stay high (90–100) */}
             <Metric label="Accessibility" value={m.accessibility} />
             <Metric label="Best Practices" value={m.bestPractices} />
             <Metric label="SEO" value={m.seo} />
+
+            {/* Capability metrics rise with complexity */}
+            <div className="my-3 h-px w-full bg-border/70" />
+
+            <Metric label="Instrumentation" value={m.instrumentation} />
+            <Metric label="Automation coverage" value={m.automation} />
+            <Metric label="Integration depth" value={m.integration} />
           </div>
         </div>
 
-        <div className="text-xs text-muted-foreground">
-          This is a budget mindset: we set targets early, then design motion and components to stay inside the rails.
-        </div>
+        {/* Removed footer explanation */}
       </CardContent>
     </Card>
   );

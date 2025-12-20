@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Container } from "@/components/layout/container";
-import { Badge } from "@/components/ui/badge";
 import { ScaleIn } from "@/components/motion/scale-in";
 import { cn } from "@/lib/utils";
 import { useGridGap, useSectionSpacing } from "@/components/providers/ui-config";
@@ -36,12 +35,10 @@ export function CaseStudy({ variant = "section" }: Props) {
           <p className="mt-3 text-muted-foreground">{caseStudyCopy.description}</p>
         </div>
 
-        <Badge variant="outline" className="mt-1 hidden sm:inline-flex">
-          {caseStudyCopy.badge}
-        </Badge>
+        {/* Removed: "Client-style preview" badge */}
       </div>
 
-      {/* Mobile order: budget above timeline (as requested earlier) */}
+      {/* Mobile order: budget above timeline */}
       <div className={cn("mt-6 grid items-start gap-4 lg:grid-cols-3", gap)}>
         <ScaleIn>
           <div className="rounded-2xl border bg-white p-6">
@@ -87,7 +84,6 @@ export function CaseStudy({ variant = "section" }: Props) {
               complexity={complexity}
               title={caseStudyCopy.timelineTitle}
               desc={caseStudyCopy.timelineDesc}
-              footnote={caseStudyCopy.footnote}
             />
           </ScaleIn>
         </div>
@@ -107,10 +103,7 @@ export function CaseStudy({ variant = "section" }: Props) {
     </>
   );
 
-  if (variant === "panel") {
-    // No section chrome; suitable for modal
-    return <div>{content}</div>;
-  }
+  if (variant === "panel") return <div>{content}</div>;
 
   return (
     <section className={cn(sectionPad, "border-t border-border/70")} id="deliverable">
