@@ -20,17 +20,17 @@ import {
   ShoppingBag,
   Wrench,
   ArrowUpRight,
+  X,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
@@ -51,8 +51,7 @@ const SERVICES: ServiceItem[] = [
   {
     id: "from-scratch",
     title: "Websites from scratch",
-    description:
-      "Marketing sites, landing pages, and product pages with clean IA and polish.",
+    description: "Marketing sites, landing pages, and product pages with clean IA and polish.",
     Icon: LayoutTemplate,
     detail: {
       summary:
@@ -91,8 +90,7 @@ const SERVICES: ServiceItem[] = [
   {
     id: "design-systems",
     title: "Design systems",
-    description:
-      "Reusable components, spacing/typography rules, and a scalable UI language.",
+    description: "Reusable components, spacing/typography rules, and a scalable UI language.",
     Icon: Blocks,
     detail: {
       summary:
@@ -111,8 +109,7 @@ const SERVICES: ServiceItem[] = [
   {
     id: "motion",
     title: "Motion & micro-interactions",
-    description:
-      "Subtle, controlled motion that makes the UI feel engineered—not flashy.",
+    description: "Subtle, controlled motion that makes the UI feel engineered—not flashy.",
     Icon: Brush,
     detail: {
       summary:
@@ -122,7 +119,7 @@ const SERVICES: ServiceItem[] = [
         "Scroll-linked reveals (calm + precise)",
         "Interaction polish (loading, states, transitions)",
         "Reduced-motion support",
-        "Performance-safe motion constraints",
+        "Performance-safe motion budget",
       ],
       outcomes: ["Higher perceived quality", "More engagement", "Better UX confidence"],
       goodFor: ["Premium brands", "Explainer flows", "Complex products that need clarity"],
@@ -131,8 +128,7 @@ const SERVICES: ServiceItem[] = [
   {
     id: "conversion",
     title: "Conversion refinement",
-    description:
-      "Tighter funnels, clearer offers, better paths. Instrumented to measure improvements.",
+    description: "Tighter funnels, clearer offers, better paths. Instrumented to measure improvements.",
     Icon: BarChart3,
     detail: {
       summary:
@@ -151,8 +147,7 @@ const SERVICES: ServiceItem[] = [
   {
     id: "performance",
     title: "Performance & Core Web Vitals",
-    description:
-      "Smarter loading, practical changes, and production-grade speed improvements.",
+    description: "Smarter loading, practical changes, and production-grade speed improvements.",
     Icon: Gauge,
     detail: {
       summary:
@@ -171,8 +166,7 @@ const SERVICES: ServiceItem[] = [
   {
     id: "seo",
     title: "SEO baseline",
-    description:
-      "Technical SEO, on-page structure, metadata, and indexable architecture.",
+    description: "Technical SEO, on-page structure, metadata, and indexable architecture.",
     Icon: Search,
     detail: {
       summary: "A clean SEO foundation—so your pages can actually rank and stay indexable.",
@@ -190,8 +184,7 @@ const SERVICES: ServiceItem[] = [
   {
     id: "a11y",
     title: "Accessibility baseline",
-    description:
-      "Keyboard support, semantics, contrast, and predictable interaction patterns.",
+    description: "Keyboard support, semantics, contrast, and predictable interaction patterns.",
     Icon: Accessibility,
     detail: {
       summary: "Accessibility that’s built-in—not bolted on. Cleaner UX for everyone.",
@@ -209,12 +202,10 @@ const SERVICES: ServiceItem[] = [
   {
     id: "analytics",
     title: "Analytics & event tracking",
-    description:
-      "Clean tracking plans, events, and dashboards that reflect what matters.",
+    description: "Clean tracking plans, events, and dashboards that reflect what matters.",
     Icon: Database,
     detail: {
-      summary:
-        "Measurement that’s useful. Track the signals that drive decisions—not noise.",
+      summary: "Measurement that’s useful. Track the signals that drive decisions—not noise.",
       includes: [
         "Tracking plan + naming conventions",
         "Event implementation",
@@ -229,8 +220,7 @@ const SERVICES: ServiceItem[] = [
   {
     id: "crm",
     title: "CRM + automations",
-    description:
-      "Forms → routing → follow-ups → reporting. Reduce manual work and missed leads.",
+    description: "Forms → routing → follow-ups → reporting. Reduce manual work and missed leads.",
     Icon: Mail,
     detail: {
       summary: "Turn inquiries into a system: capture → qualify → follow up → measure.",
@@ -248,8 +238,7 @@ const SERVICES: ServiceItem[] = [
   {
     id: "integrations",
     title: "Integrations",
-    description:
-      "APIs, webhooks, and the glue between tools (safely, with clear failure modes).",
+    description: "APIs, webhooks, and the glue between tools (safely, with clear failure modes).",
     Icon: Link2,
     detail: {
       summary: "Practical integrations that don’t turn into brittle spaghetti.",
@@ -267,12 +256,10 @@ const SERVICES: ServiceItem[] = [
   {
     id: "ecom",
     title: "E-commerce enhancements",
-    description:
-      "Checkout UX, product flow, email capture, and performance-minded merchandising.",
+    description: "Checkout UX, product flow, email capture, and performance-minded merchandising.",
     Icon: ShoppingBag,
     detail: {
-      summary:
-        "Make ecommerce feel premium: faster UX, cleaner paths, better conversion mechanics.",
+      summary: "Make ecommerce feel premium: faster UX, cleaner paths, better conversion mechanics.",
       includes: [
         "Checkout + cart friction reduction",
         "Product page optimization",
@@ -287,12 +274,10 @@ const SERVICES: ServiceItem[] = [
   {
     id: "ai",
     title: "AI-assisted workflows",
-    description:
-      "Practical assistants and automations that improve ops without adding fragility.",
+    description: "Practical assistants and automations that improve ops without adding fragility.",
     Icon: Bot,
     detail: {
-      summary:
-        "Use AI where it helps: support, ops, triage, and internal workflows—without hype.",
+      summary: "Use AI where it helps: support, ops, triage, and internal workflows—without hype.",
       includes: [
         "Workflow mapping + feasibility",
         "Lightweight automations",
@@ -307,12 +292,10 @@ const SERVICES: ServiceItem[] = [
   {
     id: "hosting",
     title: "Hosting + deployments",
-    description:
-      "Sane environments, previews, reliable deploys, and a maintainable delivery pipeline.",
+    description: "Sane environments, previews, reliable deploys, and a maintainable delivery pipeline.",
     Icon: Globe,
     detail: {
-      summary:
-        "Reliability through process: preview flows, stable deploys, and repeatable builds.",
+      summary: "Reliability through process: preview flows, stable deploys, and repeatable builds.",
       includes: [
         "Preview environments",
         "Release hygiene + rollback readiness",
@@ -327,12 +310,10 @@ const SERVICES: ServiceItem[] = [
   {
     id: "iteration",
     title: "Ongoing iteration",
-    description:
-      "Small, frequent improvements. Fixes, enhancements, and quality maintenance.",
+    description: "Small, frequent improvements. Fixes, enhancements, and quality maintenance.",
     Icon: Wrench,
     detail: {
-      summary:
-        "The system stays sharp: polish, fixes, improvements, and feature upgrades over time.",
+      summary: "The system stays sharp: polish, fixes, improvements, and feature upgrades over time.",
       includes: [
         "Bug fixes + refinements",
         "New sections/pages",
@@ -350,22 +331,18 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
-function Pill({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
+function Chip({ children }: { children: React.ReactNode }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium text-zinc-700",
-        className
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs",
+        "bg-white",
+        "text-zinc-700"
       )}
       style={{
-        borderColor: "hsl(var(--ui-glow) / 0.25)",
-        backgroundColor: "rgba(0,0,0,0.02)",
+        borderColor: "hsl(var(--ui-glow)/0.18)",
+        background:
+          "linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.82))",
       }}
     >
       {children}
@@ -377,9 +354,8 @@ function ServiceCard({ item }: { item: ServiceItem }) {
   const reduceMotion = useReducedMotion();
   const ref = useRef<HTMLButtonElement | null>(null);
 
-  const [pulse, setPulse] = useState<{ id: number; x: number; y: number } | null>(
-    null
-  );
+  const [open, setOpen] = useState(false);
+  const [pulse, setPulse] = useState<{ id: number; x: number; y: number } | null>(null);
   const [hovered, setHovered] = useState(false);
 
   const setSpotlight = useCallback((x: number, y: number) => {
@@ -438,28 +414,28 @@ function ServiceCard({ item }: { item: ServiceItem }) {
     setTilt(0, 0);
   }, [reduceMotion, setSpotlight, setTilt]);
 
-  const onPointerDown = useCallback((e: React.PointerEvent) => {
-    const el = ref.current;
-    if (!el) return;
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      const el = ref.current;
+      if (!el) return;
 
-    const r = el.getBoundingClientRect();
-    const x = e.clientX - r.left;
-    const y = e.clientY - r.top;
+      const r = el.getBoundingClientRect();
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
 
-    const id = Date.now();
-    setPulse({ id, x, y });
-    window.setTimeout(() => {
-      setPulse((p) => (p?.id === id ? null : p));
-    }, 420);
-  }, []);
+      const id = Date.now();
+      setPulse({ id, x, y });
+      window.setTimeout(() => {
+        setPulse((p) => (p?.id === id ? null : p));
+      }, 420);
+    },
+    []
+  );
 
   const { Icon } = item;
 
-  // bottom chips like your “good” popup: keep it short (3)
-  const footerTags = item.detail.goodFor.slice(0, 3);
-
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <motion.button
           ref={ref}
@@ -477,9 +453,8 @@ function ServiceCard({ item }: { item: ServiceItem }) {
           )}
           style={{
             borderColor: "hsl(var(--ui-glow) / 0.28)",
-            boxShadow: hovered
-              ? "0 22px 70px rgba(0,0,0,0.14)"
-              : "0 14px 46px rgba(0,0,0,0.08)",
+            boxShadow: hovered ? "0 26px 80px rgba(0,0,0,0.14)" : "0 18px 50px rgba(0,0,0,0.08)",
+            // defaults for CSS vars used by gradients
             ["--mx" as any]: "50%",
             ["--my" as any]: "50%",
             ["--rx" as any]: "0deg",
@@ -497,20 +472,17 @@ function ServiceCard({ item }: { item: ServiceItem }) {
                 }
           }
           transition={
-            reduceMotion
-              ? { duration: 0 }
-              : { type: "spring", stiffness: 520, damping: 34, mass: 0.7 }
+            reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 520, damping: 34, mass: 0.7 }
           }
           whileTap={reduceMotion ? undefined : { scale: 0.995, y: -4 }}
           aria-label={item.title}
         >
-          {/* soft tint */}
+          {/* base tint */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0"
             style={{
-              background:
-                "linear-gradient(180deg, hsl(var(--ui-glow) / 0.10), transparent 62%)",
+              background: "linear-gradient(180deg, hsl(var(--ui-glow) / 0.12), transparent 62%)",
             }}
           />
 
@@ -520,7 +492,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
             className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
             style={{
               background:
-                "radial-gradient(420px circle at var(--mx) var(--my), hsl(var(--ui-glow) / 0.22), transparent 60%)",
+                "radial-gradient(420px circle at var(--mx) var(--my), hsl(var(--ui-glow) / 0.20), transparent 60%)",
             }}
           />
 
@@ -536,8 +508,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
                 width: 10,
                 height: 10,
                 transform: "translate(-50%, -50%)",
-                background:
-                  "radial-gradient(circle, hsl(var(--ui-glow) / 0.35) 0%, transparent 70%)",
+                background: "radial-gradient(circle, hsl(var(--ui-glow) / 0.40) 0%, transparent 70%)",
               }}
               initial={{ opacity: 0.35, scale: 0.6 }}
               animate={{ opacity: 0, scale: 18 }}
@@ -545,7 +516,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
             />
           ) : null}
 
-          {/* inner white border */}
+          {/* inner border */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-[1px] rounded-[22px]"
@@ -554,8 +525,8 @@ function ServiceCard({ item }: { item: ServiceItem }) {
 
           <div className="relative flex items-start gap-4">
             <div
-              className="grid h-12 w-12 place-items-center rounded-2xl border bg-white/60"
-              style={{ borderColor: "hsl(var(--ui-glow) / 0.25)" }}
+              className="grid h-12 w-12 place-items-center rounded-2xl border bg-white/70"
+              style={{ borderColor: "hsl(var(--ui-glow) / 0.22)" }}
             >
               <span className="inline-flex text-[hsl(var(--ui-glow)/0.85)]">
                 <Icon className="h-6 w-6" />
@@ -570,110 +541,136 @@ function ServiceCard({ item }: { item: ServiceItem }) {
         </motion.button>
       </DialogTrigger>
 
-      {/* WHITE dialog that matches your “good popup” layout */}
+      {/* MATCH THE “FORMS + INTAKE” STRUCTURE: WHITE, AIRY, TWO-COLUMN */}
       <DialogContent
         className={cn(
-          "w-[calc(100vw-2rem)] max-w-[980px]",
-          "max-h-[calc(100vh-2rem)]",
+          "w-[min(96vw,980px)]",
+          "max-h-[88vh]",
           "overflow-hidden",
-          "rounded-3xl border border-black/10 bg-white p-0",
-          "shadow-[0_40px_140px_rgba(0,0,0,0.18)]"
+          "rounded-3xl",
+          "border border-black/10",
+          "bg-white",
+          "p-0",
+          "shadow-[0_35px_140px_rgba(0,0,0,0.16)]"
         )}
       >
-        <DialogHeader className="px-8 pt-7 pb-6">
-          <div className="flex items-start justify-between gap-6">
+        {/* ACCESSIBILITY REQUIREMENT */}
+        <DialogHeader className="sr-only">
+          <DialogTitle>{item.title}</DialogTitle>
+          <DialogDescription>{item.detail.summary}</DialogDescription>
+        </DialogHeader>
+
+        {/* HEADER (fixed) */}
+        <div className="relative px-7 py-6 sm:px-9">
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(1200px 420px at 14% 0%, hsl(var(--ui-glow)/0.12) 0%, rgba(255,255,255,0) 55%), radial-gradient(900px 420px at 92% 12%, hsl(var(--ui-glow)/0.08) 0%, rgba(255,255,255,0) 58%)",
+            }}
+          />
+
+          <div className="relative flex items-start justify-between gap-4">
             <div className="min-w-0">
-              {/* small label like your other popup */}
-              <div className="text-xs font-medium text-zinc-500">
-                Services
-              </div>
-
-              {/* Required for accessibility */}
-              <DialogTitle className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950">
+              <div className="text-xs text-zinc-500">Services</div>
+              <div className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl">
                 {item.title}
-              </DialogTitle>
-
-              <DialogDescription className="mt-3 max-w-[70ch] text-base leading-relaxed text-zinc-600">
+              </div>
+              <div className="mt-3 max-w-[72ch] text-sm leading-relaxed text-zinc-600 sm:text-base">
                 {item.detail.summary}
-              </DialogDescription>
+              </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <Button asChild className="rounded-2xl">
-                <a href="#contact">
-                  Get a quote <ArrowUpRight className="ml-2 h-4 w-4" />
+            <div className="flex items-center gap-2">
+              <Button asChild className="hidden sm:inline-flex rounded-2xl">
+                <a href="#contact" onClick={() => setOpen(false)}>
+                  Get a quote <ArrowUpRight className="ml-1 h-4 w-4" />
                 </a>
               </Button>
 
-              <DialogClose asChild>
-                <Button variant="outline" className="rounded-2xl">
-                  Close
-                </Button>
-              </DialogClose>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "grid h-10 w-10 place-items-center rounded-2xl border",
+                  "bg-white",
+                  "transition-shadow"
+                )}
+                style={{
+                  borderColor: "hsl(var(--ui-glow)/0.22)",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.06)",
+                }}
+                aria-label="Close"
+              >
+                <X className="h-4 w-4 text-zinc-600" />
+              </button>
             </div>
           </div>
-        </DialogHeader>
+        </div>
 
-        <div className="h-px w-full bg-black/10" />
+        <div className="border-t border-black/10" />
 
-        {/* Body */}
-        <div className="px-8 py-7">
+        {/* BODY (scrollable) */}
+        <div className="overflow-y-auto px-7 py-7 sm:px-9">
           <div className="grid gap-6 md:grid-cols-12">
-            {/* Left: What we build */}
-            <div className="md:col-span-7">
+            {/* LEFT: What we build */}
+            <div
+              className={cn(
+                "md:col-span-7",
+                "rounded-3xl border border-black/10 bg-white p-6"
+              )}
+              style={{ boxShadow: "0 18px 70px rgba(0,0,0,0.06)" }}
+            >
               <div className="text-sm font-semibold text-zinc-950">What we build</div>
 
               <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {item.detail.includes.map((t) => (
                   <li key={t} className="flex items-start gap-3">
-                    <span
-                      className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: "hsl(var(--ui-glow) / 0.85)" }}
-                    />
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[hsl(var(--ui-glow)/0.85)]" />
                     <span className="text-sm leading-relaxed text-zinc-700">{t}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Right: What you get */}
-            <div className="md:col-span-5">
-              <div className="text-sm font-semibold text-zinc-950">What you get</div>
+            {/* RIGHT: What you get + Good for */}
+            <div className="md:col-span-5 grid gap-6">
+              <div
+                className="rounded-3xl border border-black/10 bg-white p-6"
+                style={{ boxShadow: "0 18px 70px rgba(0,0,0,0.06)" }}
+              >
+                <div className="text-sm font-semibold text-zinc-950">What you get</div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                {item.detail.outcomes.map((t) => (
-                  <Pill key={t}>{t}</Pill>
-                ))}
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {item.detail.outcomes.map((t) => (
+                    <Chip key={t}>{t}</Chip>
+                  ))}
+                </div>
               </div>
 
-              {item.detail.goodFor.length ? (
-                <>
-                  <div className="mt-6 text-sm font-semibold text-zinc-950">
-                    Good for
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {item.detail.goodFor.map((t) => (
-                      <Pill key={t}>{t}</Pill>
-                    ))}
-                  </div>
-                </>
-              ) : null}
+              <div
+                className="rounded-3xl border border-black/10 bg-white p-6"
+                style={{ boxShadow: "0 18px 70px rgba(0,0,0,0.06)" }}
+              >
+                <div className="text-sm font-semibold text-zinc-950">Good for</div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {item.detail.goodFor.map((t) => (
+                    <Chip key={t}>{t}</Chip>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mobile CTA */}
+              <div className="sm:hidden">
+                <Button asChild className="w-full rounded-2xl">
+                  <a href="#contact" onClick={() => setOpen(false)}>
+                    Get a quote <ArrowUpRight className="ml-1 h-4 w-4" />
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
-
-          {/* Bottom chips row (matches your other popup vibe) */}
-          {footerTags.length ? (
-            <div className="mt-7">
-              <div className="h-px w-full bg-black/10" />
-              <div className="mt-5 flex flex-wrap gap-2">
-                {footerTags.map((t) => (
-                  <Pill key={t} className="bg-white">
-                    {t}
-                  </Pill>
-                ))}
-              </div>
-            </div>
-          ) : null}
         </div>
       </DialogContent>
     </Dialog>
