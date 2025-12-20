@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 
 import { THEMES, type ThemeId, THEME_STORAGE_KEY } from "@/lib/themes";
@@ -174,29 +174,69 @@ export function Navbar() {
                 </Button>
               </SheetTrigger>
 
-              <SheetContent side="right" className="w-72">
-                <VisuallyHidden>
-                  <SheetTitle>Menu</SheetTitle>
-                </VisuallyHidden>
+              <SheetContent side="right" className="w-[320px] p-0 sm:w-[360px]">
+              <VisuallyHidden>
+                <SheetTitle>Menu</SheetTitle>
+              </VisuallyHidden>
 
-                <div className="mt-6 grid gap-3">
-                  {links.map((l) => (
-                    <Link
-                      key={l.href}
-                      href={l.href}
-                      className="ui-accent-underline text-sm text-zinc-700 hover:text-zinc-900"
-                    >
-                      {l.label}
-                    </Link>
-                  ))}
+              <div className="relative flex h-full flex-col bg-white">
+                {/* subtle themed wash behind content */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 opacity-60"
+                  style={{ backgroundImage: "var(--hero-wash)" }}
+                />
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(to bottom, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.96) 30%, rgba(255,255,255,1) 70%)",
+                  }}
+                />
 
-                  <Button asChild className="mt-2">
-                    <Link href="/#contact" className="ui-accent-cta">
-                      Get a quote
-                    </Link>
-                  </Button>
+                {/* Header */}
+                <div className="relative border-b px-5 py-4">
+                  <div className="text-sm font-semibold tracking-tight text-zinc-900">Studio</div>
+                  <div className="mt-1 text-xs text-zinc-600">Navigation</div>
                 </div>
-              </SheetContent>
+
+                {/* Links */}
+                <div className="relative flex-1 px-4 py-4">
+                  <div className="grid gap-2">
+                    {links.map((l) => (
+                      <SheetClose asChild key={l.href}>
+                        <Link
+                          href={l.href}
+                          className={cn(
+                            "group flex items-center justify-between rounded-2xl border bg-white/70 px-4 py-3",
+                            "text-sm font-medium text-zinc-900 shadow-sm",
+                            "transition hover:bg-white hover:shadow-md hover:shadow-black/10"
+                          )}
+                        >
+                          <span>{l.label}</span>
+                          <span className="text-zinc-400 transition group-hover:translate-x-0.5 group-hover:text-zinc-600">
+                            →
+                          </span>
+                        </Link>
+                      </SheetClose>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Footer CTA (pinned) */}
+                <div className="relative border-t px-4 py-4">
+                  <SheetClose asChild>
+                    <Button asChild className="h-11 w-full rounded-2xl">
+                      <Link href="/#contact" className="ui-accent-cta">
+                        Get a quote
+                      </Link>
+                    </Button>
+                  </SheetClose>
+                </div>
+              </div>
+            </SheetContent>
+
             </Sheet>
           </div>
         </div>
