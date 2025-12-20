@@ -537,17 +537,20 @@ function ServiceCard({ item }: { item: ServiceItem }) {
         </motion.button>
       </DialogTrigger>
 
-      {/* WHITE, AIRY, TWO-COLUMN */}
+      {/* MOBILE: perfect as you had it. DESKTOP: truly large, no cutoff. */}
       <DialogContent
         showCloseButton={false}
         className={cn(
-          // Width: a touch tighter on mobile so you keep edge breathing room
-          "w-[calc(100vw-2.5rem)] sm:w-[min(96vw,980px)]",
+          // IMPORTANT: override shadcn default max-w-lg
+          "!max-w-none",
 
-          // Height: noticeably SHORTER on mobile, roomy on desktop
-          "max-h-[calc(100svh-9rem)] sm:max-h-[92vh]",
+          // Width: modest on mobile, huge on desktop
+          "w-[calc(100vw-2.5rem)] sm:w-[min(96vw,980px)] lg:w-[min(96vw,1400px)]",
 
-          // Constrained layout so only the BODY scrolls
+          // Height: mobile stays scrollable; desktop gets near-full viewport (slightly taller to remove scroll)
+          "max-h-[calc(100svh-9rem)] sm:max-h-[92vh] lg:h-[calc(100vh-2rem)] lg:max-h-[calc(100vh-2rem)]",
+
+          // Layout
           "grid grid-rows-[auto_1px_minmax(0,1fr)]",
           "overflow-hidden",
 
@@ -566,7 +569,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
         </DialogHeader>
 
         {/* HEADER (fixed) */}
-        <div className="relative px-6 py-5 sm:px-10 sm:py-8 lg:px-12 lg:py-9">
+        <div className="relative px-6 py-5 sm:px-10 sm:py-8 lg:px-12 lg:py-8">
           <div
             className="pointer-events-none absolute inset-0"
             style={{
@@ -578,10 +581,12 @@ function ServiceCard({ item }: { item: ServiceItem }) {
           <div className="relative flex items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="text-xs text-zinc-500">Services</div>
-              <div className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 sm:mt-3 sm:text-3xl">
+
+              <div className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 sm:mt-3 sm:text-3xl lg:text-[38px] lg:leading-[1.05]">
                 {item.title}
               </div>
-              <div className="mt-3 max-w-[72ch] text-sm leading-relaxed text-zinc-600 sm:mt-4 sm:text-base">
+
+              <div className="mt-3 max-w-[72ch] text-sm leading-relaxed text-zinc-600 sm:mt-4 sm:text-base lg:mt-4 lg:text-[16px] lg:leading-relaxed">
                 {item.detail.summary}
               </div>
             </div>
@@ -613,24 +618,31 @@ function ServiceCard({ item }: { item: ServiceItem }) {
           </div>
         </div>
 
-        {/* divider */}
         <div className="h-px w-full bg-black/10" />
 
-        {/* BODY (scrollable) */}
-        <div className="min-h-0 overflow-y-auto px-5 py-5 sm:px-10 sm:py-10 lg:px-12 lg:py-12">
-          <div className="grid gap-6 lg:gap-8 md:grid-cols-12">
+
+        {/* BODY:
+            - mobile/tablet: scrollable
+            - desktop: tightened so it fits with no scroll */}
+        <div className="min-h-0 overflow-x-hidden overflow-y-auto lg:overflow-y-hidden px-5 py-5 sm:px-10 sm:py-10 lg:px-12 lg:py-8">
+          <div className="grid gap-6 md:grid-cols-12 lg:gap-10">
             {/* LEFT: What we build */}
             <div
-              className={cn("md:col-span-7", "rounded-3xl border border-black/10 bg-white p-5 sm:p-6 lg:p-8")}
+              className={cn(
+                "md:col-span-7",
+                "rounded-3xl border border-black/10 bg-white p-5 sm:p-6 lg:p-8"
+              )}
               style={{ boxShadow: "0 18px 70px rgba(0,0,0,0.06)" }}
             >
-              <div className="text-sm font-semibold text-zinc-950">What we build</div>
+              <div className="text-sm font-semibold text-zinc-950 lg:text-base">What we build</div>
 
-              <ul className="mt-5 grid gap-4 lg:gap-5 sm:grid-cols-2">
+              <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:mt-6 lg:gap-x-10 lg:gap-y-6">
                 {item.detail.includes.map((t) => (
                   <li key={t} className="flex items-start gap-3">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[hsl(var(--ui-glow)/0.85)]" />
-                    <span className="text-sm leading-relaxed text-zinc-700">{t}</span>
+                    <span className="text-sm leading-relaxed text-zinc-700 lg:text-[15px] lg:leading-relaxed">
+                      {t}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -642,9 +654,9 @@ function ServiceCard({ item }: { item: ServiceItem }) {
                 className="rounded-3xl border border-black/10 bg-white p-5 sm:p-6 lg:p-8"
                 style={{ boxShadow: "0 18px 70px rgba(0,0,0,0.06)" }}
               >
-                <div className="text-sm font-semibold text-zinc-950">What you get</div>
+                <div className="text-sm font-semibold text-zinc-950 lg:text-base">What you get</div>
 
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-5 flex flex-wrap gap-2 lg:mt-6 lg:gap-3">
                   {item.detail.outcomes.map((t) => (
                     <Chip key={t}>{t}</Chip>
                   ))}
@@ -655,9 +667,9 @@ function ServiceCard({ item }: { item: ServiceItem }) {
                 className="rounded-3xl border border-black/10 bg-white p-5 sm:p-6 lg:p-8"
                 style={{ boxShadow: "0 18px 70px rgba(0,0,0,0.06)" }}
               >
-                <div className="text-sm font-semibold text-zinc-950">Good for</div>
+                <div className="text-sm font-semibold text-zinc-950 lg:text-base">Good for</div>
 
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-5 flex flex-wrap gap-2 lg:mt-6 lg:gap-3">
                   {item.detail.goodFor.map((t) => (
                     <Chip key={t}>{t}</Chip>
                   ))}
@@ -675,6 +687,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
             </div>
           </div>
         </div>
+
       </DialogContent>
     </Dialog>
   );
