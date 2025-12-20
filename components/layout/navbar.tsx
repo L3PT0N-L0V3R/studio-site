@@ -1,4 +1,5 @@
 "use client";
+import { LogoKineticGrid } from "@/components/brand/logo-kinetic-grid";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -137,7 +138,11 @@ export function Navbar() {
           href="/#top"
           className="ui-accent-underline inline-flex items-center gap-2 text-sm font-semibold tracking-tight"
         >
-          <span>Studio</span>
+          <span className="inline-flex items-center gap-2">
+            <LogoKineticGrid size={20} className="text-zinc-900" />
+            <span>Studio</span>
+          </span>
+
         </Link>
 
         {/* Desktop nav */}
