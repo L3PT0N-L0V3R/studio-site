@@ -216,7 +216,7 @@ export function ServiceTierDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="w-[calc(100vw-2.5rem)] max-h-[calc(100svh-2.5rem)] overflow-y-auto sm:w-full sm:max-w-2xl">
         <DialogHeader>
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>

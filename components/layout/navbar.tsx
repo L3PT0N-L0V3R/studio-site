@@ -2,7 +2,8 @@
 import { LogoKineticGrid } from "@/components/brand/logo-kinetic-grid";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
@@ -20,129 +21,153 @@ const links = [
   { label: "Contact", href: "/#contact" },
 ];
 
+const STUDIO_LOGO_HIDE_DELAY_MS = 1600;
+
 function applyTheme(id: ThemeId) {
   document.documentElement.dataset.theme = id;
   try {
     localStorage.setItem(THEME_STORAGE_KEY, id);
-  } catch {}
-}
-
-function readTheme(): ThemeId {
-  try {
-    const saved = localStorage.getItem(THEME_STORAGE_KEY) as ThemeId | null;
-    const ok = THEMES.some((t) => t.id === saved);
-    return ok && saved ? saved : "classic";
   } catch {
-    return "classic";
+    // noop
   }
 }
 
-function ThemeDots(props: { className?: string; size?: "sm" | "md" }) {
-  const { className, size = "sm" } = props;
-  const [theme, setTheme] = useState<ThemeId>("classic");
+function ThemeDots({
+  className,
+  size = "sm",
+}: {
+  className?: string;
+  size?: "sm" | "md";
+}) {
+  const [active, setActive] = useState<ThemeId>("day");
 
   useEffect(() => {
-    const initial = readTheme();
-    setTheme(initial);
+    const stored = (typeof window !== "undefined"
+      ? (localStorage.getItem(THEME_STORAGE_KEY) as ThemeId | null)
+      : null) ?? null;
+
+    const initial = stored && THEMES.some((t) => t.id === stored) ? stored : "day";
+    setActive(initial);
     applyTheme(initial);
   }, []);
 
-  const btnSize = size === "md" ? "h-6 w-6" : "h-5 w-5";
-
-  const palettes = useMemo(
-    () =>
-      THEMES.map((t) => {
-        const a = t.swatches?.[0] ?? "hsl(var(--ui-glow) / 1)";
-        const b = t.swatches?.[1] ?? "hsl(var(--ui-glow) / 0.75)";
-        const c = t.swatches?.[2] ?? "hsl(var(--ui-glow) / 0.55)";
-        return {
-          id: t.id,
-          name: t.name,
-          bg: `conic-gradient(from 180deg, ${a}, ${b}, ${c}, ${a})`,
-        };
-      }),
-    []
-  );
+  const dotSize = size === "sm" ? "h-2.5 w-2.5" : "h-3 w-3";
 
   return (
-    <div className={cn("flex items-center gap-2", className)}>
-      <span className="hidden lg:inline text-xs text-zinc-600">Theme</span>
+    <div className={cn("flex items-center gap-1.5", className)}>
+      {THEMES.map((t) => {
+        const isActive = active === t.id;
 
-      <div className="flex items-center gap-2">
-        {palettes.map((p) => {
-          const active = p.id === theme;
-
-          // Softer / whiter preview (matches the lower style you liked)
-          const soft = `radial-gradient(65% 65% at 35% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.72)),
-${p.bg}`;
-
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => {
-                setTheme(p.id);
-                applyTheme(p.id);
-              }}
-              aria-label={`Theme: ${p.name}`}
-              aria-pressed={active}
+        return (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => {
+              setActive(t.id);
+              applyTheme(t.id);
+            }}
+            className={cn(
+              "relative inline-flex items-center justify-center rounded-full",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+              "focus-visible:ring-[color:var(--ui-glow)] focus-visible:ring-offset-white",
+              dotSize
+            )}
+            aria-label={`Theme: ${t.name}`}
+          >
+            <span
               className={cn(
-                "relative rounded-full border overflow-hidden",
-                "transition-transform hover:-translate-y-[1px] active:translate-y-0",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
-                btnSize
+                "rounded-full transition",
+                dotSize,
+                isActive ? "opacity-100" : "opacity-70"
               )}
               style={{
-                backgroundImage: soft,
-                backgroundBlendMode: "screen",
-                borderColor: "rgba(0,0,0,0.20)",
-                boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.65)",
-                filter: "saturate(0.82) brightness(1.08)",
+                background: t.bg,
+                boxShadow: isActive ? "0 0 0 2px rgb(255 255 255 / 0.9), 0 0 0 4px rgb(var(--ui-glow) / 0.45)" : undefined,
               }}
-            >
+            />
+            {isActive ? (
               <span
-                aria-hidden
-                className="absolute inset-[2px] rounded-full"
-                style={{
-                  boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.10)",
-                  background: "rgba(255,255,255,0.55)",
-                  mixBlendMode: "soft-light",
-                }}
-              />
+                className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-[10px] text-zinc-500"
+                aria-hidden="true"
+              >
+                •
+              </span>
+            ) : null}
 
-              {active ? (
-                <span
-                  aria-hidden
-                  className="absolute -inset-1 rounded-full"
-                  style={{
-                    boxShadow: "0 0 0 2px hsl(var(--ui-glow) / 0.45)",
-                  }}
-                />
-              ) : null}
-
-              <span className="sr-only">{p.name}</span>
-            </button>
-          );
-        })}
-      </div>
+            <span className="sr-only">{t.name}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
 
 export function Navbar() {
+  const [showStudioLogo, setShowStudioLogo] = useState(false);
+  const hideStudioLogoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const triggerStudioLogo = () => {
+    setShowStudioLogo(true);
+    if (hideStudioLogoTimerRef.current) clearTimeout(hideStudioLogoTimerRef.current);
+    hideStudioLogoTimerRef.current = setTimeout(
+      () => setShowStudioLogo(false),
+      STUDIO_LOGO_HIDE_DELAY_MS
+    );
+  };
+
+  const onStudioPointerDown = (e: PointerEvent<HTMLAnchorElement>) => {
+    // Ignore right/middle clicks.
+    if (e.button !== 0) return;
+    triggerStudioLogo();
+  };
+
+  const onStudioKeyDown = (e: KeyboardEvent<HTMLAnchorElement>) => {
+    // Keyboard “interaction” should also trigger it.
+    if (e.key === "Enter" || e.key === " ") triggerStudioLogo();
+  };
+
+  useEffect(() => {
+    return () => {
+      if (hideStudioLogoTimerRef.current) clearTimeout(hideStudioLogoTimerRef.current);
+    };
+  }, []);
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/70">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-zinc-200/60 bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/70">
       <Container className="flex h-16 items-center justify-between gap-3">
         {/* Logo / Studio */}
         <Link
           href="/#top"
+          onPointerDown={onStudioPointerDown}
+          onKeyDown={onStudioKeyDown}
           className="ui-accent-underline inline-flex items-center gap-2 text-sm font-semibold tracking-tight"
         >
           <span className="inline-flex items-center gap-2">
-            <LogoKineticGrid size={20} className="text-zinc-900" />
+            {/* Reserve space to avoid layout shift when the logo appears/disappears */}
+            <span className="relative inline-flex h-5 w-5 items-center justify-center">
+              <AnimatePresence initial={false}>
+                {showStudioLogo ? (
+                  <motion.span
+                    key="studioLogo"
+                    className="absolute inset-0 flex items-center justify-center"
+                    initial={{ opacity: 0, scale: 0.8, y: 1 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, y: 1 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                  >
+                    <LogoKineticGrid
+                      size={20}
+                      className="text-zinc-900"
+                      intro="bloom"
+                      hoverRepel={false}
+                    />
+                  </motion.span>
+                ) : null}
+              </AnimatePresence>
+            </span>
+
             <span>Studio</span>
           </span>
-
         </Link>
 
         {/* Desktop nav */}
@@ -174,74 +199,67 @@ export function Navbar() {
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" aria-label="Open menu">
-                  <Menu className="h-4 w-4" />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-2xl"
+                  aria-label="Open menu"
+                >
+                  <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
 
-              <SheetContent side="right" className="w-[320px] p-0 sm:w-[360px]">
-              <VisuallyHidden>
-                <SheetTitle>Menu</SheetTitle>
-              </VisuallyHidden>
+              <SheetContent side="right" className="w-[320px] p-0">
+                <VisuallyHidden>
+                  <SheetTitle>Menu</SheetTitle>
+                </VisuallyHidden>
 
-              <div className="relative flex h-full flex-col bg-white">
-                {/* subtle themed wash behind content */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 opacity-60"
-                  style={{ backgroundImage: "var(--hero-wash)" }}
-                />
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(to bottom, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.96) 30%, rgba(255,255,255,1) 70%)",
-                  }}
-                />
+                <div className="flex h-full flex-col">
+                  {/* Header */}
+                  <div className="flex items-center justify-between border-b px-4 py-4">
+                    <div>
+                      <div className="text-sm font-semibold tracking-tight">Studio</div>
+                      <div className="mt-1 text-xs text-zinc-600">Navigation</div>
+                    </div>
 
-                {/* Header */}
-                <div className="relative border-b px-5 py-4">
-                  <div className="text-sm font-semibold tracking-tight text-zinc-900">Studio</div>
-                  <div className="mt-1 text-xs text-zinc-600">Navigation</div>
-                </div>
+                    <div className="flex items-center gap-2">
+                      <ThemeDots size="md" />
+                    </div>
+                  </div>
 
-                {/* Links */}
-                <div className="relative flex-1 px-4 py-4">
-                  <div className="grid gap-2">
-                    {links.map((l) => (
-                      <SheetClose asChild key={l.href}>
-                        <Link
-                          href={l.href}
-                          className={cn(
-                            "group flex items-center justify-between rounded-2xl border bg-white/70 px-4 py-3",
-                            "text-sm font-medium text-zinc-900 shadow-sm",
-                            "transition hover:bg-white hover:shadow-md hover:shadow-black/10"
-                          )}
-                        >
-                          <span>{l.label}</span>
-                          <span className="text-zinc-400 transition group-hover:translate-x-0.5 group-hover:text-zinc-600">
-                            →
-                          </span>
-                        </Link>
-                      </SheetClose>
-                    ))}
+                  {/* Links */}
+                  <div className="relative flex-1 px-4 py-4">
+                    <div className="grid gap-2">
+                      {links.map((l) => (
+                        <SheetClose asChild key={l.href}>
+                          <Link
+                            href={l.href}
+                            className={cn(
+                              "group flex items-center justify-between rounded-2xl border bg-white/70 px-4 py-3",
+                              "text-sm font-medium text-zinc-900 shadow-sm",
+                              "transition hover:bg-white hover:shadow-md hover:shadow-black/10"
+                            )}
+                          >
+                            <span>{l.label}</span>
+                            <span className="text-zinc-400 transition group-hover:text-zinc-700">
+                              →
+                            </span>
+                          </Link>
+                        </SheetClose>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Footer */}
+                  <div className="border-t px-4 py-4">
+                    <SheetClose asChild>
+                      <Button asChild className="w-full">
+                        <Link href="/#contact">Get a quote</Link>
+                      </Button>
+                    </SheetClose>
                   </div>
                 </div>
-
-                {/* Footer CTA (pinned) */}
-                <div className="relative border-t px-4 py-4">
-                  <SheetClose asChild>
-                    <Button asChild className="h-11 w-full rounded-2xl">
-                      <Link href="/#contact" className="ui-accent-cta">
-                        Get a quote
-                      </Link>
-                    </Button>
-                  </SheetClose>
-                </div>
-              </div>
-            </SheetContent>
-
+              </SheetContent>
             </Sheet>
           </div>
         </div>

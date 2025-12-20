@@ -414,23 +414,20 @@ function ServiceCard({ item }: { item: ServiceItem }) {
     setTilt(0, 0);
   }, [reduceMotion, setSpotlight, setTilt]);
 
-  const onPointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      const el = ref.current;
-      if (!el) return;
+  const onPointerDown = useCallback((e: React.PointerEvent) => {
+    const el = ref.current;
+    if (!el) return;
 
-      const r = el.getBoundingClientRect();
-      const x = e.clientX - r.left;
-      const y = e.clientY - r.top;
+    const r = el.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
 
-      const id = Date.now();
-      setPulse({ id, x, y });
-      window.setTimeout(() => {
-        setPulse((p) => (p?.id === id ? null : p));
-      }, 420);
-    },
-    []
-  );
+    const id = Date.now();
+    setPulse({ id, x, y });
+    window.setTimeout(() => {
+      setPulse((p) => (p?.id === id ? null : p));
+    }, 420);
+  }, []);
 
   const { Icon } = item;
 
@@ -445,7 +442,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
           onPointerLeave={onPointerLeave}
           onPointerDown={onPointerDown}
           className={cn(
-            "group relative w-full text-left overflow-hidden rounded-3xl border",
+            "group relative w-full overflow-hidden rounded-3xl border text-left",
             "bg-white/70 backdrop-blur-sm",
             "p-6 shadow-sm transition-[box-shadow,border-color] duration-200",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
@@ -454,7 +451,6 @@ function ServiceCard({ item }: { item: ServiceItem }) {
           style={{
             borderColor: "hsl(var(--ui-glow) / 0.28)",
             boxShadow: hovered ? "0 26px 80px rgba(0,0,0,0.14)" : "0 18px 50px rgba(0,0,0,0.08)",
-            // defaults for CSS vars used by gradients
             ["--mx" as any]: "50%",
             ["--my" as any]: "50%",
             ["--rx" as any]: "0deg",
@@ -541,12 +537,21 @@ function ServiceCard({ item }: { item: ServiceItem }) {
         </motion.button>
       </DialogTrigger>
 
-      {/* MATCH THE “FORMS + INTAKE” STRUCTURE: WHITE, AIRY, TWO-COLUMN */}
+      {/* WHITE, AIRY, TWO-COLUMN */}
       <DialogContent
+        showCloseButton={false}
         className={cn(
-          "w-[min(96vw,980px)]",
-          "max-h-[88vh]",
+          // Width: a touch tighter on mobile so you keep edge breathing room
+          "w-[calc(100vw-2.5rem)] sm:w-[min(96vw,980px)]",
+
+          // Height: noticeably SHORTER on mobile, roomy on desktop
+          "max-h-[calc(100svh-9rem)] sm:max-h-[92vh]",
+
+          // Constrained layout so only the BODY scrolls
+          "grid grid-rows-[auto_1px_minmax(0,1fr)]",
           "overflow-hidden",
+
+          // Shell
           "rounded-3xl",
           "border border-black/10",
           "bg-white",
@@ -561,7 +566,7 @@ function ServiceCard({ item }: { item: ServiceItem }) {
         </DialogHeader>
 
         {/* HEADER (fixed) */}
-        <div className="relative px-7 py-6 sm:px-9">
+        <div className="relative px-6 py-5 sm:px-10 sm:py-8 lg:px-12 lg:py-9">
           <div
             className="pointer-events-none absolute inset-0"
             style={{
@@ -573,10 +578,10 @@ function ServiceCard({ item }: { item: ServiceItem }) {
           <div className="relative flex items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="text-xs text-zinc-500">Services</div>
-              <div className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl">
+              <div className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 sm:mt-3 sm:text-3xl">
                 {item.title}
               </div>
-              <div className="mt-3 max-w-[72ch] text-sm leading-relaxed text-zinc-600 sm:text-base">
+              <div className="mt-3 max-w-[72ch] text-sm leading-relaxed text-zinc-600 sm:mt-4 sm:text-base">
                 {item.detail.summary}
               </div>
             </div>
@@ -608,22 +613,20 @@ function ServiceCard({ item }: { item: ServiceItem }) {
           </div>
         </div>
 
-        <div className="border-t border-black/10" />
+        {/* divider */}
+        <div className="h-px w-full bg-black/10" />
 
         {/* BODY (scrollable) */}
-        <div className="overflow-y-auto px-7 py-7 sm:px-9">
-          <div className="grid gap-6 md:grid-cols-12">
+        <div className="min-h-0 overflow-y-auto px-5 py-5 sm:px-10 sm:py-10 lg:px-12 lg:py-12">
+          <div className="grid gap-6 lg:gap-8 md:grid-cols-12">
             {/* LEFT: What we build */}
             <div
-              className={cn(
-                "md:col-span-7",
-                "rounded-3xl border border-black/10 bg-white p-6"
-              )}
+              className={cn("md:col-span-7", "rounded-3xl border border-black/10 bg-white p-5 sm:p-6 lg:p-8")}
               style={{ boxShadow: "0 18px 70px rgba(0,0,0,0.06)" }}
             >
               <div className="text-sm font-semibold text-zinc-950">What we build</div>
 
-              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              <ul className="mt-5 grid gap-4 lg:gap-5 sm:grid-cols-2">
                 {item.detail.includes.map((t) => (
                   <li key={t} className="flex items-start gap-3">
                     <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[hsl(var(--ui-glow)/0.85)]" />
@@ -634,14 +637,14 @@ function ServiceCard({ item }: { item: ServiceItem }) {
             </div>
 
             {/* RIGHT: What you get + Good for */}
-            <div className="md:col-span-5 grid gap-6">
+            <div className="md:col-span-5 grid gap-6 lg:gap-8">
               <div
-                className="rounded-3xl border border-black/10 bg-white p-6"
+                className="rounded-3xl border border-black/10 bg-white p-5 sm:p-6 lg:p-8"
                 style={{ boxShadow: "0 18px 70px rgba(0,0,0,0.06)" }}
               >
                 <div className="text-sm font-semibold text-zinc-950">What you get</div>
 
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="mt-5 flex flex-wrap gap-2">
                   {item.detail.outcomes.map((t) => (
                     <Chip key={t}>{t}</Chip>
                   ))}
@@ -649,12 +652,12 @@ function ServiceCard({ item }: { item: ServiceItem }) {
               </div>
 
               <div
-                className="rounded-3xl border border-black/10 bg-white p-6"
+                className="rounded-3xl border border-black/10 bg-white p-5 sm:p-6 lg:p-8"
                 style={{ boxShadow: "0 18px 70px rgba(0,0,0,0.06)" }}
               >
                 <div className="text-sm font-semibold text-zinc-950">Good for</div>
 
-                <div className="mt-4 flex flex-wrap gap-2">
+                <div className="mt-5 flex flex-wrap gap-2">
                   {item.detail.goodFor.map((t) => (
                     <Chip key={t}>{t}</Chip>
                   ))}

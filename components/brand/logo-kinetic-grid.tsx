@@ -38,6 +38,11 @@ function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
 }
 
+function smoothstep01(t: number) {
+  const x = clamp(t, 0, 1);
+  return x * x * (3 - 2 * x);
+}
+
 function useInViewport<T extends HTMLElement>(threshold = 0.1) {
   const ref = useRef<T | null>(null);
   const [inView, setInView] = useState(true);
@@ -60,7 +65,6 @@ function useInViewport<T extends HTMLElement>(threshold = 0.1) {
 /**
  * Kinetic dot-grid logo.
  * Default targets match your SVG (3×3 grid at 25/50/75 in viewBox=100).
- * If you ever want 5×5 later, just replace DOT_TARGETS with 5×5 coordinates.
  */
 const DOT_TARGETS: Array<[number, number]> = [
   [25, 25],
@@ -85,6 +89,18 @@ export function LogoKineticGrid(props: {
   hoverRepel?: boolean;
   /** aria-label override */
   label?: string;
+
+  /**
+   * Intro animation on mount.
+   * - "none": no reveal, but still paints once so it never appears blank.
+   * - "bloom": minimalist pop + settle reveal.
+   */
+  intro?: "none" | "bloom";
+
+  /** Bloom tuning (only applies when intro="bloom") */
+  introScatter?: number; // viewBox units
+  introStaggerMs?: number;
+  introPopMs?: number;
 }) {
   const {
     size = 22,
@@ -93,6 +109,11 @@ export function LogoKineticGrid(props: {
     maxOffset = 10,
     hoverRepel = true,
     label = "Kinetic Dot Grid Logo",
+
+    intro = "none",
+    introScatter = 6,
+    introStaggerMs = 28,
+    introPopMs = 170,
   } = props;
 
   const reduced = usePrefersReducedMotion();
@@ -117,6 +138,14 @@ export function LogoKineticGrid(props: {
     ox: number;
     oy: number;
   }>({ t0: 0, active: false, ox: 50, oy: 50 });
+
+  const introRef = useRef<{
+    t0: number;
+    active: boolean;
+    scatter: number;
+    staggerMs: number;
+    popMs: number;
+  }>({ t0: 0, active: false, scatter: introScatter, staggerMs: introStaggerMs, popMs: introPopMs });
 
   const dotsRef = useRef<Dot[]>([]);
 
@@ -197,7 +226,7 @@ export function LogoKineticGrid(props: {
     }
 
     // stop if offscreen and nothing active
-    if (!inView && !rippleRef.current.active && !hoveredRef.current) {
+    if (!inView && !rippleRef.current.active && !hoveredRef.current && !introRef.current.active) {
       stop();
       return;
     }
@@ -230,6 +259,16 @@ export function LogoKineticGrid(props: {
 
     if (ripple.active && rippleAge > rippleDur) {
       rippleRef.current.active = false;
+    }
+
+    // intro (bloom reveal)
+    const introState = introRef.current;
+    const introAge = introState.active ? t - introState.t0 : 0;
+    const introTotalMs =
+      (DOT_TARGETS.length - 1) * introState.staggerMs + introState.popMs + 260;
+
+    if (introState.active && introAge > introTotalMs) {
+      introRef.current.active = false;
     }
 
     // color from currentColor
@@ -273,7 +312,6 @@ export function LogoKineticGrid(props: {
         const dy = d.ty - ripple.oy;
         const dist = Math.hypot(dx, dy);
 
-        // radial direction from origin to dot target
         if (dist > 0.0001) {
           const phase = dist * waveFreq - (rippleAge / 1000) * waveSpeed;
           const falloff = Math.exp(-dist * 0.06);
@@ -299,7 +337,6 @@ export function LogoKineticGrid(props: {
         const s = maxOffset / disp;
         d.x = d.tx + ox * s;
         d.y = d.ty + oy * s;
-        // soften velocity too
         d.vx *= 0.75;
         d.vy *= 0.75;
       }
@@ -307,16 +344,32 @@ export function LogoKineticGrid(props: {
       maxDisp = Math.max(maxDisp, Math.hypot(d.x - d.tx, d.y - d.ty));
       maxVel = Math.max(maxVel, Math.hypot(d.vx, d.vy));
 
+      // intro per-dot fade/pop (minimalist)
+      let alpha = 1;
+      let rMul = 1;
+
+      if (introState.active) {
+        const localT = (introAge - i * introState.staggerMs) / introState.popMs;
+        const eased = smoothstep01(localT);
+        alpha = eased;
+        // small pop: start smaller, settle to 1.0
+        rMul = 0.55 + 0.45 * eased;
+      }
+
       // draw dot
+      ctx.save();
+      ctx.globalAlpha = alpha;
       ctx.fillStyle = color;
       ctx.beginPath();
-      ctx.arc(d.x * scale, d.y * scale, dotRadius * scale, 0, Math.PI * 2);
+      ctx.arc(d.x * scale, d.y * scale, dotRadius * scale * rMul, 0, Math.PI * 2);
       ctx.fill();
+      ctx.restore();
     }
 
     // decide whether to keep running
     const settled = maxDisp < 0.06 && maxVel < 0.06;
-    const keepAlive = hoveredRef.current || rippleRef.current.active || !settled;
+    const keepAlive =
+      hoveredRef.current || rippleRef.current.active || introRef.current.active || !settled;
 
     if (!keepAlive) {
       stop();
@@ -330,6 +383,40 @@ export function LogoKineticGrid(props: {
     return () => stop();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Ensure it never "just appears blank":
+  // - Always paint at least one frame on mount.
+  // - Optionally run the "bloom" intro.
+  useEffect(() => {
+    if (reduced) return;
+
+    // Always paint once.
+    start();
+
+    if (intro === "bloom") {
+      const dots = dotsRef.current;
+      const scatter = introScatter;
+
+      // collapse near center + tiny scatter for a clean bloom
+      for (let i = 0; i < dots.length; i++) {
+        const d = dots[i];
+        d.x = 50 + (Math.random() * 2 - 1) * scatter;
+        d.y = 50 + (Math.random() * 2 - 1) * scatter;
+        d.vx = (Math.random() * 2 - 1) * 0.6;
+        d.vy = (Math.random() * 2 - 1) * 0.6;
+      }
+
+      introRef.current = {
+        t0: performance.now(),
+        active: true,
+        scatter,
+        staggerMs: introStaggerMs,
+        popMs: introPopMs,
+      };
+
+      start();
+    }
+  }, [reduced, intro, introScatter, introStaggerMs, introPopMs]);
 
   if (reduced) {
     // Static fallback SVG (exactly your provided mark)
@@ -381,7 +468,6 @@ export function LogoKineticGrid(props: {
         start(); // allow it to settle back
       }}
       onPointerMove={(e) => {
-        // Only treat hover repulsion as “real” for fine pointers; mobile still gets click ripple.
         pointerRef.current.fine = e.pointerType === "mouse" || e.pointerType === "pen";
         if (!pointerRef.current.fine) return;
 
@@ -392,15 +478,10 @@ export function LogoKineticGrid(props: {
         start();
       }}
       onPointerDown={(e) => {
-        // Ripple on tap/click without preventing navigation if this is inside a Link.
         triggerRipple(e.clientX, e.clientY);
       }}
     >
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0"
-        aria-hidden="true"
-      />
+      <canvas ref={canvasRef} className="absolute inset-0" aria-hidden="true" />
     </span>
   );
 }
