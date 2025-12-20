@@ -145,7 +145,7 @@ export function Trust({
                       layoutId={`trust-bg-${it.id}`}
                       className={[
                         "absolute inset-0 rounded-2xl border bg-white shadow-sm transition-colors",
-                        isActive ? "border-zinc-900" : "border-border",
+                        isActive ? "ui-border-accent" : "border-border",
                       ].join(" ")}
                     />
 

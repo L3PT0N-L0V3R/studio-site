@@ -19,24 +19,25 @@ export function Hero() {
 
   const [openPanel, setOpenPanel] = useState<HeroPanelId | null>(null);
 
-  const positioning = {
-    eyebrow: "Systems-first rebuilds",
-    title: "Premium websites that act like infrastructure.",
+    const positioning = {
+    eyebrow: "Builds • rebuilds • upgrades",
+    title: "Websites that act like infrastructure.",
     description:
-      "We rebuild websites for businesses that outgrew theirs—then we connect the systems behind it.",
-    bestForTitle: "We’re best for…",
+      "From clean new launches to rebuilds and feature upgrades—we design, build, and wire the system behind your site. We work with budgets; start with an inquiry and we’ll map the right path.",
+    bestForTitle: "Great fit if…",
     bestFor: [
-      "Service businesses ready for a premium rebuild",
-      "Teams that want intake → CRM → automation connected",
-      "Founders who care about performance, SEO, and conversion clarity",
+      "You’re launching a new site and want it clean, fast, and scalable",
+      "Your current site is holding growth back and needs a rebuild",
+      "You want new features: forms, booking, payments, portals, integrations",
     ],
-    notForTitle: "Not for…",
+    notForTitle: "Not a fit if…",
     notFor: [
-      "One-page brochure sites with no system needs",
-      "Projects where cheapest is the only priority",
-      "Heavy daily publishing workflows (CMS-first teams)",
+      "Cheapest is the only priority—regardless of outcomes",
+      "You want a quick patch without scoping or finishing the system",
+      "You’re not ready to collaborate on content, approvals, and iteration",
     ],
   } as const;
+
 
   const panelContent = useMemo(() => {
     return {
