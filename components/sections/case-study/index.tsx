@@ -70,30 +70,8 @@ export function CaseStudy({ variant = "section" }: Props) {
 
               <CardContent>
                 <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
-                  {/* Inputs */}
-                  <div className="rounded-xl border bg-white p-4">
-                    <div className="space-y-5">
-                      <RangeField
-                        label="Pages"
-                        hint="Rough page count (marketing + core flows)"
-                        value={pages}
-                        min={1}
-                        max={25}
-                        onChange={setPages}
-                      />
-                      <RangeField
-                        label="Complexity"
-                        hint="Motion, integrations, custom components"
-                        value={complexity}
-                        min={1}
-                        max={5}
-                        onChange={setComplexity}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Timeline */}
-                  <div className="rounded-xl border bg-white p-4">
+                  {/* Timeline (FIRST on mobile) */}
+                  <div className="order-1 lg:order-2 rounded-xl border bg-white p-4">
                     <div className="rounded-lg bg-white">
                       <div className="text-sm text-muted-foreground">Estimated range</div>
                       <div className="mt-1 text-2xl font-semibold tracking-tight tabular-nums">
@@ -129,6 +107,28 @@ export function CaseStudy({ variant = "section" }: Props) {
                           </div>
                         </div>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Inputs (SECOND on mobile) */}
+                  <div className="order-2 lg:order-1 rounded-xl border bg-white p-4">
+                    <div className="space-y-5">
+                      <RangeField
+                        label="Pages"
+                        hint="Rough page count (marketing + core flows)"
+                        value={pages}
+                        min={1}
+                        max={25}
+                        onChange={setPages}
+                      />
+                      <RangeField
+                        label="Complexity"
+                        hint="Motion, integrations, custom components"
+                        value={complexity}
+                        min={1}
+                        max={5}
+                        onChange={setComplexity}
+                      />
                     </div>
                   </div>
                 </div>
