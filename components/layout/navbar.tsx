@@ -14,11 +14,12 @@ import { THEMES, type ThemeId, THEME_STORAGE_KEY } from "@/lib/themes";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { label: "Work", href: "/#work" },
+  { label: "Process", href: "/#process" },
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/#contact" },
 ];
+
 
 function applyTheme(id: ThemeId) {
   document.documentElement.dataset.theme = id;
