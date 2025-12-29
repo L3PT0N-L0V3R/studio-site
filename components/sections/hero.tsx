@@ -11,7 +11,7 @@ import { useGridGap, useSectionSpacing } from "@/components/providers/ui-config"
 import { AnimatePresence, motion } from "framer-motion";
 import { Lightbulb } from "lucide-react";
 
-type HeroPanelId = "bestFor" | "notFor";
+type HeroPanelId = "bestFor";
 
 export function Hero() {
   const sectionPad = useSectionSpacing();
@@ -19,52 +19,34 @@ export function Hero() {
 
   const [openPanel, setOpenPanel] = useState<HeroPanelId | null>(null);
 
-    const positioning = {
+  const positioning = {
     eyebrow: "Builds • rebuilds • upgrades",
     title: "Websites that act like infrastructure.",
     description:
       "From clean new launches to rebuilds and feature upgrades—we design, build, and wire the system behind your site. We work with budgets; start with an inquiry and we’ll map the right path.",
-    bestForTitle: "Great fit if…",
+    bestForTitle: "Great fit for you if…",
     bestFor: [
       "You’re launching a new site and want it clean, fast, and scalable",
       "Your current site is holding growth back and needs a rebuild",
       "You want new features: forms, booking, payments, portals, integrations",
     ],
-    notForTitle: "Not a fit if…",
-    notFor: [
-      "Cheapest is the only priority—regardless of outcomes",
-      "You want a quick patch without scoping or finishing the system",
-      "You’re not ready to collaborate on content, approvals, and iteration",
-    ],
   } as const;
-
 
   const panelContent = useMemo(() => {
     return {
       bestFor: {
         title: positioning.bestForTitle,
-        subtitle: "Projects where systems + clarity matter.",
+        subtitle: "Build, rebuild, or upgrade—done with systems thinking.",
         bullets: positioning.bestFor,
-        noteTitle: "Typical outcomes",
+        noteTitle: "What this unlocks",
         notes: [
-          "Higher quality leads",
-          "Cleaner conversion paths",
-          "Less operational friction as you scale",
-        ],
-      },
-      notFor: {
-        title: positioning.notForTitle,
-        subtitle: "Projects that don’t benefit from systems-first work.",
-        bullets: positioning.notFor,
-        noteTitle: "What we’ll recommend instead",
-        notes: [
-          "A simpler brochure build",
-          "A focused landing page",
-          "A phased plan if budget is tight",
+          "A clear roadmap + scope guardrails",
+          "Measurable conversion tracking",
+          "A modular base you can extend",
         ],
       },
     } as const;
-  }, [positioning.bestFor, positioning.bestForTitle, positioning.notFor, positioning.notForTitle]);
+  }, [positioning.bestFor, positioning.bestForTitle]);
 
   useEffect(() => {
     if (!openPanel) return;
@@ -78,18 +60,19 @@ export function Hero() {
   const selected = openPanel ? panelContent[openPanel] : null;
 
   return (
-  <section
-    id="top"
-    className={cn(sectionPad, "border-b relative bg-white")}
-    style={{
-      // Layer 1 (top): fade to white at the bottom
-      // Layer 2 (bottom): your theme wash
-      backgroundImage:
-        "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 70%, rgba(255,255,255,1) 100%), var(--hero-wash)",
-      backgroundRepeat: "no-repeat",
-      backgroundSize: "cover",
-      backgroundPosition: "center top",
-    }}>
+    <section
+      id="top"
+      className={cn(sectionPad, "border-b relative bg-white")}
+      style={{
+        // Layer 1 (top): fade to white at the bottom
+        // Layer 2 (bottom): your theme wash
+        backgroundImage:
+          "linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 70%, rgba(255,255,255,1) 100%), var(--hero-wash)",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center top",
+      }}
+    >
       <Container>
         <div className={cn("grid items-start gap-10 lg:grid-cols-2", gap)}>
           {/* Left column */}
@@ -105,8 +88,9 @@ export function Hero() {
 
             <p className="mt-3 max-w-xl text-muted-foreground">{positioning.description}</p>
 
+            {/* Fit card(s) */}
             <div className={cn("mt-8 grid gap-4 sm:grid-cols-2", gap)}>
-              {/* Best for (clickable) */}
+              {/* Best for (clickable) — now spans full width on sm+ */}
               <button
                 type="button"
                 onClick={() => setOpenPanel("bestFor")}
@@ -114,38 +98,15 @@ export function Hero() {
                   "group rounded-2xl border bg-white p-4 text-left transition-all",
                   "hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300",
-                  "focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  "focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+                  "sm:col-span-2"
                 )}
-
                 aria-haspopup="dialog"
                 aria-expanded={openPanel === "bestFor"}
               >
                 <div className="text-sm font-semibold">{positioning.bestForTitle}</div>
                 <ul className="mt-2 space-y-2 text-sm text-muted-foreground">
                   {positioning.bestFor.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <div className="mt-3 text-xs text-muted-foreground/80">Click to expand</div>
-              </button>
-
-              {/* Not for (clickable) */}
-              <button
-                type="button"
-                onClick={() => setOpenPanel("notFor")}
-                className={cn(
-                  "group rounded-2xl border bg-white p-4 text-left transition-all",
-                  "hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/10",
-                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300",
-                  "focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                )}
-
-                aria-haspopup="dialog"
-                aria-expanded={openPanel === "notFor"}
-              >
-                <div className="text-sm font-semibold">{positioning.notForTitle}</div>
-                <ul className="mt-2 space-y-2 text-sm text-muted-foreground">
-                  {positioning.notFor.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
@@ -176,17 +137,17 @@ export function Hero() {
                 <div>
                   <div className="text-sm font-semibold">What you get</div>
                   <div className="mt-1 text-sm text-muted-foreground">
-                    A site that looks premium—and behaves like a system.
+                    A modern site that’s clear, measurable, and built to evolve.
                   </div>
                 </div>
 
                 <HighlightBulb
                   title="Highlights"
                   lines={[
-                    "Core Web Vitals targets",
-                    "SEO + accessibility baseline",
-                    "Analytics + event plan",
-                    "Intake → CRM wiring",
+                    "Performance + SEO baseline",
+                    "Accessibility + best practices",
+                    "Tracking + event plan",
+                    "Integration-ready wiring",
                   ]}
                 />
               </div>
@@ -217,7 +178,7 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Modal for the two clickable cards */}
+        {/* Modal for the clickable card */}
         <AnimatePresence>
           {selected ? (
             <>
@@ -298,6 +259,10 @@ export function Hero() {
  * Clickable “bulb” card with a premium ambient glow when enabled.
  * Keeps the “Highlights” concept but upgrades it into an interaction.
  */
+/**
+ * Clickable “bulb” card with a premium ambient glow when enabled.
+ * Mobile: zero jitter (disables scroll anchoring + avoids layout reflow animations).
+ */
 export function HighlightBulb({
   title = "Highlights",
   lines = [],
@@ -319,22 +284,23 @@ export function HighlightBulb({
   const extra = lines.slice(2);
 
   return (
-    <motion.button
+    <button
       type="button"
       onClick={() => setOpen((v) => !v)}
-      layout
       className={cn(
-        "relative select-none rounded-2xl border bg-white px-3 py-2 text-left transition-all",
+        "relative select-none rounded-2xl border bg-white px-3 py-2 text-left transition-[box-shadow,border-color,transform] duration-200",
         "ui-ambient ui-ambient-hover",
         "max-w-full",
         "sm:shrink-0",
         open ? "ui-ambient-active ui-border-accent" : "border-border",
-        // Mobile: never widen the page. Desktop: allow the nice width expand.
-        "w-full",
-        open ? "sm:w-[280px]" : "sm:w-[220px]"
+        // Mobile: always full width, never re-measure. Desktop: fixed width (no width-anim).
+        "w-full sm:w-[260px]"
       )}
-
-      style={glowStyle}
+      style={{
+        ...glowStyle,
+        // Critical: prevents mobile browser scroll anchoring “jump” during expand/collapse
+        overflowAnchor: "none",
+      }}
       aria-pressed={open}
       aria-expanded={open}
     >
@@ -368,27 +334,26 @@ export function HighlightBulb({
           </div>
         ))}
 
-        <AnimatePresence initial={false}>
-          {open && extra.length > 0 ? (
-            <motion.div
-              key="extra"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.18 }}
-              className="overflow-hidden pt-1"
-            >
-              <div className="space-y-1">
-                {extra.map((l) => (
-                  <div key={l} className="text-[11px] text-muted-foreground">
-                    {l}
-                  </div>
-                ))}
+        {/* Expand/collapse without layout reflow jitter */}
+        <div
+          className="overflow-hidden transition-[max-height,opacity] duration-200 ease-out"
+          style={{
+            maxHeight: open ? 160 : 0, // safe cap for a few lines; no measuring required
+            opacity: open ? 1 : 0,
+            // Also helps some mobile browsers avoid a tiny “snap” mid-transition
+            willChange: "max-height, opacity",
+          }}
+          aria-hidden={!open}
+        >
+          <div className="pt-1 space-y-1">
+            {extra.map((l) => (
+              <div key={l} className="text-[11px] text-muted-foreground">
+                {l}
               </div>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+            ))}
+          </div>
+        </div>
       </div>
-    </motion.button>
+    </button>
   );
 }
