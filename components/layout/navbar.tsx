@@ -144,7 +144,7 @@ export function Navbar() {
         >
           <span className="inline-flex items-center gap-2">
             <LogoKineticGrid size={20} className="text-zinc-900" />
-            <span>Studio</span>
+            <span>Qube Studios</span>
           </span>
         </Link>
 

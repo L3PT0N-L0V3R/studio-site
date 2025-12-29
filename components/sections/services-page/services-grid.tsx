@@ -55,36 +55,35 @@ const SERVICES: ServiceItem[] = [
     Icon: LayoutTemplate,
     detail: {
       summary:
-        "A clean, modern foundation built to scale—fast, structured, and easy to expand without rewrites.",
+        "A clean, modern foundation built to scale: structured pages, a reusable component kit, and a build that stays fast and consistent as you add new sections. Designed to ship quickly without painting you into a corner.",
       includes: [
-        "IA + page architecture",
-        "Component system + visual polish",
+        "IA + sitemap (pages, nav, hierarchy)",
+        "Brand-ready UI kit (components + patterns)",
         "Responsive build + accessibility baseline",
-        "SEO structure + indexability checks",
-        "Analytics + conversion instrumentation",
+        "SEO foundations (metadata + schema basics)",
+        "Analytics + conversion event instrumentation",
       ],
-      outcomes: ["Faster launch", "Clean iteration path", "Better conversion clarity"],
-      goodFor: ["New offers", "New brand/site", "Early-stage teams that want to grow"],
+      outcomes: ["Launch-ready in weeks", "Easy to expand cleanly", "Higher-quality leads"],
+      goodFor: ["New offers/brands", "Founders shipping fast", "Teams that want polish"],
     },
   },
   {
     id: "rebuilds-upgrades",
     title: "Rebuilds & upgrades",
-    description:
-      "Modernize without losing SEO, content, or momentum. Keep what works, fix what doesn’t.",
+    description: "Modernize without losing SEO, content, or momentum. Keep what works, fix what doesn't.",
     Icon: RefreshCw,
     detail: {
       summary:
-        "We stabilize what’s already working, then rebuild the fragile parts—without breaking ranking or flow.",
+        "We modernize the UI and the underlying structure while protecting what you've already earned: rankings, content equity, and conversion paths. Changes ship in controlled phases with measurement, not guesswork.",
       includes: [
-        "Audit + risk map (SEO, UX, performance)",
-        "Incremental rebuild plan",
-        "Migration-safe rollout (no sudden cliff)",
-        "Component + layout refresh",
-        "Instrumentation + measurement",
+        "Audit + risk map (SEO, UX, CWV)",
+        "Stepwise rebuild plan (safe sequencing)",
+        "Migration hygiene (redirects + parity checks)",
+        "Component + layout refresh (no regressions)",
+        "Instrumentation + regression guardrails",
       ],
-      outcomes: ["Less risk", "Better performance", "Modern UX without disruption"],
-      goodFor: ["Aging sites", "Teams with traffic to protect", "Sites that have outgrown the stack"],
+      outcomes: ["Protected SEO equity", "Faster, cleaner UX", "Measured rollout"],
+      goodFor: ["Traffic you can't lose", "Legacy stacks", "Sites with patchwork UX"],
     },
   },
   {
@@ -94,16 +93,16 @@ const SERVICES: ServiceItem[] = [
     Icon: Blocks,
     detail: {
       summary:
-        "A consistent UI system that makes future pages cheaper and faster—without getting generic.",
+        "A reusable UI system aligned to your brand: tokens, components, and rules so new pages stay consistent and easy to ship. The goal is speed later, not just beauty now.",
       includes: [
         "Tokens (type, spacing, radii, color)",
-        "Reusable components + variants",
+        "Core components + variants (real use-cases)",
         "Interaction rules + motion constraints",
-        "Docs + usage patterns",
-        "Production-ready implementation",
+        "Docs + usage examples (so it sticks)",
+        "Production-ready implementation in your stack",
       ],
-      outcomes: ["Consistent UI", "Faster iteration", "Less design debt"],
-      goodFor: ["Growing marketing sites", "Multi-page builds", "Teams shipping new pages often"],
+      outcomes: ["Consistent UI", "Cheaper new pages", "Less design debt"],
+      goodFor: ["Multi-page sites", "Teams shipping weekly", "Design/dev alignment"],
     },
   },
   {
@@ -113,16 +112,16 @@ const SERVICES: ServiceItem[] = [
     Icon: Brush,
     detail: {
       summary:
-        "Premium interaction design: hover physics, scroll narrative, and feedback loops that feel “app-like.”",
+        "Premium motion that signals quality: crisp feedback, scroll narrative, and state transitions that feel app-like. Built with a motion budget so it stays smooth and doesn't become performance tax.",
       includes: [
-        "Hover + tap feedback (spring rules)",
+        "Hover/tap feedback (spring spec + feel)",
         "Scroll-linked reveals (calm + precise)",
-        "Interaction polish (loading, states, transitions)",
-        "Reduced-motion support",
-        "Performance-safe motion budget",
+        "State transitions (loading, states, flows)",
+        "Reduced-motion support (accessible defaults)",
+        "Performance-safe motion budget + constraints",
       ],
-      outcomes: ["Higher perceived quality", "More engagement", "Better UX confidence"],
-      goodFor: ["Premium brands", "Explainer flows", "Complex products that need clarity"],
+      outcomes: ["Premium feel", "More engagement", "Clearer UX signals"],
+      goodFor: ["Premium brands", "Explainer flows", "Complex products"],
     },
   },
   {
@@ -132,16 +131,16 @@ const SERVICES: ServiceItem[] = [
     Icon: BarChart3,
     detail: {
       summary:
-        "We simplify decision paths and remove friction—then measure what changed so it’s not guesswork.",
+        "We tighten hierarchy, clarify CTAs, and remove friction across the decision path. Improvements are instrumented so you can see what changed and what actually moved the needle.",
       includes: [
-        "Offer clarity + page hierarchy",
-        "CTA strategy + friction removal",
+        "Offer clarity + page hierarchy cleanup",
+        "CTA map + friction removal (flow fixes)",
         "Event tracking plan + implementation",
         "A/B-ready structure (optional)",
-        "Reporting + iteration loop",
+        "Reporting loop (what changed + why)",
       ],
-      outcomes: ["Higher conversion", "Cleaner funnels", "Measurable improvements"],
-      goodFor: ["Lead-gen sites", "Service businesses", "Teams spending on ads/traffic"],
+      outcomes: ["Higher conversion", "Cleaner funnels", "Measurable wins"],
+      goodFor: ["Lead-gen sites", "Paid traffic teams", "Service businesses"],
     },
   },
   {
@@ -151,16 +150,16 @@ const SERVICES: ServiceItem[] = [
     Icon: Gauge,
     detail: {
       summary:
-        "Speed that holds up in the real world—built into the system rather than “fixed later.”",
+        "Speed work that holds up in production: practical fixes, a clean loading model, and guardrails so performance doesn't decay over time. Tuned for real users, not just lab scores.",
       includes: [
-        "CWV audit + bottleneck map",
-        "Image + font strategy",
-        "Code-splitting + loading model",
-        "Lighthouse + field data alignment",
-        "Regression-safe checks",
+        "CWV audit + bottleneck map (root causes)",
+        "Image + font strategy (fast by default)",
+        "Code-splitting + lazy-load model",
+        "Field data alignment (RUM vs Lighthouse)",
+        "Regression guardrails (don't backslide)",
       ],
-      outcomes: ["Faster pages", "Better UX", "More stable SEO outcomes"],
-      goodFor: ["High-traffic sites", "SEO-sensitive teams", "Sites with heavy media/content"],
+      outcomes: ["Faster pages", "Better CWV", "More stable SEO"],
+      goodFor: ["High-traffic sites", "Media-heavy pages", "SEO-sensitive teams"],
     },
   },
   {
@@ -169,16 +168,17 @@ const SERVICES: ServiceItem[] = [
     description: "Technical SEO, on-page structure, metadata, and indexable architecture.",
     Icon: Search,
     detail: {
-      summary: "A clean SEO foundation—so your pages can actually rank and stay indexable.",
+      summary:
+        "An SEO foundation that stays clean as the site grows: indexable structure, consistent templates, and the technical basics that keep rankings from becoming fragile later.",
       includes: [
-        "Indexability + crawl checks",
-        "Metadata + schema basics",
-        "Internal linking structure",
-        "Content hierarchy guidance",
-        "Migration-safe adjustments",
+        "Indexability + crawl checks (blockers removed)",
+        "Metadata + schema basics (right-sized)",
+        "Internal linking structure (intentional)",
+        "Content hierarchy templates (page consistency)",
+        "Migration-safe adjustments (redirect plan if needed)",
       ],
-      outcomes: ["Better crawlability", "Cleaner structure", "Reduced SEO fragility"],
-      goodFor: ["Rebuilds", "Content sites", "Local/service businesses"],
+      outcomes: ["Better crawlability", "Cleaner structure", "Reduced fragility"],
+      goodFor: ["Rebuilds", "Content sites", "Local/service SEO"],
     },
   },
   {
@@ -187,16 +187,17 @@ const SERVICES: ServiceItem[] = [
     description: "Keyboard support, semantics, contrast, and predictable interaction patterns.",
     Icon: Accessibility,
     detail: {
-      summary: "Accessibility that’s built-in—not bolted on. Cleaner UX for everyone.",
+      summary:
+        "Accessibility that's built-in, not bolted on: semantic structure, keyboard flows, and predictable interaction patterns. Cleaner UX for everyone and fewer expensive reworks later.",
       includes: [
-        "Keyboard navigation",
+        "Keyboard navigation (complete flows)",
         "Semantic structure + ARIA where needed",
-        "Contrast + focus states",
-        "Reduced-motion patterns",
-        "Form + error state clarity",
+        "Contrast + focus states (usable, consistent)",
+        "Reduced-motion patterns (safe defaults)",
+        "Forms + error state clarity (less friction)",
       ],
-      outcomes: ["Better UX", "Lower friction", "More robust components"],
-      goodFor: ["Any production site", "Forms + funnels", "Teams that want fewer UX bugs"],
+      outcomes: ["Lower friction", "Fewer UX bugs", "Stronger components"],
+      goodFor: ["Forms + funnels", "Any production site", "Teams scaling UI"],
     },
   },
   {
@@ -205,16 +206,17 @@ const SERVICES: ServiceItem[] = [
     description: "Clean tracking plans, events, and dashboards that reflect what matters.",
     Icon: Database,
     detail: {
-      summary: "Measurement that’s useful. Track the signals that drive decisions—not noise.",
+      summary:
+        "Measurement you can trust: a tracking plan that matches business decisions, clean event naming, and dashboards that stay actionable. Includes QA so the data isn't noisy or misleading.",
       includes: [
-        "Tracking plan + naming conventions",
-        "Event implementation",
-        "Dashboards (simple + actionable)",
-        "Funnel definitions",
-        "Quality checks + consistency",
+        "Tracking plan + naming conventions (clean)",
+        "Event implementation (consistent + reliable)",
+        "Dashboards (simple, actionable, not bloated)",
+        "Funnels + key journeys (signal over noise)",
+        "Quality checks + ongoing consistency",
       ],
-      outcomes: ["Clear KPIs", "Less guessing", "Better iteration"],
-      goodFor: ["Conversion work", "Ads traffic", "Teams improving weekly/monthly"],
+      outcomes: ["Clear KPIs", "Trusted data", "Faster iteration"],
+      goodFor: ["Growth teams", "Ads + landing pages", "Weekly improvement cycles"],
     },
   },
   {
@@ -223,15 +225,16 @@ const SERVICES: ServiceItem[] = [
     description: "Forms → routing → follow-ups → reporting. Reduce manual work and missed leads.",
     Icon: Mail,
     detail: {
-      summary: "Turn inquiries into a system: capture → qualify → follow up → measure.",
+      summary:
+        "Turn inquiries into a system: capture, qualify, route, follow up, and measure. The focus is less manual work, faster response time, and a pipeline that stays clean over time.",
       includes: [
-        "Form routing + spam mitigation",
-        "CRM integration + pipeline hygiene",
+        "Form routing + spam mitigation (deliverability)",
+        "CRM setup + pipeline hygiene (stages + rules)",
         "Email/SMS follow-ups (as needed)",
-        "Notification rules",
-        "Reporting + lead quality signals",
+        "Notifications + SLAs (no missed leads)",
+        "Reporting + lead quality signals (what converts)",
       ],
-      outcomes: ["Fewer missed leads", "Faster response time", "Cleaner pipeline"],
+      outcomes: ["Fewer missed leads", "Faster response", "Cleaner pipeline"],
       goodFor: ["Service businesses", "Teams scaling ops", "Lead-gen sites"],
     },
   },
@@ -241,16 +244,17 @@ const SERVICES: ServiceItem[] = [
     description: "APIs, webhooks, and the glue between tools (safely, with clear failure modes).",
     Icon: Link2,
     detail: {
-      summary: "Practical integrations that don’t turn into brittle spaghetti.",
+      summary:
+        "Practical integrations that don't become brittle: APIs, webhooks, retries, validation, and logging. Designed with clear failure modes so operations don't silently break.",
       includes: [
-        "API + webhook wiring",
-        "Retries + failure modes",
-        "Data validation + logging",
-        "Security-safe patterns",
-        "Documentation + handoff",
+        "API + webhook wiring (clean contracts)",
+        "Retries + failure modes (predictable behavior)",
+        "Data validation + logging (debuggable)",
+        "Security-safe patterns (auth + secrets)",
+        "Documentation + handoff (maintainable)",
       ],
       outcomes: ["Less manual work", "More reliability", "Cleaner operations"],
-      goodFor: ["Scaling teams", "Multiple tools", "Ops-heavy workflows"],
+      goodFor: ["Ops-heavy workflows", "Multi-tool stacks", "Scaling teams"],
     },
   },
   {
@@ -259,16 +263,17 @@ const SERVICES: ServiceItem[] = [
     description: "Checkout UX, product flow, email capture, and performance-minded merchandising.",
     Icon: ShoppingBag,
     detail: {
-      summary: "Make ecommerce feel premium: faster UX, cleaner paths, better conversion mechanics.",
+      summary:
+        "Make ecommerce feel premium: faster UX, cleaner product paths, and checkout friction reduction. Improvements are paired with tracking so you can validate conversion and AOV impact.",
       includes: [
-        "Checkout + cart friction reduction",
-        "Product page optimization",
-        "Email capture flows",
-        "Performance improvements",
-        "Tracking + funnel clarity",
+        "Checkout/cart friction reduction (flow fixes)",
+        "Product page optimization (clarity + speed)",
+        "Email capture flows (well-timed, not spammy)",
+        "Performance improvements (media + loading)",
+        "Tracking + funnel clarity (measure impact)",
       ],
-      outcomes: ["Higher AOV potential", "Better conversion", "Cleaner merchandising"],
-      goodFor: ["Shopify-style stacks", "Product catalogs", "Paid traffic"],
+      outcomes: ["Higher conversion", "Better AOV potential", "Cleaner merchandising"],
+      goodFor: ["Shopify stacks", "Product catalogs", "Paid traffic"],
     },
   },
   {
@@ -277,16 +282,17 @@ const SERVICES: ServiceItem[] = [
     description: "Practical assistants and automations that improve ops without adding fragility.",
     Icon: Bot,
     detail: {
-      summary: "Use AI where it helps: support, ops, triage, and internal workflows—without hype.",
+      summary:
+        "Use AI where it actually helps: ops, triage, support routing, and internal workflows. Built with safeguards, human review points, and logging so it stays reliable (and explainable).",
       includes: [
-        "Workflow mapping + feasibility",
-        "Lightweight automations",
-        "Human-in-the-loop safeguards",
-        "Prompt + tooling patterns",
-        "Logging + review loop",
+        "Workflow mapping + feasibility (what's real)",
+        "Lightweight automations (low-fragility)",
+        "Human-in-the-loop safeguards (control points)",
+        "Prompt + tooling patterns (reusable)",
+        "Logging + review loop (continuous quality)",
       ],
       outcomes: ["Less busywork", "Faster ops", "Better consistency"],
-      goodFor: ["Operations teams", "Support-heavy flows", "Internal tooling needs"],
+      goodFor: ["Operations teams", "Support workflows", "Internal tooling needs"],
     },
   },
   {
@@ -295,16 +301,17 @@ const SERVICES: ServiceItem[] = [
     description: "Sane environments, previews, reliable deploys, and a maintainable delivery pipeline.",
     Icon: Globe,
     detail: {
-      summary: "Reliability through process: preview flows, stable deploys, and repeatable builds.",
+      summary:
+        "Reliability through process: preview environments, clean release hygiene, and a delivery pipeline that makes shipping calm. Includes the basics so production stays observable and recoverable.",
       includes: [
-        "Preview environments",
+        "Preview environments (safe iteration)",
         "Release hygiene + rollback readiness",
-        "Monitoring basics",
-        "Env config sanity",
-        "Maintainable handoff",
+        "Monitoring basics (visibility + alerts)",
+        "Env config sanity (no mystery vars)",
+        "Maintainable handoff (docs + ownership)",
       ],
       outcomes: ["Fewer deploy issues", "Faster iteration", "More confidence"],
-      goodFor: ["Teams shipping often", "Multi-environment setups", "Production sites"],
+      goodFor: ["Teams shipping often", "Multi-env setups", "Production sites"],
     },
   },
   {
@@ -313,16 +320,17 @@ const SERVICES: ServiceItem[] = [
     description: "Small, frequent improvements. Fixes, enhancements, and quality maintenance.",
     Icon: Wrench,
     detail: {
-      summary: "The system stays sharp: polish, fixes, improvements, and feature upgrades over time.",
+      summary:
+        "Keep the system sharp over time: continuous fixes, new sections, experiments, and maintenance without the overhead of re-onboarding every time. Designed for momentum and quality.",
       includes: [
-        "Bug fixes + refinements",
-        "New sections/pages",
+        "Bug fixes + refinements (polish included)",
+        "New sections/pages (fast turnarounds)",
         "Conversion experiments (optional)",
-        "Performance maintenance",
-        "Tracking + reporting upkeep",
+        "Performance maintenance (stay fast)",
+        "Tracking + reporting upkeep (stay measurable)",
       ],
       outcomes: ["Continuous improvement", "Lower tech debt", "Stable growth"],
-      goodFor: ["Long-term partners", "Growing sites", "Teams that iterate monthly"],
+      goodFor: ["Long-term partners", "Growing sites", "Monthly iteration"],
     },
   },
 ];
@@ -620,7 +628,6 @@ function ServiceCard({ item }: { item: ServiceItem }) {
 
         <div className="h-px w-full bg-black/10" />
 
-
         {/* BODY:
             - mobile/tablet: scrollable
             - desktop: tightened so it fits with no scroll */}
@@ -687,7 +694,6 @@ function ServiceCard({ item }: { item: ServiceItem }) {
             </div>
           </div>
         </div>
-
       </DialogContent>
     </Dialog>
   );
