@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { motion, useAnimationControls, useReducedMotion } from "framer-motion";
+import { motion, useAnimationControls, useReducedMotion, type Variants } from "framer-motion";
 
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
@@ -161,10 +161,15 @@ function NavbarDotMark({
     return out;
   }, []);
 
-  const circleVariants = {
+  // IMPORTANT: TS wants a real bezier tuple here (not number[])
+  const BEZIER: [number, number, number, number] = [0.2, 0.85, 0.2, 1];
+
+  const circleVariants: Variants = {
     idle: { y: 0, scale: 1, opacity: 1 },
     tap: (phase: number) => {
-      if (reduceMotion) return { y: 0, scale: 1, opacity: 1 };
+      if (reduceMotion) {
+        return { y: 0, scale: 1, opacity: 1, transition: { duration: 0 } };
+      }
       return {
         y: [0, -4.8, 1.1, -2.2, 0],
         scale: [1, 1.18, 0.98, 1.08, 1],
@@ -173,11 +178,11 @@ function NavbarDotMark({
           delay: phase * 0.07,
           duration: 0.72,
           times: [0, 0.22, 0.46, 0.68, 1],
-          ease: [0.2, 0.85, 0.2, 1],
+          ease: BEZIER,
         },
       };
     },
-  } as const;
+  };
 
   return (
     <motion.svg width={size} height={size} viewBox="0 0 24 24" className={className} aria-hidden="true">
@@ -244,7 +249,7 @@ export function Navbar() {
 
         {/* Right cluster */}
         <div className="flex shrink-0 items-center gap-2 max-[430px]:gap-1.5">
-          {/* Theme dots: SHOW on mobile; just make them smaller on tight widths. Hide while menu open. */}
+          {/* Theme dots: SHOW on mobile; hide while menu open */}
           <ThemeDots
             className={cn(
               "mr-1 transition-opacity duration-150",
