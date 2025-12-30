@@ -8,7 +8,7 @@ export const tiers: ServiceTier[] = [
   {
     name: "Starter",
     priceFrom: "$1,500+",
-    bullets: ["1–3 pages", "Mobile-first", "Fast launch", "Basic SEO + analytics"],
+    bullets: ["1–5 pages", "Mobile-first", "Fast launch", "Basic SEO + analytics"],
   },
   {
     name: "Business",

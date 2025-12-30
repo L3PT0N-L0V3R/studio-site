@@ -106,7 +106,7 @@ export function ServiceQuiz({
       <CardHeader className={`${padHeader} space-y-2`}>
         <div className={headerRowClass}>
           <div>
-            <div className="text-sm font-semibold">Best-fit build</div>
+            <div className="text-sm font-semibold">Best-fit build questionaire</div>
             <div className="mt-1 text-xs text-zinc-600">
               Answer 7 questions. We’ll recommend Starter, Growth, or Systems.
             </div>
@@ -225,7 +225,7 @@ export function ServiceQuiz({
 
               <Separator />
 
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 ui-accent-cta">
                 <Button asChild className="h-9">
                   <a href="#contact">Get a quote</a>
                 </Button>

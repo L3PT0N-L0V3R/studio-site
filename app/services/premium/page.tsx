@@ -64,18 +64,18 @@ export default function PremiumServicePage() {
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             <div className="rounded-xl border bg-zinc-50/60 p-4">
-              <div className="text-sm font-semibold">Very conservative</div>
-              <div className="mt-1 text-2xl font-semibold">$15,000–$25,000</div>
+              <div className="text-sm font-semibold">Conservative</div>
+              <div className="mt-1 text-2xl font-semibold">$6,000–$10,000</div>
               <div className="mt-1 text-sm text-zinc-600">Premium design + light integrations</div>
             </div>
             <div className="rounded-xl border bg-zinc-50/60 p-4">
               <div className="text-sm font-semibold">Typical</div>
-              <div className="mt-1 text-2xl font-semibold">$25,000–$60,000</div>
+              <div className="mt-1 text-2xl font-semibold">$10,000–$15,000</div>
               <div className="mt-1 text-sm text-zinc-600">Deeper motion + systems, iteration and optimization</div>
             </div>
             <div className="rounded-xl border bg-zinc-50/60 p-4">
-              <div className="text-sm font-semibold">High end</div>
-              <div className="mt-1 text-2xl font-semibold">$60,000–$150,000+</div>
+              <div className="text-sm font-semibold">Complex</div>
+              <div className="mt-1 text-2xl font-semibold">$15,000–$20,000+</div>
               <div className="mt-1 text-sm text-zinc-600">Complex systems, extensive iteration, advanced scope</div>
             </div>
           </div>

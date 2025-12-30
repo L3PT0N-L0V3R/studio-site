@@ -23,12 +23,13 @@ export function Hero() {
     eyebrow: "Builds • rebuilds • upgrades",
     title: "Websites that act like infrastructure.",
     description:
-      "From clean new launches to rebuilds and feature upgrades—we design, build, and wire the system behind your site. We work with budgets; start with an inquiry and we’ll map the right path.",
+      "From clean new launches to rebuilds and feature upgrades—we design, build, and wire the system behind your site, keeping the future in mind so you don't have to. We work with budgets; start with an inquiry and we’ll map the right path.",
     bestForTitle: "Great fit for you if…",
     bestFor: [
       "You’re launching a new site and want it clean, fast, and scalable",
       "Your current site is holding growth back and needs a rebuild",
       "You want new features: forms, booking, payments, portals, integrations",
+      "You want a site that can adapt to future technologies"
     ],
   } as const;
 
@@ -43,6 +44,7 @@ export function Hero() {
           "A clear roadmap + scope guardrails",
           "Measurable conversion tracking",
           "A modular base you can extend",
+          "Future-proofing"
         ],
       },
     } as const;

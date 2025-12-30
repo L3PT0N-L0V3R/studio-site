@@ -64,18 +64,18 @@ export default function BusinessServicePage() {
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             <div className="rounded-xl border bg-zinc-50/60 p-4">
-              <div className="text-sm font-semibold">Very conservative</div>
-              <div className="mt-1 text-2xl font-semibold">$5,000–$9,000</div>
+              <div className="text-sm font-semibold">Conservative</div>
+              <div className="mt-1 text-2xl font-semibold">$3,000–$4,500</div>
               <div className="mt-1 text-sm text-zinc-600">Simple CMS-ready structure, content mostly provided</div>
             </div>
             <div className="rounded-xl border bg-zinc-50/60 p-4">
               <div className="text-sm font-semibold">Typical</div>
-              <div className="mt-1 text-2xl font-semibold">$9,000–$18,000</div>
+              <div className="mt-1 text-2xl font-semibold">$4,500–$7,000</div>
               <div className="mt-1 text-sm text-zinc-600">More pages, stronger copy/design iteration, SEO structure</div>
             </div>
             <div className="rounded-xl border bg-zinc-50/60 p-4">
-              <div className="text-sm font-semibold">High end</div>
-              <div className="mt-1 text-2xl font-semibold">$18,000–$35,000+</div>
+              <div className="text-sm font-semibold">Complex</div>
+              <div className="mt-1 text-2xl font-semibold">$7,000–$9,000+</div>
               <div className="mt-1 text-sm text-zinc-600">Heavy iteration, content system depth, advanced polish</div>
             </div>
           </div>

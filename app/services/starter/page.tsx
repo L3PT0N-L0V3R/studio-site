@@ -38,7 +38,7 @@ export default function StarterServicePage() {
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <div className="rounded-xl border bg-zinc-50/60 p-4">
                 <div className="text-sm font-semibold">Pages</div>
-                <div className="mt-1 text-sm text-zinc-600">1–3 pages (home + core intent pages)</div>
+                <div className="mt-1 text-sm text-zinc-600">1–5 pages (home + core intent pages)</div>
               </div>
               <div className="rounded-xl border bg-zinc-50/60 p-4">
                 <div className="text-sm font-semibold">Mobile-first</div>
@@ -64,18 +64,18 @@ export default function StarterServicePage() {
 
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             <div className="rounded-xl border bg-zinc-50/60 p-4">
-              <div className="text-sm font-semibold">Very conservative</div>
-              <div className="mt-1 text-2xl font-semibold">$1,500–$3,000</div>
+              <div className="text-sm font-semibold">Conservative</div>
+              <div className="mt-1 text-2xl font-semibold">$1,000–$2,500</div>
               <div className="mt-1 text-sm text-zinc-600">Tight scope, content provided, minimal revisions</div>
             </div>
             <div className="rounded-xl border bg-zinc-50/60 p-4">
               <div className="text-sm font-semibold">Typical</div>
-              <div className="mt-1 text-2xl font-semibold">$3,000–$6,000</div>
+              <div className="mt-1 text-2xl font-semibold">$2,500–$4,500</div>
               <div className="mt-1 text-sm text-zinc-600">Copy help, light design system, best-practice polish</div>
             </div>
             <div className="rounded-xl border bg-zinc-50/60 p-4">
-              <div className="text-sm font-semibold">High end</div>
-              <div className="mt-1 text-2xl font-semibold">$6,000–$12,000+</div>
+              <div className="text-sm font-semibold">Complex</div>
+              <div className="mt-1 text-2xl font-semibold">$4,500–$6,000+</div>
               <div className="mt-1 text-sm text-zinc-600">Premium polish, animation, iteration, assets</div>
             </div>
           </div>
