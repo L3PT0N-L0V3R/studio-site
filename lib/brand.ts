@@ -2,7 +2,7 @@
 
 export const BRAND = {
   name: "Qubewise",
-  domain: "qubewise.com",
-  url: "https://qubewise.com",
+  url: "https://www.qubewise.com",
+  domain: "www.qubewise.com",
   tagline: "Systems-first websites that convert.",
 } as const;

@@ -6,6 +6,8 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { UiConfigProvider } from "@/components/providers/ui-config";
 import { ScrollRestoration } from "@/components/scroll-restoration";
+import { StructuredData } from "@/components/seo/structured-data";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BRAND.url),
@@ -32,6 +34,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" data-theme="classic">
       <body className="min-h-screen bg-background text-foreground antialiased ui-accent-pill">
+        {/* JSON-LD: Organization / Website */}
+        <StructuredData />
+
         <UiConfigProvider>
           <ScrollRestoration />
           <div className="relative isolate min-h-screen">
@@ -54,6 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
             <Footer />
           </div>
+
+          {/* Field metrics in Vercel dashboard */}
+          <SpeedInsights />
         </UiConfigProvider>
       </body>
     </html>
