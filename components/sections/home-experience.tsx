@@ -9,12 +9,15 @@ import SystemMap from "@/components/sections/system-map";
 import { Services } from "@/components/sections/services";
 import { Process } from "@/components/sections/process";
 import { Contact } from "@/components/sections/contact";
+import WorkSection from "@/components/sections/work";
+
 
 export function HomeExperience() {
   return (
     <>
       <Hero />
       <FeaturedWork />
+      <WorkSection id="work" />
       <CaseStudy />
       <FlagshipScroll />
       <Trust

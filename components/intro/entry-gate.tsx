@@ -145,6 +145,22 @@ export function EntryGate({
     }, reduced ? 60 : 520);
   };
 
+  // NEW: Skip intro (preserves your existing animation + completion logic)
+  const skipIntro = () => {
+    if (!shown || completed) return;
+
+    // Stop any in-progress hold cleanly
+    holdGate.set(0);
+    holdingRef.current = false;
+    startRef.current = null;
+    stopRaf();
+
+    // Optional: snap progress to complete so the ring looks "finished" on skip
+    p.set(1);
+
+    complete();
+  };
+
   const startHold = () => {
     if (!shown || completed) return;
 
@@ -174,7 +190,10 @@ export function EntryGate({
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
-    e.currentTarget.setPointerCapture?.(e.pointerId);
+    e.preventDefault();
+    try {
+      (e.currentTarget as any).setPointerCapture?.(e.pointerId);
+    } catch {}
     startHold();
   };
 
@@ -210,6 +229,21 @@ export function EntryGate({
           animate={{ opacity: completed ? 0 : 1 }}
           transition={{ duration: reduced ? 0.12 : 0.55, ease: [0.2, 0.8, 0.2, 1] }}
         >
+          {/* NEW: Skip button (minimal, does not alter the layout) */}
+          <button
+            type="button"
+            onClick={skipIntro}
+            className={cn(
+              "absolute right-5 top-5 rounded-full",
+              "border border-black/10 bg-white/70",
+              "px-3 py-1.5 text-xs font-medium text-black/60",
+              "backdrop-blur hover:bg-white"
+            )}
+            aria-label="Skip intro"
+          >
+            Skip
+          </button>
+
           {/* Very soft page atmosphere */}
           <div
             aria-hidden
@@ -319,7 +353,9 @@ function MotionDotLogo(props: {
 
   const haloOpacity = useTransform(energy, [0, 1], [0.12, 0.36]);
   const haloBlur = useTransform(energy, [0, 1], [0, 14]);
-  const haloFilter = useTransform(haloBlur, (b) => (b <= 0.01 ? "none" : `blur(${b.toFixed(2)}px)`));
+  const haloFilter = useTransform(haloBlur, (b) =>
+    b <= 0.01 ? "none" : `blur(${b.toFixed(2)}px)`
+  );
 
   const centers: Array<[number, number]> = [
     [30, 30],
@@ -418,29 +454,29 @@ function Dot(props: {
 
   const a = (i * Math.PI) / 4.2;
   const b = (i * Math.PI) / 2.8;
-  const c = (i * Math.PI) / 1.9;
+  const c = (i * Math.PI) / 5.6;
 
-  // movement intensity scales with hold progress
-  const amp = useTransform(energy, [0, 1], [0, 16]);
-  const amp2 = useTransform(energy, [0, 1], [0, 10]);
-
-  const x = useTransform([t, amp, amp2] as MotionValue<number>[], (v: number[]) => {
+  // Subtle organic drift around each dot’s base position.
+  const x = useTransform([t, energy], (v: number[]) => {
     const tt = v[0] ?? 0;
-    const a1 = v[1] ?? 0;
-    const a2 = v[2] ?? 0;
+    const e = v[1] ?? 0;
 
-    const orbit = Math.sin(tt * (2.6 + i * 0.07) + a) * a1;
-    const jitter = Math.sin(tt * (7.4 + i * 0.12) + b) * a2;
-    const drift = Math.cos(tt * (3.2 + i * 0.05) + c) * (a2 * 0.55);
+    // amplitude scales with energy; near zero = perfectly static.
+    const a2 = 0.42 * e;
+
+    const orbit = Math.sin(tt * (1.8 + i * 0.07) + a) * a2;
+    const jitter = Math.cos(tt * (6.2 + i * 0.11) + b) * a2;
+    const drift = Math.sin(tt * (3.1 + i * 0.05) + c) * (a2 * 0.55);
     return orbit + jitter + drift;
   });
 
-  const y = useTransform([t, amp, amp2] as MotionValue<number>[], (v: number[]) => {
+  const y = useTransform([t, energy], (v: number[]) => {
     const tt = v[0] ?? 0;
-    const a1 = v[1] ?? 0;
-    const a2 = v[2] ?? 0;
+    const e = v[1] ?? 0;
 
-    const orbit = Math.cos(tt * (2.3 + i * 0.06) + a) * a1;
+    const a2 = 0.42 * e;
+
+    const orbit = Math.cos(tt * (1.6 + i * 0.06) + b) * a2;
     const jitter = Math.cos(tt * (6.9 + i * 0.11) + b) * a2;
     const drift = Math.sin(tt * (3.5 + i * 0.05) + c) * (a2 * 0.55);
     return orbit + jitter + drift;
