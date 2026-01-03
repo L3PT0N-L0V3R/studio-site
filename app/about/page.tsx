@@ -185,10 +185,10 @@ export default function AboutPage() {
             <ul className="mt-5 grid gap-3">
               {[
                 "Unwilling to invest (time, budget, or feedback)",
-                "Looking for “cheap” instead of “effective”",
-                "No interest in a strong online presence",
-                "Refusing modern best practices (SEO, a11y, measurement)",
-                "Expecting scope to expand without tradeoffs",
+                "Optimizing purely for the lowest price over outcomes and maintainability",
+                "No interest in building a credible online presence",
+                "Resisting modern best practices (SEO, accessibility, measurement)",
+                "Expecting scope to expand without clear tradeoffs or timeline changes",
               ].map((t) => (
                 <li key={t} className="flex items-start gap-3">
                   <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[hsl(var(--ui-glow)/0.85)]" />
@@ -196,6 +196,7 @@ export default function AboutPage() {
                 </li>
               ))}
             </ul>
+
           </div>
         </div>
       </section>
