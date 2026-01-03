@@ -116,8 +116,9 @@ export function Navbar() {
         >
           <span className="inline-flex items-center gap-2 text-[13px] font-semibold tracking-tight text-zinc-900 sm:text-sm">
             <NavbarDotMark size={20} controls={markControls} />
-            <span className="max-[430px]:hidden">Qube Studios</span>
+            <span className="max-[430px]:hidden">Qubewise</span>
             <span className="hidden max-[430px]:inline">Qube</span>
+
           </span>
         </Link>
 

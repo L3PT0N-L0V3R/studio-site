@@ -1,14 +1,31 @@
 import "./globals.css";
 import type { Metadata } from "next";
 
+import { BRAND } from "@/lib/brand";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { UiConfigProvider } from "@/components/providers/ui-config";
 import { ScrollRestoration } from "@/components/scroll-restoration";
 
 export const metadata: Metadata = {
-  title: "Qube Studios",
-  description: "Web design + engineering for modern brands.",
+  metadataBase: new URL(BRAND.url),
+  title: {
+    default: BRAND.name,
+    template: `%s | ${BRAND.name}`,
+  },
+  description: BRAND.tagline,
+  openGraph: {
+    title: BRAND.name,
+    description: BRAND.tagline,
+    url: BRAND.url,
+    siteName: BRAND.name,
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: BRAND.name,
+    description: BRAND.tagline,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

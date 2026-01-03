@@ -13,14 +13,31 @@ type Budget =
   | "Premium (6k–20k)"
   | "Not sure yet";
 
+type ApiResponse =
+  | { ok: true; delivered: true; requestId: string }
+  | {
+      ok: true;
+      delivered: false;
+      requestId: string;
+      fallback?: { mailto: string; email: string };
+    }
+  | { ok: false; error: string; requestId?: string };
+
 export function Contact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [budget, setBudget] = useState<Budget>("Not sure yet");
   const [message, setMessage] = useState("");
 
+  // Honeypot (hidden field). Humans never fill it; bots often do.
+  const [website, setWebsite] = useState("");
+
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const [requestId, setRequestId] = useState<string | null>(null);
+  const [delivered, setDelivered] = useState<boolean>(true);
+  const [fallback, setFallback] = useState<{ mailto: string; email: string } | null>(null);
 
   const canSubmit = useMemo(() => {
     return (
@@ -35,6 +52,9 @@ export function Contact() {
     e.preventDefault();
     setErrorMsg(null);
     setStatus("submitting");
+    setRequestId(null);
+    setDelivered(true);
+    setFallback(null);
 
     try {
       const res = await fetch("/api/contact", {
@@ -45,21 +65,41 @@ export function Contact() {
           email: email.trim(),
           budget,
           message: message.trim(),
+          website, // honeypot
           source: "website-contact",
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        throw new Error(data?.error || `Request failed (${res.status})`);
+      const data = (await res.json().catch(() => null)) as ApiResponse | null;
+
+      if (!res.ok || !data) {
+        throw new Error((data as any)?.error || `Request failed (${res.status})`);
       }
 
+      if ("ok" in data && data.ok === false) {
+        throw new Error(data.error || "Something went wrong.");
+      }
+
+      // Success path
+      if ("requestId" in data) setRequestId(data.requestId);
+
+      if ("delivered" in data && data.delivered === false) {
+        setDelivered(false);
+        if ("fallback" in data && data.fallback) setFallback(data.fallback);
+        setStatus("success");
+        // Keep fields (so user can re-send or copy) — do NOT clear.
+        return;
+      }
+
+      setDelivered(true);
       setStatus("success");
-      // optional: clear form
+
+      // Clear form on confirmed delivery
       setName("");
       setEmail("");
       setBudget("Not sure yet");
       setMessage("");
+      setWebsite("");
     } catch (err: any) {
       setStatus("error");
       setErrorMsg(err?.message || "Something went wrong.");
@@ -90,11 +130,54 @@ export function Contact() {
                 <CardContent>
                   {status === "success" ? (
                     <div className="rounded-2xl border bg-white p-5">
-                      <div className="text-base font-semibold">Thanks — received.</div>
-                      <div className="mt-1 text-sm text-zinc-600">
-                        We’ll reply soon. If you want to move faster, include a booking link in your
-                        response template.
+                      <div className="text-base font-semibold">
+                        {delivered ? "Thanks — received." : "Received — delivery not confirmed."}
                       </div>
+
+                      <div className="mt-1 text-sm text-zinc-600">
+                        {delivered ? (
+                          <>
+                            We’ll reply soon. If you want to move faster, we can include a booking link
+                            in our response.
+                          </>
+                        ) : (
+                          <>
+                            Your message was accepted, but our delivery system did not confirm email
+                            notification. If you don’t hear back within 1 business day, please email us
+                            directly using the reference below.
+                          </>
+                        )}
+                      </div>
+
+                      {requestId ? (
+                        <div className="mt-3 rounded-xl border bg-muted/20 px-3 py-2 text-sm">
+                          <span className="text-zinc-600">Reference:</span>{" "}
+                          <span className="font-mono">{requestId}</span>
+                        </div>
+                      ) : null}
+
+                      {!delivered && fallback ? (
+                        <div className="mt-4 rounded-2xl border bg-white p-4">
+                          <div className="text-sm font-medium">Fallback email</div>
+                          <div className="mt-1 text-sm text-zinc-600">{fallback.email}</div>
+                          <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                            <Button asChild variant="outline" className="rounded-2xl">
+                              <a href={fallback.mailto}>Email us now</a>
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="rounded-2xl"
+                              onClick={() => {
+                                navigator.clipboard?.writeText(fallback.email);
+                              }}
+                            >
+                              Copy email
+                            </Button>
+                          </div>
+                        </div>
+                      ) : null}
+
                       <div className="mt-4">
                         <Button
                           type="button"
@@ -108,6 +191,21 @@ export function Contact() {
                     </div>
                   ) : (
                     <form onSubmit={onSubmit} className="space-y-3">
+                      {/* Honeypot field (hidden) */}
+                      <div className="hidden">
+                        <label className="grid gap-1 text-sm">
+                          <span>Website</span>
+                          <input
+                            value={website}
+                            onChange={(e) => setWebsite(e.target.value)}
+                            className="h-11 rounded-2xl border bg-white px-4 outline-none"
+                            placeholder="https://"
+                            autoComplete="off"
+                            tabIndex={-1}
+                          />
+                        </label>
+                      </div>
+
                       <div className="grid gap-3 sm:grid-cols-2">
                         <label className="grid gap-1 text-sm">
                           <span className="text-zinc-700">Name</span>
@@ -178,7 +276,7 @@ export function Contact() {
                       ) : null}
 
                       <Button
-                        type="submit" // IMPORTANT: without this, shadcn defaults to type="button"
+                        type="submit"
                         className="mt-2 w-full rounded-2xl"
                         disabled={!canSubmit}
                       >
